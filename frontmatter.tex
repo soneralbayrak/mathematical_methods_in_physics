@@ -1,0 +1,43 @@
+\chapter{Preface}
+\sidebar{\vspace*{\baselineskip}}
+\section{Remarks to the reader}
+I would like to make a few points crystal clear:
+\begin{enumerate}
+	\item I do not update these notes on a regular basis.
+	\item The contents are correct to the best of my knowledge, but I have not put the extra effort to make sure that everything is book-level correct; nevertheless, I try to put as many references as possible when relevant, so please make the most of it!
+	\item I believe that the level of this book is appropriate for an average sophomore, but I would dare say that it should be quite useful even for graduate students of theoretical physics. 
+	\item Lastly, I provide several links as references here and there: I agree that this is a bad practice in academia and one should instead convert them to proper references in the bibliography. Nevertheless, it is faster for me to write this way and faster for the reader to just click on them where they appear, so I'll keep this practice. My upfront apologies if the links get broken in time: hopefully a snapshot will have been available here \href{https://web.archive.org/}{https://\\web.archive.org/} (it would be rather amusing if this site itself becomes unavailable).
+\end{enumerate}
+\section{About the format of the book}
+This book is publicly available online, and anyone can simply download and read it on their computer. Nevertheless, it is a lot easier on eyes to read a book on paper (or epaper), so I suspect many readers will simply print this book. To make this book convenient for all types of readers, I need to make a few design choices\footnote{For instance, I provide all links in their explicit form (not like \href{https://www.google.com/}{google} but as \href{https://www.google.com/}{https://www.google.com/}) so that the book on an ereader without a browser or its printed version is as useful as its digital version.} and the most important of it is the format of this book.
+
+The most convenient paper that most students have easy access to is A4 (or letterpaper which is very similar in size): so if they choose to print this book, their easiest and cheapest option would be to use A4 paper. However that paper has been historically designed for typewriters which use large monospaced fonts, hence is not really appropriate for a digitally prepared book. Indeed, if you check your favorite-to-read book, you will most likely see that it uses a smaller paper size, with proportionally spaced small fonts.
+
+\beginfullwidth
+\begin{SingleSpace}
+\hphantom{\indent} What is wrong with using a large paper? It is empirically known that a document is properly legible if there are around 60-75 characters on a line: if there are more characters, it becomes harder to read and the reader may end up re-reading same line over and over again (doubling). When used with typewriter, A4 paper indeed has appropriate number of characters one a line, but as stated previously, this is not the optimal setup with the digital fonts, hence making A4 paper \emph{too large for digital books}.
+\\\\
+{\ttfamily \hphantom{\indent} How to solve the problem that A4 is too large for a digital book?\newline Obviously, we can use a typewriter font for which A4 is historically\newline intended in the first place! However, such monospaced fonts (Courier\newline being another example) are not aesthetically pleasing and do not\newline belong to modern texts!}
+\\\\
+{\LARGE \hphantom{\indent} Of course, we can go with a modern proportionally spaced fonts but make the font size large enough such that a line has few enough characters for it to be easily legible. Although a better one than using monospaced fonts, this is still a suboptimal solution to the problem at hand...}
+\end{SingleSpace}
+%
+\begin{DoubleSpace}
+	Another solution which is somehow popular around the institutions is to use double-spacing among the lines. Indeed, regulations for master and doctorate thesis of various universities include compulsory large spacing among the lines, such as one and a half spacing or double spacing: you can also see this in my master and doctorate thesis: \href{https://arxiv.org/abs/1602.07676}{https://arxiv.org/abs/1602.07676}, and \href{https://arxiv.org/abs/2107.13601}{https://arxiv.org/abs/2107.13601}. Although this method can indeed prevent doubling to a degree, it is neither an aesthetic nor an efficient solution.
+\end{DoubleSpace}
+\vspace*{-\baselineskip}
+	\begin{multicols}{2}
+	A somehow better solution than those listed above is to use multiple columns in the document. Indeed, this is the traditional approach in magazines and newspapers, and is immediately applicable in academic papers and manuscripts as well. However, A4 paper is not really big enough to have two columns of text with around 60-75 characters (let alone three or more columns), and although one can go with smaller font sizes to make it more legible digitally, the printed version would still be hard to read either way (proper number of small font characters, or few number of normal font characters).
+\end{multicols}
+\endfullwidth 
+\begincenter
+\qquad Common text editors such as Microsoft Word either go with one of the solutions above or do not solve the problem at all. On the contrary, \LaTeX\;templates default to choose another approach: they stick to a modern font with an appropriate spacing and a single column, but they also increase the margins such that a line has proper number of characters. This is an ideal solution if the resultant text will be read digitally, however it leads to a waste of paper when printed.
+\endcenter
+\vspace*{\baselineskip}
+\sidebar{\vspace*{50\baselineskip}}
+\hphantom{\indent} In this book, we will not follow any of these design choices. Instead, we will go with the rather unorthodox \emph{Tufte style},\footnote{See \href{https://www.ctan.org/tex-archive/macros/latex/contrib/tufte-latex/}{https://www.ctan.org/tex-archive\\/macros/latex/contrib/tufte-latex/}} an asymmetric allocation of the text in the paper. Indeed, the main text will be in the left of the paper, whereas we have another block of text on the right dedicated to the \emph{sidenotes},\footnote{In the traditional layout, one usually uses endnotes, margin notes, or footnotes; in this paper, most ``notes'' will be sidenotes with occasional footnotes.\bottomnotemark}\bottomnotetext{Such as this one.} margin figures, and margin tables. We choose a rather narrow font family (\emph{libertine}) and arrange the margins such that the main text is of 26 pica width and side text is of 14 pica width: for the 11pt and 9pt font sizes, this corresponds to roughly 66 and 44 characters of the libertine font for main and side text blocks respectively.\footnote{For a nice discussion of these points along with the tools to compute approximate expected number of characters per line, see \href{https://ftp.cc.uoc.gr/mirrors/CTAN/macros/latex/contrib/memoir/memman.pdf}{https://ftp.cc.uoc.gr/mirrors/CTAN/macros\\/latex/contrib/memoir/memman.pdf}} Thus we have an ideally-sized main text block and acceptably-sized side text block for a modern proportionally spaced font in an A4 paper, and we do this without unnecessarily wasting the paper.\footnote{I would like to acknowledge the following nice discussion with which I started to learn more about these \emph{typographical} issues: \href{https://tex.stackexchange.com/questions/71172/why-are-default-latex-margins-so-big}{https://tex.stackexchange.com/questions/71172\\/why-are-default-latex-margins-so-big}.}
+
+\section{About the course Phys209}
+As stated in the front page, this ``book'' is collection of notes prepared for the course Phys209, with the syllabus provided here:\\ \hyperref{https://soneralbayrak.com/teaching/Phys209}{}{}{https://soneralbayrak.com/teaching/Phys209}. Although the title is somewhat generic, the contents of this book is severely restricted and arranged so as to be an appropriate one-semester-long course for \emph{an average sophomore at the Physics program of Middle East Technical University}. I would also like to acknowledge that the level and approach of this book is based solely on my expectations and projections for such a student, and thus it may not be really appropriate in real life; nevertheless, it is what it is.
+
+I left several sources in the syllabus, including the textbook of the course on which these notes are somewhat based on. I'll also make use of other sources; yet, any error or incorrect information on these notes are entirely my fault and not of any of these sources.

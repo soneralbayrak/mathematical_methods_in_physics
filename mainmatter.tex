@@ -1,0 +1,504 @@
+\chapter{Definition and Classification of Differential Equations}
+\section{Preliminaries: some basic terminology}
+
+\subsection{Type notation and functions}
+
+Consider the number $2$. It is an integer, which mathematicians denote as $2\in \Z$, where $\Z$ denotes the set of integers.\footnote{$\Z$ is actually an integral domain.} Computer scientists on the other hand would denote this as
+\be 
+2::\texttt{Integer}
+\ee 
+where $a::b$ reads as \emph{``a is of type b''}. Further examples would be
+\bea 
+3/2::{}&\texttt{Rational}\\
+1.56::{}&\texttt{Real}\\
+1+i::{}&\texttt{Complex}
+\eea 
+Note that an object may be of multiple types. Mathematically, $3\in\Z$ and $3\in\R$, meaning
+\bea 
+3::{}&\texttt{Integer}\\
+3::{}&\texttt{Real}
+\eea 
+A somewhat hybrid notation between mathematicians and computer scientists would be 
+\bea 
+3::{}&\Z\\
+3::{}&\R
+\eea 
+We shall use this notation in the rest of the book.\footnote{I personally find this notation clearer when we use it with higher order functions such as derivatives.} 
+
+Just as we do with the explicit numbers above, we can \emph{define} variables with explicit types; for instance,
+\be 
+x::\Z
+\ee 
+It is up to us to choose what we want for the type, we can even left the type unknown; for instance,
+\be 
+y::\texttt{A}
+\ee 
+means that $y$ is a variable of the type \texttt{A},\footnote{This is called a \emph{type variable}.} where \texttt{A} can be anything.\footnote{It could be a simple field such as $\Z$ or $\N$, or it could be a more complex object such as $\mathfrak{M}_{2\x2}(\C)$ which denotes two by two matrices with complex entries.}
+
+Unlike the numbers or the variables above, the functions have an input and an output, hence their type actually reads differently.\footnote{
+Physicists tend to refer to multi-valued relations as functions as well: this is a justifiable habit as such relations can always be treated as genuine functions by appropriately restricting their domains.\footnotemark We will stick to this convention in the rest of the book and  refer all multi-valued relations (such as an arctan) as functions.
+}
+\footnotetext{
+Mathematically, a function yields a unique output for a given input, therefore so-called multi-valued ``functions'' are not really functions in their full analytic domain. For instance, the relation \mbox{$\texttt{sqrt}=\lambda\to\sqrt{\lambda}$} is not a function in the complete complex plane, as \mbox{$\texttt{sqrt}(4)=\pm 2$}. One solution is to choose a \emph{restricted domain} so that the relation actually yields a unique solution for a given input from the domain, hence making the relation a genuine function, e.g. choosing the domain $\R^+$ for \texttt{sqrt}. In principle, we do not need to make an arbitrary restriction: the strategy would be to analyze the \emph{Riemann surface} of the relation, and then determine the codomain in which the relation yields a unique result; in the case of \texttt{sqrt}, we can state
+\mbox{$\texttt{sqrt}::\C\to \texttt{A}$} where $x\in\texttt{A}$ if and only if\; $0\le\arg(x)<\pi$. This means that $\texttt{sqrt}\left(re^{i\theta}\right)=\sqrt{r}e^{i\theta/2}$ for $\theta$ chosen in the range $0\le\theta< 2\pi$ with $r>0$; hence, $\texttt{sqrt}(4)=2$.
+
+ The regions of the codomain in which the multi-valued relation becomes a genuine function are called \emph{sheets}; in the example above, we choose a principle sheet (or a first sheet) for the relation \texttt{sqrt}: we can move on to the \emph{other sheets} by removing the restriction on $\theta$. Indeed, we have on the second sheet $\texttt{sqrt}(4)=\texttt{sqrt}\left(4e^{i2\pi}\right)=\sqrt{4}e^{i\pi}=-2$, the other solution! One could go on to higher sheets to find even more solutions; in the case of \texttt{sqrt}, $n-$th sheet is actually identified with $(n-2)-$th sheet, hence we have only two solutions (as expected from a square root operation).
+
+ Somewhat more traditional approach to the Riemann surfaces is the \emph{analysis of branch cuts}. We \textbf{(1)} take one of the solutions of the relation as the output (called \emph{principal value}), \textbf{(2)} determine some lines on the complex plane (branch cuts), \textbf{(3)} impose discontinuity on the cuts such that the relation is a true function in the rest of the complex plane! With the insight from Riemann surfaces, we know that moving across such lines actually takes us from one sheet to another ---previous (next) sheet if we pass the branch cut (counter)clockwise. For \texttt{sqrt}, the conventionally chosen principle value is $\sqrt{r^2}=r$ for $r\in\R^+$, and branch cut is the line $(-\infty,0)$: $\texttt{sqrt}(z)$ for any other $z\in\C$ can then be uniquely determined to be consistent with these; for instance $\texttt{sqrt}\left(-1\pm i 10^{-100}\right)\sim 6\x 10^{-17}\pm i$ ---note the jump!
+} For instance,
+\be 
+f::\Z\to\Z
+\ee 
+denotes \emph{``a function that acts on integers and produces another integer}. An example would be
+\be 
+f = \l \to \l^2
+\ee 
+which gives the integer $f(x)=x^2$ when acted on the integer $x$.\footnote{I'd like to note that there is a common misconception (especially) in the physics community. $f(x)$ is \emph{not} the function, the function is $f$. $f$ acts on the input $x$, and produces the output $f(x)$.} Another example would be 
+\be 
+g(y)=y/3
+\ee 
+for which we can write down\footnote{If you couldn't remember, $\Q$ denotes the set of rational numbers.}
+\bea 
+g::{}&\Z\to\Q\\
+y::{}&\Z\\
+g(y)::{}&\Q
+\eea 
+Of course, we can also extend our interested regime for the input $y$ and simply state
+\bea 
+g::{}&\C\to\C\\
+y::{}&\C\\
+g(y)::{}&\C
+\eea 
+which is still true for $g(y)=y/3$. In fact, we can even write $g::{}\texttt{A}\to\texttt{B}$ if we do not care for the explicit types of input and output.\footnote{We use different letters for the type variables (\texttt{A} and \texttt{B}) so that the input and output are not necessarily of the same type. On the contrary, the function $h::{}\texttt{A}\to\texttt{A}$ can only produce integers when acted on integers, reals when acted on reals, and so on.}
+
+\subsection{Higher order functions and the derivative}
+Consider the operation $T$ of \emph{``doubling the output of a function''}. If we apply this operation $T$ to a function $f$, then it yields a function $g$ such that $g(x)=2 f(x)$. For instance,
+\bea 
+f={}&\l\to\l+5\\
+g={}&\l\to2\l+10
+\eea 
+The question now is this: what is the type of the operation $T$?
+
+Clearly, $T=f\to g$ as it takes the function $f$ as an input and produces the function $g$ as the output. Thus, we can write it as 
+\be 
+T::{}&\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{C}\to\texttt{D}\right)
+\ee 
+which means if 
+\be 
+f::{}&\texttt{A}\to\texttt{B}
+\ee 
+then 
+\be 
+\left(g=T\.f\right)::{}&\texttt{C}\to\texttt{D}
+\ee 
+$T$ is called \emph{a higher order function}: it acts on a function and produces another function.
+
+The derivative operator \emph{is} a higher order function, i.e.
+\be 
+\label{eq: type of derivative operator}
+\rdr{}{x}::{}&\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{A}\to\texttt{C}\right)
+\ee 
+which means\footnote{We are using the common convention $f'\coloneqq \rdr{f}{x}$ and $f'(x)\coloneqq \rdr{f}{x}(x)$ for brevity.}
+\bea 
+x::{}&\texttt{A}\\
+f::{}&\texttt{A}\to\texttt{B}\\
+f(x)::{}&\texttt{B}\\
+f'::{}&\texttt{A}\to\texttt{C}\\
+f'(x)::{}&\texttt{C}
+\eea  
+For example, 
+\bea
+f::{}&\R\to\C\\
+f={}&\l\to\l^2+2i
+\eea
+leads to
+\bea
+f'::{}&\R\to\R\\
+f'={}&\l\to 2\l
+\eea
+where the type variables in \equref{eq: type of derivative operator} are $\texttt{A}=\texttt{C}=\R$ and $\texttt{B}=\C$.
+
+The derivatives can shrink the codomain of a function;\footnote{Reminder: if $f=\texttt{A}\to\texttt{B}$, we call $A$ ($B$) the (co)domain of $f$.} in the above example, the original codomain (that of $f$) was $\C$ whereas the new codomain (that of $f'$) is $\R$. Nevertheless, we can always \emph{embed} the smaller codomain into a larger one (e.g. all real numbers can be considered as complex numbers as well), hence we can always take \mbox{$\rdr{}{x}::{}\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{A}\to\texttt{B}\right)$}. This shows that the derivative is a higher order function that can be \emph{repeatedly applied}; thus, we say\footnote{We will use the notation such that $f^{(n)}$ is the $n-$th derivative of the function $f$.}
+\bea 
+\label{eq: type of nth order derivatives}
+\rdr{{}^n}{x^n}::{}&\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{A}\to\texttt{B}\right)\\
+f::{}&\texttt{A}\to\texttt{B}\\
+f^{(n)}::{}&\texttt{A}\to\texttt{B}
+\eea  
+
+\subsection{Functionals and the integral}
+In the previous section, we have seen that the derivative is a higher-order function, i.e. it takes a function to another function. Naturally, its inverse is also a higher-order function:\footnote{In principle, the anti-derivative can \emph{extend} the codomain of a function, just as derivative shrinks it. We can see this via \emph{integration constant}, which can be anything as long as it is $x-$independent. We put this subtlety aside as we can always extend the original codomain such that it matches the new one, hence \eqref{eq: anti-derivative}.}
+\bea 
+\rdr{{}^{-1}}{x^{-1}}::{}&\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{A}\to\texttt{B}\right)\label{eq: anti-derivative}\\
+g::{}&\texttt{A}\to\texttt{B}\\
+g^{(-1)}::{}&\texttt{A}\to\texttt{B}
+\eea  
+where $g^{(-n)}=\left(\rdr{{}^{-1}}{x^{-1}}\right)\.g^{(1-n)}$ with $g^{(0)}=g$, in line with the notation for derivatives. Fundamental theorem of calculus then tells us that the output \mbox{$g^{(-1)}(x)::\texttt{B}$} can be written as
+\be 
+g^{(-1)}(x)=\int\limits_0^x g(t) dt
+\ee 
+which is compatible with $\rdr{}{x}g^{(-1)}(x)=g(x)$.
+
+We have shown above that the \emph{the indefinite integral} is a higher order function, but how about a definite integral? How do we determine its type?
+
+We can start by writing down a generic definite integral:
+\be 
+\int\limits_{0}^{\pi/2} \cos(x) dx= 1
+\ee 
+Clearly, we take a function ($\cos$) and a range over which we do the integration (between $0$ and $\pi/2$). We can always specify the integration range via the domain of the function,\footnote{
+For instance, if we would like to do the integration from $0$ to $1$, we can restrict the function $f(x)::\texttt{A}\to\texttt{B}$ to $f(x)::\texttt{UnitReal}\to\texttt{B}$ where $x::\texttt{UnitReal}$ means $x\in[0,1]$.
+} thus
+\be 
+\int\limits :: (\texttt{A}\to\texttt{B})\to\texttt{C}
+\ee 
+as the integration turns the function cosine into a number $1$.
+
+Operations that turn functions into numbers are called \emph{functionals}, and definite integration is a functional.  For instance, the operation to compute the area under a curve is a functional: if we call that operation $T$, we then have
+\bea 
+T::{}&\left(\R\to\R\right)\to\R\\
+f::{}&\R\to\R\\
+\left(T\.f = \int\limits_{-\infty}^\infty f(x)dx\right)::{}&\R
+\eea  
+
+Note that the parentheses in the type definition is important; for instance, 
+\bea 
+T::{}&\left(\R\to\R\right)\to\R\\
+F::{}&\R\to\left(\R\to\R\right)
+\eea 
+denote different objects: $T$ is a functional, which produces a number if given a function as input. $F$ on the other hand produces a function when fed a number, i.e. $F(x)=f$ is a function, whose output can be written as $F(x)(y)=f(y)$. This show that we can actually interpret $F$ as a function of two variables!\footnote{
+	This property can be generalized. A higher order function
+	\be 
+	f::\texttt{A}_1\to\left(
+	\texttt{A}_2\to\left(\dots\to\left(
+	\texttt{A}_{n-1}\to\left(\texttt{A}_{n}\to\texttt{B}
+	\right)\right)\right)\right)
+	\ee 
+produces a function of $n-1$ variable once given a variable as input. That function then produces another function of $n-2$ variable once given a variable as input, and so on. Indeed, it means
+\bea 
+x_i::{}&\texttt{A}_i\\
+f(x_1)(x_2)\dots(x_n)::{}&\texttt{B}
+\eea 
+which can easily be re-interpreted as $f(x_1,\dots,x_n)::\texttt{B}$.
+
+This concept of turning higher-order functions into functions of multiple variables (and vise versa) is called \emph{currying}, see bla bla bla. \draftnote{Put some sources here.}
+}
+
+\section{Differential equations}
+\subsection{Basics}
+Very broadly, we could define any relation that contains the derivative higher order function $\rdr{}{x}$ and an unknown function $f$ as a differential equation. For instance,
+\be 
+\cos\left(\exp(\rdr{}{x})f(x)+\frac{1}{f(x)}\right)=0
+\ee 
+is a differential equation: but it is neither real-world motivated nor easy-to-solve, so let's skip it and focus on more relevant and simpler cases.\footnote{\label{footnote: exponentiated differential}
+You may be surprised with the expression $\exp(\rdr{}{x})$. To understand it, let's first view the taking-the-$n^{\text{th}}$-power operation as a higher order function:
+\be 
+P_n::{}&(\texttt{A}\to\texttt{B})\to(\texttt{A}\to\texttt{B})
+\ee 
+and
+\bea
+\left(P_0\.f=f\right)::{}&\texttt{A}\to\texttt{B}\\
+\bigg(P_n\.f=f\.(P_{n-1}\.f)\bigg)::{}&\texttt{A}\to\texttt{B}
+\eea
+meaning 
+\bea
+x::{}&\texttt{A}\\
+(P_n\.f)(x)=f(f(\dots f(x)))::{}&\texttt{B}
+\eea
+For instance, $P_2\.\cos= \l\to\cos(\cos(\l))$.
+
+We can now define \emph{exponentiation} as a higher order operation:
+\bea
+\exp::{}&(\texttt{A}\to\texttt{B})\to(\texttt{A}\to\texttt{B})\\
+\exp={}&\sum\limits_{n=0}^\infty\frac{1}{n!}P_n
+\eea
+One can then immediately compute, say,
+\be
+\exp(\rdr{}{x})x^3={}&x^3+3x^2+3x+1\\
+\exp(\rdr{}{x})e^{k x}={}&e^ke^{k x}
+\ee 
+and so on.
+}
+
+The simplest differential equation is
+\bea 
+x::{}&\R\\
+\left(\rdr{}{x}\.f\right)::{}&\tA\to\tB\\
+\label{eq:simplest dif equation}\rdr{}{x}\.f={}&0
+\eea
+which states that \emph{there is an unknown function $f$ such that ``the derivative higher order function acting on it'' leads to the zero function}.\footnote{
+	We use the convention such that $0$ can be of any type that yields the ordinary number zero (\mbox{$0::\C$}) as the output. In \equref{eq:simplest dif equation}, $0$ has the type \mbox{$\tA\to(0::\C)$}, which we call \emph{the zero function}.
+} You may hope to formally solve this equation by applying $\rdr{^{-1}}{x^{-1}}$ to the both sides and use $\rdr{^{-1}}{x^{-1}}\.\rdr{}{x}\.f=f$, but this actually leads to a circular argument.\footnote{
+Naively applying $\rdr{^{-1}}{x^{-1}}$ would lead to the equation $f=\rdr{^{-1}}{x^{-1}}\.0$ but this equation is not necessarily equivalent to the original one. Indeed, both  $f=\rdr{^{-1}}{x^{-1}}\.0$ and  $f=g+\rdr{^{-1}}{x^{-1}}\.0$ would lead to the original equation if $\rdr{}{x}\.g=0$ as well.
+\draftnote{burada kernel kavramindan, homojen ve hetetojen denklemlerden bahset.}
+
+} Instead, let us proceed to apply this function to a real variable and write
+\be
+\left(\rdr{}{x}\.f\right)(x)\equiv\rdr{f}{x}(x)\equiv f'(x)=0
+\ee
+for which one usually writes down the result as
+\be 
+f(x)=\textrm{constant}
+\ee 
+immediately. This makes sense, as the derivative of a constant is always zero.
+
+The next simplest example would be the following differential equation
+\be 
+\rdr{}{x}\.f=f
+\ee 
+for the unknown function $f$. Solving this equation is equivalent to answering this question: \emph{what function is equal to its derivative?}
+
+Even though what we know and what we try to solve for are all \emph{functions}, the traditional way of writing down such equations is in terms of \emph{the values of functions}; in other words, we say
+\be 
+\label{eq: exponential diff}
+f'(x)=f(x)
+\ee 
+is the differential equation, and we are trying to find the output $f(x)$ that satisfies this. Indeed, in the rest of the notes, we will mostly stick to this more traditional form.
+
+Let us ask the question again: what is the function that is equal to its derivative? We will provide three equivalent answer.
+\begin{enumerate}
+	\item We \emph{define} a function as solution of this equation. Indeed, most of the famous mathematical functions (Hypergeometric, Bessel, Hankel, Gegenbauer, etc.) are \emph{defined} as solutions to various differential equations. Analogously, we define
+\bea 
+\exp::{}&\C\to\C\\
+\exp={}&x\to \exp(x)\text{ such that } \rdr{\exp(x)}{x}=\exp(x)
+\eea 
+We call this function \emph{exponential} and usually denote it as \mbox{$\exp(x)=e^x$}.\footnote{By using various numerical methods, we can compute the value of this function for arbitrary complex numbers, e.g. $e^{0}=1,\;e^1\sim 2.72,\;e^{1+i}\sim1.5+2.3i$, and so on.}
+
+	\item We first assume that $f(x)\ne 0$, with which we can rewrite \equref{eq: exponential diff} as
+\be 
+\frac{1}{f'(x)}=\frac{1}{f(x)}
+\ee 
+By chain rule, we have
+\be 
+\rdr{f(x)}{x}\rdr{x}{f(x)}=1
+\ee 
+hence the above equation becomes
+\be 
+\rdr{x}{f(x)}=\frac{1}{f(x)}
+\ee 
+If we now replace $x=f^{-1}(y)$ where $f^{-1}$ is the inverse of the function $f$,\footnote{This means
+\bea 
+f::{}&\C\to\C\\
+f^{-1}::{}&\C\to\C\\
+f={}&x\to f(x)\\
+f^{-1}={}&f(x)\to x
+\eea 
+} we get
+\be 
+\rdr{f^{-1}(y)}{dy}=\frac{1}{y}
+\ee 
+By integrating this function, we get
+\be 
+f^{-1}(y)=\int\frac{dy}{y}
+\ee 
+If we now \emph{define} the function \emph{logarithm} as the right hand side, we arrive at the solution that \emph{the function whose derivative is equal to itself is the inverse of the logarithm function}, which we call the exponential function.\footnote{We can now check that our very initial assumption $f(x)\ne 0$ is indeed satisfied.}
+\end{enumerate}
+
+\paragraph{Summary} In the first approach, we \emph{defined} the exponential function as the solution of the differential equation $f'(x)=f(x)$. We can then \emph{derive} that its inverse (logarithmic function) can be given as the integral of $1/x$.\footnote{We can show this by using the fundamental theorem of calculus.} In the second approach, we \emph{defined} the logarithmic function as the integral of $1/x$, and then \emph{derived} that its inverse (exponential function) solves the differential equation. Which one we choose is purely conventional.
+
+\paragraph{What did we learn?} In math, we \emph{define} many objects as our initial data, and then \emph{derive} other quantities based on those. What we \emph{choose to define} is purely conventional; however, we cannot afford to define too many things and still remain consistent. For instance, in the example above, we actually show that if we give two of the following three statements, the third one is already fixed by the other two: (1) \emph{exponential and logarithm functions are inverse of each other}, (2) \emph{exponential function is the solution of the differential equation $f'(x)=f(x)$}, and (3) \emph{logarithm function is the integration of $1/x$}.
+
+\subsection{Classification}
+In the beginning of the section above, we defined differential equations as any relation that contains the derivative operator $\rdr{}{x}$ and an unknown function $f(x)$.\footnote{As stated earlier, $f(x)$ is actually \emph{not} the function but the \emph{output} of the function $f$. Nevertheless, I'll abuse terminology here and there to remain more familiar to physicists.} There is nothing that stops us from generalizing this to multiple variables;\footnote{Alternatively, we can generalize to multiple \emph{functions}; for instance,
+\be 
+\rdr{f(x)}{x}=g(x)\;,\quad\rdr{g(x)}{x}=-f(x)\;.
+\ee 
+Such relations are called \emph{systems of differential equations}. We will see more about such systems in \S~\ref{chapter: Linear nonhomogeneous equations with functional coefficients}.
+} indeed, an expression that contains the partial derivatives $\frac{\partial}{\partial x}$ and  $\frac{\partial}{\partial y}$ (along with an unknown function $f(x,y)$) is \emph{also} a differential equation. We then divide all differential equations into two categories:
+\be 
+\text{A differential equation is called}\left\{\begin{aligned}
+\text{ordinary}\\\text{partial}
+\end{aligned}\right\}\text{ if there are}
+\\
+\text{derivatives with respect to}\left\{\begin{aligned}
+	\text{one}\\\text{more than one}
+\end{aligned}\right\}\text{variables.}
+\ee 
+For instance,
+\be 
+\frac{\partial f(x,y)}{\partial x}+\frac{\partial f(x,y)}{\partial y}+ f(x,y)=0
+\ee 
+is a partial differential equation. Until the last chapter, we will only focus on \emph{ordinary} differential equations!
+
+We also define the \emph{order} of a differential equation to be the highest number of derivatives in it; for instance,
+\be 
+\rdr{^{3}}{x^{3}}f(x)=0
+\ee 
+is a third order differential equation,\footnote{
+See if you can convince yourself that 
+\be 
+f(x)=c_0+c_1x+c_2x^2
+\ee 
+for the coefficients $c_i$ is the solution to this equation.
+} whereas
+\be 
+\rdr{^{3}}{x^{3}}f(x)+f(x)\rdr{^{4}}{x^{4}}f(x)+x\rdr{}{x}f(x)=0
+\ee 
+is a fourth order one. Note that not all differential equations have to have a finite order.\footnote{
+It is perfectly possible to define the differential equation
+\be 
+\exp(\rdr{}{x})f(x)={}& f(x)+3x^2+3x+1
+\ee 
+for which 
+\be 
+f(x)=x^3
+\ee 
+is a solution (see the footnote~\ref{footnote: exponentiated differential}). However, clearly, this differential equation has arbitrarily high numbers of derivatives, hence it is of infinite order.
+}
+
+The differential equations are also grouped according to the \emph{linearity} of the unknown function $f$. For instance, the differential equation
+\be 
+\rdr{^{2}}{x^2}f(x)+f(x)=1
+\ee 
+is called a \emph{linear differential equation}, whereas
+\be 
+f(x)\rdr{}{x}f(x)=x^3
+\ee 
+is a \emph{nonlinear} differential equation. An easy way to check if a differential equation is linear or nonlinear is to apply the transformation $f(x)\rightarrow \lambda f(x)$ for the constant $\lambda$: if the differential equation is linear in $\lambda$ (i.e. it can be written as $\lambda(\dots)+(\dots)=0$), then the differential equation is a linear differential equation; otherwise, it is a nonlinear differential equation.
+
+Nonlinear equations are way harder to solve than the linear equations; in fact, we actually do not know how to solve most of the nonlinear equations! In practice, one usually handles them numerically, which is beyond of the scope of this course. If you are only interested in a particular regime, you can also \emph{linearize} a nonlinear equation around that regime, which is what most physicists do in practice. For instance, consider the nonlinear differential equation
+\be 
+\label{eq: nonlinear example}
+\rdr{}{x}f(x)+\sin(f(x))=0
+\ee 
+If we say that we are only interested in the results $f(x)\ll1$, then we can linearize this equation as 
+\be 
+\rdr{}{x}f(x)+f(x)=0
+\ee 
+which has the solution
+\be 
+f(x)=c e^{-x}
+\ee 
+which satisfies our necessary condition for $x\gg 1$.\footnote{
+We can actually solve the full nonlinear differential equation \equref{eq: nonlinear example}; the result is
+\be 
+f(x)=2\arccot(\frac{2e^x}{c})
+\ee 
+which matches the linearized result in the regime it is valid, i.e. 
+\be 
+\lim\limits_{x\rightarrow\infty}2\arccot(\frac{2e^x}{c})=\lim\limits_{x\rightarrow\infty} c e^{-x}
+\ee 
+}
+
+A last classification we can do with our differential equations is their \emph{homogeneity}: a differential equation is said to be \emph{homogeneous} if it is invariant under the scaling of the unknown function. This is just a fancy way of saying that the differential equation does not change even if we replace $f(x)$ with $\lambda f(x)$ for an unknown constant $\lambda$.  
+
+We can summarize the classification of all differential equations with examples as given in Table~\ref{table: Illustration of various differential equations}
+\begin{table}
+	\caption{\label{table: Illustration of various differential equations}Illustration of various differential equations}
+	\centering
+	\footnotesize
+	\begin{tabular}{llll}
+			\textbf{Example differential equation}&\textbf{ordinary?}&\textbf{linear?}&\textbf{homogeneous?}\\
+$\displaystyle\rdr{^2f(x)}{x^2}+f(x)=0$&\cmark&\cmark&\cmark
+		\\\\
+$\displaystyle\rdr{^2f(x)}{x^2}+f(x)=x^2$&\cmark&\cmark&\xmark
+		\\\\
+$\displaystyle f(x)\rdr{^3f(x)}{x^3}+\left(\rdr{f(x)}{x}\right)^2=0$&\cmark&\xmark&\cmark
+		\\\\
+$\displaystyle\rdr{^2f(x)}{x^2}+\sin(f(x))=0$&\cmark&\xmark&\xmark
+\\\\
+$\displaystyle\pdr{^2f(x,y)}{x\partial y}+f(x,y)=0$&\xmark&\cmark&\cmark
+\\\\
+$\displaystyle\pdr{^2f(x,y)}{x^2}+f(x,y)=x^2$&\xmark&\cmark&\xmark
+\\\\
+$\displaystyle f(x)\pdr{^3f(x,y)}{x^3}+\left(\pdr{f(x,y)}{y}\right)^2=0$&\xmark&\xmark&\cmark
+\\\\
+$\displaystyle\pdr{^2f(x,y)}{x\partial y}+\sin(f(x,y))=0$&\xmark&\xmark&\xmark
+	\end{tabular}
+\end{table}
+
+\chapter{Linear equations with constant coefficients}
+\section{Linear mappings and kernels}
+Formally, we could write down the most generic linear ordinary differential equation for the unknown function $f$ as
+\be 
+g\left(x,\rdr{}{x}\right)f(x)+h(x)=0
+\ee 
+for arbitrary known functions $g$ and $h$. Indeed, this is a linear equation in the function $f$, and it has only one kind of derivative, $\rdr{}{x}$, hence it is an ordinary differential equation.
+
+Let's assume that we are given such an equation for known $g$ and $h$, and we are trying to solve for $f$. A naive attempt would be to write down
+\be 
+f(x)=\frac{1}{g\left(x,\rdr{}{x}\right)}h(x)
+\ee 
+which looks like a total nonsense! Nevertheless, we cannot help but realize that it does somewhat work in some cases; for instance, for
+\be 
+\rdr{}{x}f(x)=x^2
+\ee 
+we can write down
+\be 
+f(x)=\left(\rdr{}{x}\right)^{-1}x^2
+\ee 
+which we can rewrite as 
+\be 
+f(x)=\int dx x^2=\frac{x^2}{3}+\text{constant}
+\ee 
+by observing that integral is \emph{the inverse of derivative}.\footnote{Rigorously speaking, we are referring to indefinite integrals integrals (also known as antiderivatives or Newton integrals).}
+
+We need to be careful with such manipulations, but physicists \emph{tend to} define things \emph{formally}, which allows such expressions. For instance, we could say that \emph{the formal solution} to the differential equation
+\be 
+\left(\rdr{^2}{x^2}+c^2\right)f(x)=0
+\ee 
+is
+\be 
+f(x)=\left(\rdr{^2}{x^2}+c^2\right)^{-1}0
+\ee 
+For a physicist, there is nothing wrong with writing things like the equation above \emph{as long as we are careful with what we mean}! To spell out what we really mean with such an equation, we need to set up some terminology.
+
+Remember how we defined the derivative higher order function (or its integer powers) in \equref{eq: type of nth order derivatives}:
+\bea 
+\rdr{{}^n}{x^n}::{}&\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{A}\to\texttt{B}\right)\\
+f::{}&\texttt{A}\to\texttt{B}\\
+f^{(n)}::{}&\texttt{A}\to\texttt{B}
+\eea  
+The operation of taking derivatives is \emph{a map of functions to functions}; in fact, it is a \emph{linear map}!\footnote{We can easily see the linearity by noting the relation
+\be 
+\rdr{^n}{x^n}\left(c_1 f(x)+c_2 g(x)\right)=c_1\rdr{^n}{x^n}f(x)+c_2\rdr{^n}{x^n}g(x)
+\ee 
+for arbitrary coefficients $c_1$ and $c_2$.
+} Linear maps are really useful when we work with vectors, but we will see below that an important notion called \emph{kernel} can be extended from vector spaces to the functions as well.\footnote{
+The analogy is as follows: functions are like vectors, and linear transformations due to derivatives are like matrix multiplications. Indeed, a matrix $M$ (say $\begin{pmatrix}
+1&1\\0&1
+\end{pmatrix}$) acting on a vector $v$ (say $\begin{pmatrix}
+2\\3
+\end{pmatrix}$) is a linear mapping, just as the derivative $\rdr{}{x}$ turning the function $x^2$ into $2x$.
+
+The analogy extends to the equations. We could solve $M\.w=v$ for the unknown vector $w$, similar to how we solve $\rdr{}{x}f(x)=x^2$ for the function $f$. In fact such analogies can be made more precise if we realize that a function $f$ is in some sense an infinite dimensional vector. Indeed, in a neighborhood containing the point $c$ in which the function $f$ is analytic, we can just do a Taylor expansion and rewrite $f(x)$ as 
+\be 
+f(x)=\sum\limits_{n=0}^{\infty}f_n x^n
+\ee  
+where $f_n$ can be viewed as an infinite-dimensional vector $f_n=\left(f_0,f_1,\dots\right)$.\footnotemark
+}\footnotetext{
+If we take a step back, we can actually realize that the converse is also true (in fact, it is \emph{generically} true): \emph{any vector $v$ is simply a function from integers to the domain of the components of the vector}.
+
+What do we mean by that? Consider the vector $\vec{v}=\begin{pmatrix}
+1\\0\\-3
+\end{pmatrix}$. This vector is equivalent to the set of relations $v_1=1$, $v_2=0$, and $v_3=-3$. But that is simply a function
+\bea 
+v::{}&\N\to\R\\
+v={}&n\to\left\{\begin{aligned}
+1&\text{ if }n=1\\
+0&\text{ if }n=2\\
+-3&\text{ if }n=3\\
+\text{undefined}&\text{ otherwise}
+\end{aligned}\right.
+\eea 
+
+This process can be generalized to any finite or infinite dimensional vector.
+} 
+
+In vector spaces linear transformations are implemented by matrices and the \emph{kernel of a map} (or equivalently the kernel of the matrix that implements that map) is the set of vectors that are mapped to \emph{zero vector}. For instance the transformation ``clockwise rotation by $\pi/4$'' on $2d$ vectors can be implemented by the matrix
+\be 
+R(\pi/4)=\frac{1}{\sqrt{2}}\begin{pmatrix}
+1&1\\-1&1
+\end{pmatrix}
+\ee 
+which indeed rotates any vector $\vec{v}=\begin{pmatrix}
+	v_x\\v_y
+\end{pmatrix}$ to its rotated version $R(\pi/4)\.\vec{v}$!
+
+
+
+
+\chapter{Linear homogeneous equations with functional coefficients}
+\chapter{Linear nonhomogeneous equations with functional coefficients}
+\label{chapter: Linear nonhomogeneous equations with functional coefficients}
+\chapter{First order differential equations and their formal solutions}
+\chapter{Partial differential equations}

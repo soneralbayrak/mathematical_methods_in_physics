@@ -1,0 +1,500 @@
+%%% CLASS OPTIONS
+\def\yes{yes}
+\ifx\showtrimss\yes%
+\documentclass[11pt,oneside,final,openany,onecolumn,showtrims]{memoir}%
+\else%
+\documentclass[11pt,oneside,final,openany,onecolumn]{memoir}%
+\fi
+%%% CHAPTER STYLE
+\ifnum\chapterstylechoice=2 		\chapterstyle{section}
+\else\ifnum\chapterstylechoice=3 	\chapterstyle{hangnum}
+\else\ifnum\chapterstylechoice=4 	\chapterstyle{companion}
+\else\ifnum\chapterstylechoice=5 	\chapterstyle{article}
+\else\ifnum\chapterstylechoice=6 	\chapterstyle{reparticle}
+\else\ifnum\chapterstylechoice=7 	\chapterstyle{bianchi}
+\else\ifnum\chapterstylechoice=8 	\chapterstyle{bringhurst}
+\else\ifnum\chapterstylechoice=9 	\chapterstyle{brotherton}
+\else\ifnum\chapterstylechoice=10 	\chapterstyle{chappell}
+\else\ifnum\chapterstylechoice=11	\chapterstyle{crosshead}
+\else\ifnum\chapterstylechoice=12	\chapterstyle{culver}
+\else\ifnum\chapterstylechoice=13	\chapterstyle{dash}
+\else\ifnum\chapterstylechoice=14	\chapterstyle{demo2}
+\else\ifnum\chapterstylechoice=15 	\chapterstyle{demo3}
+\else\ifnum\chapterstylechoice=16	\chapterstyle{dowding}
+\else\ifnum\chapterstylechoice=17	\chapterstyle{ell}
+\else\ifnum\chapterstylechoice=18	\chapterstyle{ger}
+\else\ifnum\chapterstylechoice=19	\chapterstyle{komalike}
+\else\ifnum\chapterstylechoice=20	\chapterstyle{lyhne}
+\else\ifnum\chapterstylechoice=21	\chapterstyle{madsen}
+\else\ifnum\chapterstylechoice=22	\chapterstyle{ntglike}
+\else\ifnum\chapterstylechoice=23	\chapterstyle{pedersen}
+\else\ifnum\chapterstylechoice=24	\chapterstyle{southall}
+\else\ifnum\chapterstylechoice=25	\chapterstyle{tandh}
+\else\ifnum\chapterstylechoice=26	\chapterstyle{thatcher}
+\else\ifnum\chapterstylechoice=27	\chapterstyle{veelo}
+\else\ifnum\chapterstylechoice=28	\chapterstyle{verville}
+\else\ifnum\chapterstylechoice=29	\chapterstyle{wilsondob}
+\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi\fi
+%
+%%% FONT OPTIONS
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[oldstyle]{libertine}
+\usepackage{libertinust1math}
+%
+%%% NUMBERING OPTIONS
+\setsecnumdepth{subsection}
+%
+%%% SET PAPER SIZE
+\setstocksize{297mm}{210mm} %A4 paper
+\settrims{18mm}{18mm} % we trim 18mm from every direction. We chose this value at the very end, once we established the lengths of text block and side margin
+\settrimmedsize{261mm}{174mm}{*} % we trim 18mm from every direction
+%% Length of the text-block
+\settypeblocksize{233mm}{26pc}{*} % the height is maximized at the end
+%133pt, for 66pts, it is ~26pc
+% This is determined by the length of alphabet and Table 2.2 of https://mirrors.evoluso.com/CTAN/macros/latex/contrib/memoir/memman.pdf. The length of alphabet is determined by running the following command after begin document:
+%\newlength{\mylen} % a length
+%\newcommand{\alphabet}{qwertyuiopasdfghjklzxcvbnm} % the lowercase alphabet
+%\begingroup % keep font change local
+% font specification e.g., \Large\sffamily
+%\settowidth{\mylen}{\alphabet}
+%The length of this alphabet is \the\mylen. % print in document
+%\typeout{The length of the Large sans alphabet is \the\mylen} % put in log file
+%\endgroup % end the grouping
+%
+% By the same method, we also determined sidenotes should be around ~14pc (for ~44pt)
+\setsidebars{2\marginparsep}{14pc}{\onelineskip}{0pt}{\footnotesize\normalfont}{\textheight}
+%
+%%% MARGIN SETUP
+\setlrmargins{0mm}{*}{*} % no additional margin from left
+\setulmargins{*}{*}{1} % the top and bottom margins are devided equally
+\setheadfoot{\onelineskip}{2\onelineskip}
+\setheaderspaces{*}{2\onelineskip}{*}
+%Make sidenotes use hyphenation
+\usepackage{ragged2e}
+%\renewcommand*{\sidebarform}{\ifmemtortm\RaggedRight\else\RaggedLeft\fi}
+\renewcommand*{\sidebarform}{\justifying}
+%
+%%% FINALIZE PAGE SETUP
+\checkandfixthelayout 
+%
+%%% FULL WIDTH PAGE FORMAT
+\newlength{\fullwidthlen}
+\setlength{\fullwidthlen}{\marginparwidth}
+\addtolength{\fullwidthlen}{\marginparsep}
+
+\def\beginfullwidth#1\endfullwidth{%
+\checkoddpage\ifoddpage\strictpagecheck
+\begin{adjustwidth*}{0pt}{-\fullwidthlen}%
+	#1
+\end{adjustwidth*}%
+\else\strictpagecheck
+\begin{adjustwidth*}{-\fullwidthlen}{0pt}%
+	#1
+\end{adjustwidth*}%
+\fi
+}
+
+\def\begincenter#1\endcenter{%
+\calccentering{\unitlength}
+\checkoddpage\ifoddpage\strictpagecheck
+\begin{adjustwidth*}{\unitlength}{-\unitlength}%
+	#1
+\end{adjustwidth*}%
+\else\strictpagecheck
+\begin{adjustwidth*}{-\unitlength}{\unitlength}%
+	#1
+\end{adjustwidth*}%
+\fi
+}
+
+
+
+%
+%%% ENSURE PARAGRAPHS ARE LEAST SPLIT BETWEEN PAGES
+\clubpenalty=10000
+\widowpenalty=10000
+\raggedbottom
+%
+%%% SETUP SIDE NOTES
+\usepackage{alphalph}
+\makeatletter
+\newalphalph{\alphmult}[alph]{\@alph}{26}
+\makeatother
+\newcounter{myfootnote}
+\setcounter{myfootnote}{0}
+\renewcommand{\themyfootnote}{\alphmult{\value{myfootnote}}}
+%
+\newcommand{\note}[1]{%
+\refstepcounter{myfootnote}%
+\hyperref[footnoteinternal:{\themyfootnote}]{${}^{\themyfootnote}$}%
+\sidebar{\label{footnoteinternal:{\themyfootnote}}${}^{\themyfootnote}$#1}%
+}
+%
+\let\oldfootnote\footnote
+\renewcommand{\footnote}{\note}
+%
+\let\oldfootnotemark\footnotemark
+\renewcommand{\footnotemark}{%
+\refstepcounter{myfootnote}%
+\hyperref[footnoteinternal:{\themyfootnote}]{${}^{\themyfootnote}$}}
+%
+\newcommand{\notetext}[1]{%
+\sidebar{\label{footnoteinternal:{\themyfootnote}}${}^{\themyfootnote}$#1}%
+}
+\let\oldfootnotetext\footnotetext
+\renewcommand{\footnotetext}{\notetext}
+%
+\newcommand{\sidefigure}[3]{%
+\sidebar{\centering #3\captionof{figure}[#1]{#2}
+}}
+%
+\newcommand{\sidetable}[3]{%
+	\sidebar{\centering \captionof{table}[#1]{#2} #3
+}}
+%
+%%% BOTTOM NOTES
+\newcommand{\bottomnote}[1]{%
+	\refstepcounter{myfootnote}%
+	\renewcommand{\thefootnote}{\themyfootnote}%
+	\oldfootnote{#1}%
+}
+%
+\newcommand{\bottomnotemark}{%
+	\refstepcounter{myfootnote}%
+	\renewcommand{\thefootnote}{\themyfootnote}%
+	\oldfootnotemark}
+%
+\newcommand{\bottomnotetext}[1]{%
+	\renewcommand{\thefootnote}{\themyfootnote}%
+	\oldfootnotetext{#1}}
+%
+%%% ARRANGE SIDEBAR MARGINS ON CHAPTER PAGES
+\let\chapterTemporary\chapter
+\renewcommand{\chapter}[1]{%
+\chapterTemporary{#1}%
+\sidebar{\vspace*{\chapterpagesidenotesmargin\baselineskip}}%
+}
+%
+%%% MAKE SURE THERE IS NO FULL-PAGE FLOATS
+\renewcommand{\topfraction}{1}
+\renewcommand{\textfraction}{0}
+\setfloatlocations{figure}{t}
+\setfloatlocations{table}{t}
+\suppressfloats[p]
+%
+%%% TITLE SETUP
+\pretitle{\begin{flushleft}\Huge\sffamily}
+\posttitle{\par\end{flushleft}\vskip 3em}
+\preauthor{\begin{center}\Large}
+\postauthor{\end{center}\vskip 3em}
+\predate{\begin{flushright}\large\scshape}
+\postdate{\par\end{flushright}\vskip 3em}	
+%
+\newcommand{\published}[1]{%
+	\gdef\puB{#1}}
+\newcommand{\puB}{}
+\renewcommand{\maketitlehooka}{%
+	\par\noindent \puB}
+%
+\published{\publishnote}
+\title{\titlee}
+\author{\authorr}
+\date{\datee}
+%
+%%% SET LANGUAGE SPECIFIC DATA
+\usepackage[\lang]{babel}
+% One can change the titles as follows if so wishes:
+\addto\captionsenglish{%
+\renewcommand{\abstractname}{Summary}%
+%\renewcommand{\prefacename}{Preface}%
+%\renewcommand{\refname}{References}%
+%\renewcommand{\bibname}{Bibliography}%
+%\renewcommand\contentsname{Contents}%
+%\renewcommand{\listfigurename}{LIST OF FIGURES}%
+%\renewcommand{\chaptername}{Chapter}%
+%\renewcommand{\appendixname}{Appendix}%
+}
+%
+%\addto\captionsturkish{%
+%	\renewcommand{\abstractname}{Summary}%
+%	\renewcommand{\prefacename}{Preface}%
+%	\renewcommand{\refname}{Refereces}%
+%	\renewcommand\contentsname{Contents}%
+%	\renewcommand{\listfigurename}{LIST OF FIGURES}%
+%}
+%
+%%% USEFUL PACKAGES
+\usepackage{amsmath,amssymb,amsfonts,mathtools,bm} % Default math packages
+\numberwithin{equation}{\numberwithinn}
+\usepackage{physics} % Default physics package
+\usepackage[margin=10pt,font=small,labelfont=bf]{caption}
+\usepackage[square, comma, sort&compress,numbers]{natbib} 
+\usepackage[pdftex,dvipsnames]{xcolor}
+\definecolor{darkblue}{rgb}{0.1,0.1,.7}
+\usepackage[colorlinks, linkcolor=darkblue, citecolor=darkblue, urlcolor=darkblue, linktocpage]{hyperref} 
+\usepackage{graphicx}  % Allows including images
+\graphicspath{ {images/} }
+%
+%%% CURLY L IN MATH MODE
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+%
+%%% SEVERAL MACROS
+\def\<#1\>{\expval{#1}}
+\newcommand   \rdr  [2] {\frac{\dd #1}{\dd #2}}
+\newcommand   \pdr  [2] {\frac{\partial #1}{\partial #2}}
+\newcommand   \tl  [1] {\widetilde{#1}}
+\newcommand{\undertl}[1]{\mathord{\vtop{\ialign{##\crcr
+				$\hfil\displaystyle{#1}\hfil$\crcr\noalign{\kern1.5pt\nointerlineskip}
+				$\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}} % Puts tilde under given variable
+% \def\blfootnote{\gdef\@thefnmark{}\@footnotetext} %FOOTNOTE WITHOUT NUMBER OR SYMBOL
+\renewcommand \.   {\cdot}
+\newcommand   \x   {\times}
+\newcommand   \aeq {\thickapprox}
+\newcommand   \mto {\mapsto}
+\newcommand   \half{\frac 1 2}
+\newcommand   \lptl{\raise .8ex\hbox{$^\leftarrow$} \hspace{-9pt} \partial} % derivatives with arrows
+\newcommand   \lrptl{\raise .8ex\hbox{$^\leftrightarrow$} \hspace{-9pt} \partial} % derivatives with arrows
+%
+%%% EQUATION COMMANDS
+\newcommand \nn {\nonumber}
+\def\be#1\ee{\begin{equation}\begin{aligned}#1\end{aligned}\end{equation}}
+\makeatletter
+\DeclareRobustCommand\bea{\@ifnextchar[{\@@bea}{\@bea}}
+\def\@@bea[#1]#2\eea{\begin{subequations}\begin{align}#2\end{align}\label{#1}\end{subequations}}
+\def\@bea#1\eea{\begin{subequations}\begin{align}#1\end{align}\end{subequations}}
+\makeatother
+%
+%%% RENDERING HYPERGEOMETRIC FUNCTION 
+ \newcommand*\pFqskip{8mu}
+ \catcode`,\active
+ \newcommand*\pFq{\begingroup
+		\catcode`\,\active
+		\def ,{\mskip\pFqskip\relax}%
+		\dopFq
+	 }
+ \catcode`\,12
+ \def\dopFq#1#2#3#4#5{%
+		{}_{#1}F_{#2}\biggl[\genfrac..{0pt}{}{#3}{#4};#5\biggr]%
+		\endgroup
+	 }
+%
+%%% GREEK LETTERS
+\renewcommand \a  {\alpha}
+\renewcommand \b  {\beta}
+\newcommand   \g  {\gamma}
+\newcommand   \G  {\Gamma}
+\newcommand   \de {\delta}
+\newcommand   \De {\Delta}
+\newcommand   \e  {\epsilon}
+\renewcommand \l  {\lambda}
+\renewcommand \L  {\Lambda}
+\renewcommand \r  {\rho}
+\newcommand   \f  {\phi}
+\newcommand   \vf {\varphi}
+\newcommand   \s  {\sigma}
+\newcommand   \w  {\omega}
+\renewcommand \O  {\Omega}
+\renewcommand \th {\theta}
+\newcommand   \ka {\kappa}
+\newcommand   \z  {\zeta}
+%
+%%% BOLD LETTERS
+% some letters are commented out to not conflict with the usual TeX commands
+%% lowercase
+\newcommand   \ba {\mathbf{a}}
+\newcommand   \bb {\mathbf{b}}
+\newcommand   \bc {\mathbf{c}}
+\newcommand   \bd {\mathbf{d}}
+%\newcommand   \be {\mathbf{e}}
+%\newcommand   \bf {\mathbf{f}}
+\newcommand   \bg {\mathbf{g}}
+\newcommand   \bh {\mathbf{h}}
+\newcommand   \bi {\mathbf{i}}
+\newcommand   \bj {\mathbf{j}}
+\newcommand   \bk {\mathbf{k}}
+\newcommand   \bl {\mathbf{l}}
+%\newcommand   \bm {\mathbf{m}}
+\newcommand   \bn {\mathbf{n}}
+\newcommand   \bo {\mathbf{o}}
+\newcommand   \bp {\mathbf{p}}
+\newcommand   \bq {\mathbf{q}}
+\newcommand   \br {\mathbf{r}}
+\renewcommand   \bs {\mathbf{s}}
+\newcommand   \bt {\mathbf{t}}
+\newcommand   \bu {\mathbf{u}}
+\newcommand   \bv {\mathbf{v}}
+\newcommand   \bw {\mathbf{w}}
+\newcommand   \bx {\mathbf{x}}
+\newcommand   \by {\mathbf{y}}
+\newcommand   \bz {\mathbf{z}}
+%% Uppercase
+\newcommand   \bA {\mathbf{A}}
+\newcommand   \bB {\mathbf{B}}
+\newcommand   \bC {\mathbf{C}}
+\newcommand   \bD {\mathbf{D}}
+\newcommand   \bE {\mathbf{E}}
+\newcommand   \bF {\mathbf{F}}
+\newcommand   \bG {\mathbf{G}}
+\newcommand   \bH {\mathbf{H}}
+\newcommand   \bI {\mathbf{I}}
+\newcommand   \bJ {\mathbf{J}}
+\newcommand   \bK {\mathbf{K}}
+\newcommand   \bL {\mathbf{L}}
+\newcommand   \bM {\mathbf{M}}
+\newcommand   \bN {\mathbf{N}}
+\newcommand   \bO {\mathbf{O}}
+\newcommand   \bP {\mathbf{P}}
+\newcommand   \bQ {\mathbf{Q}}
+\newcommand   \bR {\mathbf{R}}
+\newcommand   \bS {\mathbf{S}}
+\newcommand   \bT {\mathbf{T}}
+\newcommand   \bU {\mathbf{U}}
+\newcommand   \bV {\mathbf{V}}
+\newcommand   \bW {\mathbf{W}}
+\newcommand   \bX {\mathbf{X}}
+\newcommand   \bY {\mathbf{Y}}
+\newcommand   \bZ {\mathbf{Z}}
+%
+%%% SPACES AND FIELDS
+\newcommand   \R  {\mathbb{R}}
+\newcommand   \Z  {\mathbb{Z}}
+\newcommand   \N  {\mathbb{N}}
+\newcommand   \C  {\mathbb{C}}
+\newcommand   \Q  {\mathbb{Q}}
+\newcommand   \Qp {\mathbb{Q}_p}
+\renewcommand \P  {\mathbb{P}}
+\newcommand   \A  {\mathbb{A}}
+%
+%%% MULTI-LETTER FUNCTORS/FUNCTIONS
+\newcommand   \Ad    {\mathrm{Ad}}
+\newcommand   \SU    {\mathrm{SU}}
+\newcommand   \SO    {\mathrm{SO}}
+\newcommand   \ISO    {\mathrm{ISO}}
+\newcommand   \GL    {\mathrm{GL}}
+\newcommand   \SL    {\mathrm{SL}}
+\newcommand   \PSL   {\mathrm{PSL}}
+\newcommand   \PGL   {\mathrm{PGL}}
+\newcommand   \Sp    {\mathrm{Sp}}
+\newcommand   \Span  {\mathrm{Span}}
+\newcommand   \Aut   {\mathrm{Aut}}
+\renewcommand \Re    {\mathop{\mathrm{Re}}}
+\renewcommand \Im    {\mathop{\mathrm{Im}}}
+\newcommand   \Pf    {\mathrm{Pf}}
+\newcommand   \Ker   {\mathop{\mathrm{Ker}}}
+\newcommand   \Coker {\mathop{\mathrm{Coker}}}
+\newcommand   \Hom   {\mathrm{Hom}}
+\newcommand   \Mor   {\mathrm{Mor}}
+\newcommand   \Gal   {\mathrm{Gal}}
+\newcommand   \Sym   {\mathrm{Sym}}
+\newcommand   \codim {\mathop{\mathrm{codim}}}
+\newcommand   \ind   {\mathop{\mathrm{ind}}}
+\newcommand   \Vol   {\mathrm{Vol}}
+\newcommand   \vol   {\mathrm{vol}}
+\newcommand   \diag  {\mathrm{diag}}
+%
+%%% CALIGRAPHIC CAPITALS
+\newcommand   \cA {\mathcal{A}}
+\newcommand   \cB {\mathcal{B}}
+\newcommand   \cC {\mathcal{C}}
+\newcommand   \cD {\mathcal{D}}
+\newcommand   \cE {\mathcal{E}}
+\newcommand   \cF {\mathcal{F}}
+\newcommand   \cG {\mathcal{G}}
+\newcommand   \cH {\mathcal{H}}
+\newcommand   \cI {\mathcal{I}}
+\newcommand   \cJ {\mathcal{J}}
+\newcommand   \cK {\mathcal{K}}
+\newcommand   \cL {\mathcal{L}}
+\newcommand   \cM {\mathcal{M}}
+\newcommand   \cN {\mathcal{N}}
+\newcommand   \cO {\mathcal{O}}
+\newcommand   \cP {\mathcal{P}}
+\newcommand   \cQ {\mathcal{Q}}
+\newcommand   \cR {\mathcal{R}}
+\newcommand   \cS {\mathcal{S}}
+\newcommand   \cT {\mathcal{T}}
+\newcommand   \cU {\mathcal{U}}
+\newcommand   \cV {\mathcal{V}}
+\newcommand   \cW {\mathcal{W}}
+\newcommand   \cX {\mathcal{X}}
+\newcommand   \cY {\mathcal{Y}}
+\newcommand   \cZ {\mathcal{Z}}
+%
+
+%%%%%%% Fractur Capitals %%%%%%%
+\newcommand   \fA {\mathfrak{A}}
+\newcommand   \fB {\mathfrak{B}}
+\newcommand   \fC {\mathfrak{C}}
+\newcommand   \fD {\mathfrak{D}}
+\newcommand   \fE {\mathfrak{E}}
+\newcommand   \fF {\mathfrak{F}}
+\newcommand   \fG {\mathfrak{G}}
+\newcommand   \fH {\mathfrak{H}}
+\newcommand   \fI {\mathfrak{I}}
+\newcommand   \fJ {\mathfrak{J}}
+\newcommand   \fK {\mathfrak{K}}
+\newcommand   \fL {\mathfrak{L}}
+\newcommand   \fM {\mathfrak{M}}
+\newcommand   \fN {\mathfrak{N}}
+\newcommand   \fO {\mathfrak{O}}
+\newcommand   \fP {\mathfrak{P}}
+\newcommand   \fQ {\mathfrak{Q}}
+\newcommand   \fR {\mathfrak{R}}
+\newcommand   \fS {\mathfrak{S}}
+\newcommand   \fT {\mathfrak{T}}
+\newcommand   \fU {\mathfrak{U}}
+\newcommand   \fV {\mathfrak{V}}
+\newcommand   \fW {\mathfrak{W}}
+\newcommand   \fX {\mathfrak{X}}
+\newcommand   \fY {\mathfrak{Y}}
+\newcommand   \fZ {\mathfrak{Z}}
+%%% START THE DOCUMENT
+\bibliographystyle{\bibliographystylefile}
+\begin{document}
+\setlength{\droptitle}{40pt}
+\begin{titlingpage}
+\calccentering{\unitlength}
+\begin{adjustwidth*}{\unitlength}{-\unitlength}
+\maketitle
+\begin{abstract}
+\abstractt
+\end{abstract}
+\end{adjustwidth*}
+\end{titlingpage}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
+\frontmatter
+\input{frontmatter}
+\beginfullwidth
+\clearpage
+\tableofcontents
+\clearpage
+\listoftables
+\clearpage
+\listoffigures
+\endfullwidth
+\mainmatter
+\input{mainmatter}
+\appendix 
+\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+\input{appendix}
+\backmatter
+\input{backmatter}
+%%% Bibliography
+\let\chapter\chapterTemporary
+\checkoddpage\ifoddpage\strictpagecheck
+	\begin{adjustwidth*}{0pt}{-\fullwidthlen}%
+	\bibliography{\bibliographyfile}{}
+\end{adjustwidth*}%
+\else\strictpagecheck
+\begin{adjustwidth*}{-\fullwidthlen}{0pt}%
+	\bibliography{\bibliographyfile}{}
+\end{adjustwidth*}%
+\fi
+\end{document}
