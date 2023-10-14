@@ -185,6 +185,7 @@ This concept of turning higher-order functions into functions of multiple variab
 
 \section{Differential equations}
 \subsection{Basics}
+\label{section: basics of diff eqn}
 Very broadly, we could define any relation that contains the derivative higher order function $\rdr{}{x}$ and an unknown function $f$ as a differential equation. For instance,
 \be 
 \cos\left(\exp(\rdr{}{x})f(x)+\frac{1}{f(x)}\right)=0
@@ -353,7 +354,9 @@ is called a \emph{linear differential equation}, whereas
 \be 
 f(x)\rdr{}{x}f(x)=x^3
 \ee 
-is a \emph{nonlinear} differential equation. An easy way to check if a differential equation is linear or nonlinear is to apply the transformation $f(x)\rightarrow \lambda f(x)$ for the constant $\lambda$: if the differential equation is linear in $\lambda$ (i.e. it can be written as $\lambda(\dots)+(\dots)=0$), then the differential equation is a linear differential equation; otherwise, it is a nonlinear differential equation.
+is a \emph{nonlinear} differential equation.\footnote{\label{footnote:superposition}
+One important feature of linear differential equations is that their solutions obey \emph{the principle of supersposition}; that is, if $f(x)$ and $g(x)$ are two solutions to the linear differential equation, then $c_1f(x)+c_2g(x)$ is also a solution for arbitrary constants $c_{1,2}$.
+} An easy way to check if a differential equation is linear or nonlinear is to apply the transformation $f(x)\rightarrow \lambda f(x)$ for the constant $\lambda$: if the differential equation is linear in $\lambda$ (i.e. it can be written as $\lambda(\dots)+(\dots)=0$), then the differential equation is a linear differential equation; otherwise, it is a nonlinear differential equation.
 
 Nonlinear equations are way harder to solve than the linear equations; in fact, we actually do not know how to solve most of the nonlinear equations! In practice, one usually handles them numerically, which is beyond of the scope of this course. If you are only interested in a particular regime, you can also \emph{linearize} a nonlinear equation around that regime, which is what most physicists do in practice. For instance, consider the nonlinear differential equation
 \be 
@@ -410,7 +413,7 @@ $\displaystyle\pdr{^2f(x,y)}{x\partial y}+\sin(f(x,y))=0$&\xmark&\xmark&\xmark
 \section{Linear mappings and kernels}
 Formally, we could write down the most generic linear ordinary differential equation for the unknown function $f$ as
 \be 
-g\left(x,\rdr{}{x}\right)f(x)+h(x)=0
+g\left(x,\rdr{}{x}\right)f(x)=h(x)
 \ee 
 for arbitrary known functions $g$ and $h$. Indeed, this is a linear equation in the function $f$, and it has only one kind of derivative, $\rdr{}{x}$, hence it is an ordinary differential equation.
 
@@ -430,7 +433,7 @@ which we can rewrite as
 \be 
 f(x)=\int dx x^2=\frac{x^2}{3}+\text{constant}
 \ee 
-by observing that integral is \emph{the inverse of derivative}.\footnote{Rigorously speaking, we are referring to indefinite integrals integrals (also known as antiderivatives or Newton integrals).}
+by observing that integral is \emph{the inverse of derivative}.\footnote{Rigorously speaking, we are referring to indefinite integrals (also known as antiderivatives or Newton integrals).}
 
 We need to be careful with such manipulations, but physicists \emph{tend to} define things \emph{formally}, which allows such expressions. For instance, we could say that \emph{the formal solution} to the differential equation
 \be 
@@ -484,18 +487,228 @@ v={}&n\to\left\{\begin{aligned}
 This process can be generalized to any finite or infinite dimensional vector.
 } 
 
-In vector spaces linear transformations are implemented by matrices and the \emph{kernel of a map} (or equivalently the kernel of the matrix that implements that map) is the set of vectors that are mapped to \emph{zero vector}. For instance the transformation ``clockwise rotation by $\pi/4$'' on $2d$ vectors can be implemented by the matrix
+In vector spaces linear transformations are implemented by matrices; for instance, the transformation ``clockwise rotation by $\pi/4$'' on $2d$ vectors can be implemented by the matrix
 \be 
-R(\pi/4)=\frac{1}{\sqrt{2}}\begin{pmatrix}
+R(-\pi/4)=\frac{1}{\sqrt{2}}\begin{pmatrix}
 1&1\\-1&1
 \end{pmatrix}
 \ee 
 which indeed rotates any vector $\vec{v}=\begin{pmatrix}
 	v_x\\v_y
-\end{pmatrix}$ to its rotated version $R(\pi/4)\.\vec{v}$!
+\end{pmatrix}$ to its rotated version\linebreak \mbox{$R(-\pi/4)\.\vec{v}$}; for instance, the unit vector pointing to NorthEast direction on a map ---i.e. $\frac{1}{\sqrt{2}}\begin{pmatrix}
+1\\1
+\end{pmatrix}$--- gets rotated to the vector pointing to the East by this $45$ degrees of clockwise rotation:
+\be 
+\frac{1}{\sqrt{2}}\begin{pmatrix}
+1&1\\-1&1
+\end{pmatrix}\frac{1}{\sqrt{2}}\begin{pmatrix}
+1\\1
+\end{pmatrix}=\begin{pmatrix}
+1\\0
+\end{pmatrix}
+\ee 
+In fact \emph{a general counterclockwise rotation by an angle $\theta$} can be implemented by the matrix
+\be 
+R(-\pi/4)=\begin{pmatrix}
+	\cos(\theta)&\sin(\theta)\\-\sin(\theta)&\cos(\theta)
+\end{pmatrix}
+\ee 
 
+The \emph{kernel of a map} (or equivalently the kernel of the matrix that implements that map) is the set of vectors that are mapped to \emph{zero vector}; for instance, we can show that the only such vector for the rotation matrix is the zero vector itself; in other words,
+\be 
+\begin{pmatrix}
+	\cos(\theta)&\sin(\theta)\\-\sin(\theta)&\cos(\theta)
+\end{pmatrix}\begin{pmatrix}
+a\\b
+\end{pmatrix}=\begin{pmatrix}
+0\\0
+\end{pmatrix}
+\ee 
+is true only if $a=b=0$; thus, we write
+\be 
+\ker\left[R(\theta)\right]=\{\vec{0}\}
+\ee 
+which means \emph{the only vector that can be rotated to the zero vector is the zero vector itself}. When said this way, it clearly makes sense!
 
+Let's look at another example: we define the matrix $S$ as
+\be 
+S=\begin{pmatrix}
+1&2\\2&4
+\end{pmatrix}
+\ee 
+If we now look at the \emph{kernel of this linear transformation}, we find a non-trivial result; in fact, we can immediately write down
+\be 
+\ker [S]=\left\{\vec{0},\begin{pmatrix}
+2a\\-a
+\end{pmatrix}\right\}
+\ee 
+which means not only the zero vector gets mapped to zero vector, but also any vector of the form $\begin{pmatrix}
+	2a\\-a
+\end{pmatrix}$ becomes zero under the action of this matrix. Indeed, we see that
+\be 
+\begin{pmatrix}
+	1&2\\2&4
+\end{pmatrix}\begin{pmatrix}
+2a\\-a
+\end{pmatrix}=\begin{pmatrix}0\\0\end{pmatrix}
+\ee 
 
+What does this mean? And what is the action of this linear transformation? Just like the rotation matrix rotates any input vector, this $S$ matrix also transforms the input vectors, but it actually \emph{squeezes} them. Indeed, we see that for any vector pointing in any direction, the action of this transformation squeezes them into the $\begin{pmatrix}
+	1\\2
+\end{pmatrix}$ direction. We can see this explicitly:
+\bea 
+S\.\vec{v}_{\text{input}}={}&\vec{v}_{\text{output}}\\
+\vec{v}_{\text{input}}={}&\begin{pmatrix}
+a\\b
+\end{pmatrix}
+\\
+\vec{v}_{\text{output}}={}&(a+2b)\begin{pmatrix}
+	1\\2\end{pmatrix}
+\eea
+
+\paragraph{Summary:} We have seen with examples that some linear transformations (such as rotation) has a \emph{trivial kernel},\footnote{We say that a kernel is trivial if it only includes the identity element ($\vec{0}$ vector in the case of vector spaces).} whereas other transformations (such as squeezing) may have a nontrivial kernel. 
+\paragraph{Quick check in vector spaces:} Whether a linear transformation has a trivial kernel or not can immediately be checked in the case of vector spaces by computing the \emph{determinant} of the matrix that implements that transformation. If the determinant is zero (e.g. $\det S=0$), then the kernel is nontrivial; otherwise ($\det R = 1$) the kernel is trivial.
+\paragraph{The importance of nontrivial kernel:} If the kernel is nontrivial, then the transformation is not uniquely invertible. For instance, if we have 
+\be 
+\begin{pmatrix}
+	1&2\\2&4
+\end{pmatrix}\begin{pmatrix}
+x\\y
+\end{pmatrix}=\begin{pmatrix}
+1\\2
+\end{pmatrix}
+\ee 
+Then $\begin{pmatrix}
+1\\0
+\end{pmatrix}$ is a solution, but so is $\begin{pmatrix}
+3\\-1
+\end{pmatrix}$ or $\begin{pmatrix}
+-1\\1
+\end{pmatrix}$. In fact, the full family of solutions is given as 
+\be 
+\begin{pmatrix}
+	x\\y
+\end{pmatrix}=\begin{pmatrix}
+1\\0
+\end{pmatrix}+\begin{pmatrix}
+2a\\-a
+\end{pmatrix}
+\ee 
+On the other hand, the rotation having a trivial kernel makes sure that we have a unique answer; for instance, 
+\be 
+\frac{1}{\sqrt{2}}\begin{pmatrix}
+	1&1\\-1&1
+\end{pmatrix}\begin{pmatrix}
+x\\y
+\end{pmatrix}=\begin{pmatrix}
+1\\2
+\end{pmatrix}
+\ee 
+has the unique answer
+\be 
+\begin{pmatrix}
+	x\\y
+\end{pmatrix}=\frac{1}{\sqrt{2}}\begin{pmatrix}
+	-1\\3
+\end{pmatrix}
+\ee 
+\paragraph{Back to the differential equations:} The story with the matrices immediately carries over to the differential equations: the differential operators have nontrivial kernels, and these results are called \emph{homogeneous solutions}. For the general differential equation
+\be 
+g\left(x,\rdr{}{x}\right)f(x)=h(x)
+\ee 
+the solution then becomes
+\be 
+f(x)=p(x)+\ker \left[g\left(x,\rdr{}{x}\right)\right]
+\ee 
+where $p(x)$ is called the \emph{particular solution}, and the elements of the kernel are the homogeneous solutions.
+
+\section{Homogeneous solutions}
+\subsection{Basics}
+We have discussed in \S~\ref{section: basics of diff eqn} that the solution to the differential equation $f'(x)=f(x)$ is given as\footnote{As we discussed in that section, this result is either a definition or a derived result depending our conventions.}
+\be 
+f(x)=e^x
+\ee 
+We can actually generalize this to\footnote{
+One way to show this is the judicious use of the chain rule as follows:
+\be 
+\rdr{}{x}e^{x}=e^{x}\xrightarrow{\text{define }x=\lambda y} \rdr{}{x}e^{\lambda y}=e^{\l y}\\
+\xrightarrow{\text{use chain rule}}\rdr{y}{x}\rdr{}{y}e^{\lambda y}=e^{\l y}\\\xrightarrow{\text{use }y=x/\l}\frac{1}{\l}\rdr{}{y}e^{\lambda y}=e^{\l y}
+\\\xrightarrow{\text{rewrite}}\left(\rdr{}{y}-\l\right)e^{\lambda y}=0
+\ee 
+}
+\be 
+\left(\rdr{}{y}-\l\right)e^{\lambda y}=0
+\ee 
+which says the \emph{linear ordinary differential equation with constant coefficient}
+\be 
+\left(\rdr{}{x}-\l\right)f(x)=0
+\ee 
+has the \emph{solution}
+\be 
+f(x)=e^{\lambda x}
+\ee 
+In the fancy language, we can now write this result as 
+\be 
+\ker\left[\left(\rdr{}{x}-\l\right)\right]=\left\{0,e^{\lambda x}\right\}
+\ee 
+which means that
+\be 
+\left(\rdr{}{x}-\l\right)f(x)=h(x)\quad\Rightarrow\quad f(x)=p(x)+ce^{\l x}
+\ee 
+for the arbitrary variable $c$, where we will discuss the computation of particular solution $p(x)$ later.
+
+One immediate observation we can make is that $e^{\l x}$ would still be a solution if there were more terms to the left of the equation; in other words,
+\be 
+g\left(x,\rdr{}{x}\right)\left(\rdr{}{x}-\l\right)f(x)=0
+\ee 
+is still satisfied for $f(x)=e^{\l x}$. This becomes particularly interesting if $g\left(x,\rdr{}{x}\right)$ is a product of $\left(\rdr{}{x}-a\right)$, i.e.
+\be
+\label{eq: product form diff eqn} 
+\left(\rdr{}{x}-r_1\right)\left(\rdr{}{x}-r_2\right)\cdots\left(\rdr{}{x}-r_n\right)f(x)=0
+\ee 
+Clearly $e^{r_nx}$ is a solution, but as these terms commute with each other, we can immediately write down the full solution as\footnote{This follows from the principle of superposition, see footnote~\ref{footnote:superposition}.}
+\bea 
+f::{}&{}\C\to\C\\
+f={}&{}x\to \sum\limits_{i=1}^n c_i e^{r_i x}
+\eea
+for arbitrary constants $c_i$.
+
+Differential equations are usually given in the form
+\be 
+\left(a_0+a_1\rdr{}{x}+a_2\rdr{^2}{x^2}+\dots+a_n\rdr{^n}{x^n}\right)f(x)=0
+\ee 
+which can be brought to the form \equref{eq: product form diff eqn} by simply finding the roots of the equation\footnote{This equation is called \emph{characteristic equation} of the given system.}
+\be 
+a_0+a_1r+a_2r^2+\dots+a_nr^n=0
+\ee 
+If the coefficients $a_i$ are simply complex numbers (or real numbers as a special case of complex numbers), we can always find $n$ roots $r_i$!\footnote{
+The field of complex numbers is algebraically closed, hence such polynomials \emph{always} have solutions. In contrast, the field of real numbers is \emph{not} algebraically closed; for instance, $x^2+1=0$ has no real root. For more information on these, see \emph{fundamental theorem of algebra}.
+}
+
+\subsection{Repeated roots}
+Consider the differential equation
+\be
+\left(\rdr{}{x}-r_1\right)\left(\rdr{}{x}-r_2\right)f(x)=0
+\ee 
+which has the solution $f(x)=c_1 e^{r_1x}+c_2e^{r_2x}$. If we now do a change of parameters as
+\be 
+r_1=r\;,\quad r_2=r+\de\;,\quad c_1=a-\frac{b}{\de}\;,\quad c_2=\frac{b}{\de}
+\ee 
+our statement becomes
+\be 
+\left(\rdr{}{x}-r\right)\left(\rdr{}{x}-(r+\de)\right)f(x)=0\quad f(x)=a e^{r x}+b\frac{e^{(r+\de)x}-e^{rx}}{\de}
+\ee 
+If we now take the limit $\de\to 0$ and recognize the definition of derivative, we arrive at
+\be 
+\left(\rdr{}{x}-r\right)^2f(x)=0\quad f(x)=a e^{r x}+bxe^{rx}
+\ee 
+\draftnote{discuss this more, compare it with finding the solution with $a(x)e^{rx}$, generalize to arbitrary multiplicity}
+
+\subsection{Examples}
+\draftnote{RLC circuits, damper-spring systems, traffic models, etc.}
+
+\section{Laplace transform}
+\draftnote{about integral transforms, laplace transforms of common functions, example: RLC circuit with AC input}
 
 \chapter{Linear homogeneous equations with functional coefficients}
 \chapter{Linear nonhomogeneous equations with functional coefficients}
