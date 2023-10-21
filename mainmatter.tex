@@ -681,7 +681,7 @@ which can be brought to the form \equref{eq: product form diff eqn} by simply fi
 \be 
 a_0+a_1r+a_2r^2+\dots+a_nr^n=0
 \ee 
-If the coefficients $a_i$ are simply complex numbers (or real numbers as a special case of complex numbers), we can always find $n$ roots $r_i$!\footnote{
+If the coefficients $a_i$ are simply complex numbers (or real numbers as a special case of complex numbers), we can always find $n$ complex roots $r_i$!\footnote{
 The field of complex numbers is algebraically closed, hence such polynomials \emph{always} have solutions. In contrast, the field of real numbers is \emph{not} algebraically closed; for instance, $x^2+1=0$ has no real root. For more information on these, see \emph{fundamental theorem of algebra}.
 }
 
@@ -692,6 +692,7 @@ Consider the differential equation
 \ee 
 which has the solution $f(x)=c_1 e^{r_1x}+c_2e^{r_2x}$. If we now do a change of parameters as
 \be 
+\label{eq: repeated root transformation}
 r_1=r\;,\quad r_2=r+\de\;,\quad c_1=a-\frac{b}{\de}\;,\quad c_2=\frac{b}{\de}
 \ee 
 our statement becomes
@@ -700,17 +701,152 @@ our statement becomes
 \ee 
 If we now take the limit $\de\to 0$ and recognize the definition of derivative, we arrive at
 \be 
-\left(\rdr{}{x}-r\right)^2f(x)=0\quad f(x)=a e^{r x}+bxe^{rx}
+\label{eq: repeated result}
+\left(\rdr{}{x}-r\right)^2f(x)=0\quad\rightarrow\quad f(x)=a e^{r x}+bxe^{rx}
 \ee 
-\draftnote{discuss this more, compare it with finding the solution with $a(x)e^{rx}$, generalize to arbitrary multiplicity}
+
+The way we arrived at this curious result is not satisfactory: we did a particular transformation in \equref{eq: repeated root transformation} and we do not have a strong reason to choose that transformation. For instance, if we instead choose
+\be 
+\label{eq: repeated root transformation 2}
+r_1=r\;,\quad r_2=r+\de\;,\quad c_1=a-b\;,\quad c_2=b
+\ee 
+and then take the limit $\de\to0$, we end up with
+\be 
+\label{eq: repeated result 2}
+\left(\rdr{}{x}-r\right)^2f(x)=0\quad\xrightarrow{???}\quad f(x)=a e^{r x}
+\ee 
+We missed the second piece of $f(x)$ in \equref{eq: repeated result}.
+
+What is the resolution of this discrepancy? We have two potential scenarios: \textbf{(a)} $x e^{ax}$ is \emph{a spurious solution},\footnote{Spurious solutions are fake results that emerge as solutions even though they actually do not solve the problem.} or \textbf{(b)} \equref{eq: repeated result 2} misses one of the solutions.
+
+We can check it straightforwardly that the option \textbf{(b)} is the correct case,\footnote{
+We only need to check
+\be 
+\left(\rdr{}{x}-r\right)^2(xe^{rx})=0
+\ee 
+} indicating that out choice of reparametrization of the variables in terms of infinitesimal variable $\de$ affects which solutions we obtain. This then begs the question: \emph{can we potentially have more solutions?}
+
+We have mathematical arguments why a second order differential equation should have two solutions,\footnote{\draftnote{Maybe expand on this more.}} so we can already infer that \equref{eq: repeated result} is the full solution; however, let's see another method to derive why this is the case.
+
+Define a new function $g$ such that $f(x)=g(x)e^{rx}$.\footnote{Note that we can do this \emph{without a loss of generality}!} If we insert this into the original differential equation, we immediately see that
+\be 
+\left(\rdr{}{x}-r\right)^2 f(x)=0\quad\xrightarrow{f(x)=g(x)e^{rx}}\quad \rdr{^2}{x^2}g(x)=0
+\ee 
+which tells us that \emph{the most general result} is $f(x)=(ax+b)e^{rx}$. In fact, this derivation generalizes, i.e.
+\be 
+\left(\rdr{}{x}-r\right)^n f(x)=0\quad\xrightarrow{f(x)=g(x)e^{rx}}\quad \rdr{^n}{x^n}g(x)=0
+\ee
+yielding $f(x)=(a_1+a_2 x+\dots a_n x^{n-1})e^{rx}$.
+
+With the discussion above, we can now write down the most general homogeneous solution to a linear ordinary differential equation with constant coefficients:
+\bea
+\left(\rdr{}{x}-r_1\right)^{m_1+1} \left(\rdr{}{x}-r_2\right)^{m_2+1}\cdots \left(\rdr{}{x}-r_n\right)^{m_n+1}f(x)=0\\
+\Rightarrow\qquad f(x)=\sum\limits_{i=1}^n\left[\left(\sum\limits_{k=0}^m c_{ik} x^k\right)e^{r_i x}\right]
+\eea 
+for arbitrary coefficients $c_{ij}$.
+
 
 \subsection{Examples}
 \draftnote{RLC circuits, damper-spring systems, traffic models, etc.}
 
 \section{Laplace transform}
-\draftnote{about integral transforms, laplace transforms of common functions, example: RLC circuit with AC input}
+Consider the following higher order function:\footnote{
+Note that the letters on the left hand side of an arrow are \emph{placeholders}, i.e. they do not inherently carry information. Such parameters are called dummy variables in math (or scooping variables in computer science) and they are ubiquitous in math and physics; for instance, the integrals $\int dx f(x)$ and $\int dy f(y)$ are the same expression as $x$ and $y$ are dummy variables. Similarly, the expressions $x\to f(x)$ and $y\to f(y)$ are equivalent.
+
+It gets complicated with the higher order functions as they include multiple arrows; in such cases, the left hand side of \emph{each arrow} contains only placeholders for \emph{the right hand side of that particular arrow}. For example, let us rewrite \equref{eq: general integral transform} in a colorful way:
+\bea
+\mathfrak{IT}::{}&(\C\to\C)\to (\C\to\C)\\
+\mathfrak{IT}={}&\bm{(\textcolor{orange}{x}\textcolor{orange}{\to} \textcolor{red}{f}(\textcolor{orange}{x}))\textcolor{red}{\to}\left(\textcolor{blue}{s}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{black}{\a}}^{\textcolor{black}{\b}}} K(\textcolor{magenta}{x},\textcolor{blue}{s})\textcolor{red}{f}(\textcolor{magenta}{x})d\textcolor{magenta}{x}\right)}
+\eea  
+Variables of the same color can be changed as they are dummy variables for the same color arrow (in the case of the color magenta, the variables are dummy variables of the integration operation). For instance, following expressions are all equivalent:
+\begin{equation*}
+\begin{aligned}
+\mathfrak{IT}={}&\bm{(\textcolor{orange}{x}\textcolor{orange}{\to} \textcolor{red}{f}(\textcolor{orange}{x}))\textcolor{red}{\to}\left(\textcolor{blue}{s}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{black}{\a}}^{\textcolor{black}{\b}}} K(\textcolor{magenta}{x},\textcolor{blue}{s})\textcolor{red}{f}(\textcolor{magenta}{x})d\textcolor{magenta}{x}\right)}
+\\
+\mathfrak{IT}={}&\bm{(\textcolor{orange}{y}\textcolor{orange}{\to} \textcolor{red}{f}(\textcolor{orange}{y}))\textcolor{red}{\to}\left(\textcolor{blue}{z}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{black}{\a}}^{\textcolor{black}{\b}}} K(\textcolor{magenta}{x},\textcolor{blue}{z})\textcolor{red}{f}(\textcolor{magenta}{x})d\textcolor{magenta}{x}\right)}
+\\
+\mathfrak{IT}={}&\bm{(\textcolor{orange}{y}\textcolor{orange}{\to} \textcolor{red}{g}(\textcolor{orange}{y}))\textcolor{red}{\to}\left(\textcolor{blue}{z}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{black}{\a}}^{\textcolor{black}{\b}}} K(\textcolor{magenta}{s},\textcolor{blue}{z})\textcolor{red}{g}(\textcolor{magenta}{s})d\textcolor{magenta}{s}\right)}
+\end{aligned}
+\end{equation*}
+Note that the letters $K$, $\a$, $\b$ are not dummy variables as they are externally fixed. Nevertheless, we \emph{can} turn them into dummy variables of the equal sign $=$ by defining them in the left hand side of $=$; e.g.
+\begin{equation*}
+	\begin{aligned}
+\mathfrak{IT}_{\textcolor{cyan}{K},\textcolor{cyan}{\a},\textcolor{cyan}{\b}}\textcolor{cyan}{=}{}&\bm{(\textcolor{orange}{y}\textcolor{orange}{\to} \textcolor{red}{g}(\textcolor{orange}{y}))\textcolor{red}{\to}\left(\textcolor{blue}{z}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{cyan}{\a}}^{\textcolor{cyan}{\b}}} \textcolor{cyan}{K}(\textcolor{magenta}{s},\textcolor{blue}{z})\textcolor{red}{g}(\textcolor{magenta}{s})d\textcolor{magenta}{s}\right)}
+\\
+\mathfrak{IT}_{\textcolor{cyan}{T},\textcolor{cyan}{\g},\textcolor{cyan}{\l}}\textcolor{cyan}{=}{}&\bm{(\textcolor{orange}{y}\textcolor{orange}{\to} \textcolor{red}{g}(\textcolor{orange}{y})) \textcolor{red}{\to}\left(\textcolor{blue}{z}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{cyan}{\g}}^{\textcolor{cyan}{\l}}} \textcolor{cyan}{T}(\textcolor{magenta}{s},\textcolor{blue}{z})\textcolor{red}{g}(\textcolor{magenta}{s})d\textcolor{magenta}{s}\right)}
+	\end{aligned}
+\end{equation*}
+are equivalent expressions ---just like \mbox{$f(x)=x^2$} and \mbox{$f(y)=y^2$} being equivalent expressions.
+}
+\bea[eq: general integral transform]
+\mathfrak{IT}::{}&(\C\to\C)\to (\C\to\C)\\
+\mathfrak{IT}={}&(x\to f(x))\to\left(s\to\int\limits_\a^\b K(x,s)f(x)dx\right)
+\eea 
+where $\mathfrak{IT}$ is an \emph{integral transform}, i.e. it maps a function to another one by using the integration operation. The function $K$ above is called \emph{the kernel of the tranformation}: different kernels (along with different integration ranges) lead to different integral transforms.
+
+The Laplace transform is a special kind of an integral transformation:
+\bea[eq: laplace transform]
+\cL::{}&(\C\to\C)\to (\C\to\C)\\
+\cL={}&(x\to f(x))\to\left(s\to\int\limits_0^\infty e^{-xs}f(x)dx\right)
+\eea 
+which plays a immense role in the analysis of linear ordinary differential equations with constant coefficients because such equations become algebraic under this transformation. To see this, consider how the laplace transform interacts with the derivative operation: replace $f$ with $g'$ above, and integrate by parts
+\be 
+\cL={}&(x\to g'(x))\to\left(s\to \left[s\int\limits_0^\infty e^{-xs}g(x)dx-g(0)+\lim\limits_{x\rightarrow\infty}e^{-xs}g(x)\right]\right)
+\ee 
+We will assume that the last piece is zero, which is a necessary condition for the Laplace transform to be well-defined in the first place.\footnote{Otherwise, the integral in the definition does not converge.} Thus
+\be 
+\cL\.g'={}&s\to \left(s(\cL\.g)(s)-g(0)\right)
+\ee 
+or in a more conventional notation, we state
+\be 
+\rdr{g(x)}{x}\xrightarrow{\text{Laplace transform}} s G(s)-g(0)
+\ee 
+where $G(s)$ is the laplace transform of $g(x)$.
+
+One can repeat this process iteratively for higher numbers of derivative; in fact, we can immediately write down the Laplace transform of $n-$the derivative of a function:
+\be 
+\left(\cL\.g^{(n)}\right)(s)=s^n\left(\cL\.g\right)(s)-\sum\limits_{i=0}^{n-1} s^{n-i-1}g^{(i)}(0)
+\ee 
+
+We can now justify our previous statement of \emph{\textbf{Laplace transform converts  linear ordinary differential equations with constant coefficients into algebraic ones}}! Start with the most generic such differential equation:
+\be 
+\label{eq: general constant coefficient differential equation}
+\sum\limits_{i=0}^n a_i f^{(i)}(x)=g(x)
+\ee 
+which is \emph{homogeneous} if $g(x)=0$ and nonhomogeneous otherwise. If we take the Laplace transform of this equation, we end up with
+\be 
+\sum\limits_{i=0}^n a_i \left[s^i F(s)-\sum\limits_{k=0}^{i-1}s^{i-k-1}f^{(k)}(0)\right]=G(s)
+\ee 
+where $F(s)\coloneqq (\cL\.f)(s)$ and $G(s)\coloneqq (\cL\.g)(s)$ are defined for brevity. By using algebra, we can rewrite this equation in the form
+\be 
+F(s)=\frac{\displaystyle\sum\limits_{i=0}^{n-1}f^{(i)}(0)\left[\sum\limits_{k=1+i}^na_ks^{k-i-1}\right]}{\displaystyle\sum\limits_{i=0}^na_is^i}+\frac{G(s)}{\displaystyle\sum\limits_{i=0}^na_is^i}
+\ee 
+
+Let us comment on this result a little bit. \textbf{Firstly}, we can immediately state that the solution $f(x)$ to the differential equation in \equref{eq: general constant coefficient differential equation} is simply the \emph{inverse Laplace transform} of $F(s)$. Even though this is a well-defined transformation that we can introduce, we actually do not need it: we will discuss other methods to obtain $f(x)$ from $F(s)$. \textbf{Secondly}, we can actually see that the first piece is the homogeneous solution to the differential equation, and the second piece is the particular solution: Laplace transform allowed us to solve both of them at once!
+
+Consider the simple case of $n=2$:
+\be 
+F(s)=\frac{f(0)\left(a_1+a_2s\right)+f^{(1)}(0) a_2}{a_0+a_1s+a_2s^2}+\frac{G(s)}{a_0+a_1s+a_2s^2}
+\ee 
+If $r_1$ and $r_2$ are two distinct roots of $a_0+a_1s+a_2s^2=0$, we can simply write down this expression as \emph{bla bla bla bla}\draftnote{ to be written later, probably next year.}
+
+\draftnote{
+We have covered several topics in class but I will not be able to type them in time. So I'm postponing that to next year; after all, all of those topics are already in the textbook --- chapter 6 of Elementary Differential Equations and Boundary Value Problems” by Boyce and Diprima (10th edition). The summary is as follows:
+\begin{enumerate}
+	\item Derive laplace transforms of common functions
+	\item Solving homogeneous differential equations using Laplace transformation, and "proof" of why characteristic equation method works
+	\item Discussion of particular solutions in Laplace domain; example: RLC circuit with an AC input
+	\item Discussion of how it is tiresome to repeat the computations for each nonhomogeneous piece and why we need a universal solution true for any non-homogeneous piece. For this, we need to find an operation that maps to multiplication in Laplace domain
+	\item Derive $H(s)=F(s)G(s)$ means $h(x)= $convolution of $f(s)$ and $g(x)$, i.e. derive convolution
+	\item Introduce impulse response: it is the solution to the same differential equation with nonhomogeneous part $H(s)=1$ in laplace domain (with $i(0)=i'(0)=\dots=0$).
+	\item Introduce Dirac-delta distribution, discuss why it is a generalized function but not a well defined function. Show that it maps to $1$ as needed.
+	\item Write down the most generic solution to a linear ordinary differential equation with constant coefficients. Show examples.
+\end{enumerate}
+}
 
 \chapter{Linear homogeneous equations with functional coefficients}
+
+
 \chapter{Linear nonhomogeneous equations with functional coefficients}
 \label{chapter: Linear nonhomogeneous equations with functional coefficients}
 \chapter{First order differential equations and their formal solutions}
