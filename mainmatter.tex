@@ -431,7 +431,7 @@ f(x)=\left(\rdr{}{x}\right)^{-1}x^2
 \ee 
 which we can rewrite as 
 \be 
-f(x)=\int dx x^2=\frac{x^2}{3}+\text{constant}
+f(x)=\int dx x^2=\frac{x^3}{3}+\text{constant}
 \ee 
 by observing that integral is \emph{the inverse of derivative}.\footnote{Rigorously speaking, we are referring to indefinite integrals (also known as antiderivatives or Newton integrals).}
 
@@ -845,6 +845,50 @@ We have covered several topics in class but I will not be able to type them in t
 }
 
 \chapter{Linear homogeneous equations with functional coefficients}
+
+\draftnote{
+Summary of what we have discussed in class (to be typed later, maybe next year):
+\begin{enumerate}
+	\item Differential equations with functional coefficients \emph{do not necessarily have generic analytic solutions}: we do not know how to solve them except the isolated cases!
+	\item Explicit solutions of $\left(x\rdr{}{x}+a\right)f(x)=0$ and $\left(x^k\rdr{}{x}+a\right)f(x)=0$ for $k\ne 1$.
+	\item How these differential operators can be chained, and how it leads to the following form:
+	\be 
+	\left(x^k\rdr{}{x}+a_1\right)\cdots\left(x^k\rdr{}{x}+a_n\right)f(x)=0
+	\ee 
+	for both $k=1$ \& $k\ne 1$.
+	\item How these equations are secretly related to the differential equations with constants coefficients through a reparametrization, i.e. 
+	\be 
+	\rdr{}{y}=\frac{1}{1-n}x^n\rdr{}{x}\text{ for }y=x^{-n+1}\\
+	\rdr{}{y}=x\rdr{}{x}\text{ for }y=\log(x)
+	\ee 
+	\item Lesson: The differential equations with constant coefficients are nice guys with straightforward general solutions: do your best to check if a given differential equation can be brought to that form! Usually, the physics of the problem gives us insight as to whether that would be possible.
+	\item Discuss why $k=1$ case above is treated differently, show a little bit about scale invariance, and informally mention the Mellin transform: we do not need to know this for this course (but it is super relevant in modern physics)!
+	
+	\item Introduce Euler equations: show how this is solvable simple because of the scale invariance and how it is actually a subset of similar higher order equations.
+	
+	\item Discuss change of variables to make equations constant coefficients:
+	\begin{multline}
+	f''(x)+p(x)f'(x)+q(x)f(x)=0\\\Rightarrow\\
+	(u')^2 f''(u)+(u''(x)+u'(x)p(x))y'(u)+q(x)y(u)=0
+	\end{multline}
+	for a change of parameter $x\rightarrow u(x)$. For this to be constant coefficient, we need $u(x)=\int \sqrt{q(x)}dx$ and $\frac{u''(x)+u'(x)p(x)}{(u')^2}=$constant. 
+	\item An example equation where change of variables would work: $ty''+(t^2-1)y'+t^3y=0$.
+	
+	\item Reparametrization is harder to do generically for higher orders! For those equations (also for second order equations without reparametrization), check if the function $f(x)$ is missing. If that is missing, we can lower the order of differential equation by writing it in terms of a new function $g(x)=f'(x)$. If both $f(x)$ and $f'(x)$ are missing, use $g(x)=f''(x)$, and so on!
+	\item Examples (page 135 of textbook): $xf''(x)+f'(x)=0$, $x^2f''(x)+2xf'(x)=2$. Solve these!
+	\item Another thing to check is if the equation is \emph{exact}, i.e. if it can be rewritten as a total derivative:
+\begin{multline*}
+\left[p_n(x)\rdr{^n}{x^n}+\dots+p_1(x)\rdr{}{x}+p_0(x)\right]f(x)=0\\
+\xRightarrow{???}\\
+\rdr{}{x}\left(\left[q_{n-1}(x)\rdr{^{n-1}}{x^{n-1}}+\dots+q_1(x)\rdr{}{x}+q_0(x)\right]f(x)\right)=0
+\end{multline*}
+If that is the case, then we can turn an order-$n$ (non)homogeneous differential equation into an order-$(n-1)$ nonhomogeneous one.
+\item For a second order differential equation $p(x)f''(x)+q(x)f'(x)+r(x)f(x)=0$, the condition $p''(x)-q'(x)+r(x)=0$ is sufficient for it to be exact.
+\item Examples (page 157 of textbook): $f''(x)+xf'(x)+f(x)=0$, $x^2f''(x)+xf'(x)-f(x)=0$.
+\item \textbf{Reduction of order:} if we already know $k$ solutions of an order $n$ differential equation, we can use that information to transform the system into an order $n-k$ differential equation with no known solutions. This is rather useful as lower differential equations are easier to solve, and it becomes extremely useful if we know one solution of a second order differential equation as first order differential equations are always formally solvable (we will discuss this in more detail later).
+\item Examples (page 174 of textbook): $xf''(x)-f'(x)+4x^3f(x)=0$ with $f_1(x)=\sin(x^2)$, $(x-1)f''(x)-xf'(x)+f(x)=0$ with $f_1(x)=e^x$.
+\end{enumerate}
+}
 
 
 \chapter{Linear nonhomogeneous equations with functional coefficients}
