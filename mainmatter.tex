@@ -887,6 +887,52 @@ If that is the case, then we can turn an order-$n$ (non)homogeneous differential
 \item Examples (page 157 of textbook): $f''(x)+xf'(x)+f(x)=0$, $x^2f''(x)+xf'(x)-f(x)=0$.
 \item \textbf{Reduction of order:} if we already know $k$ solutions of an order $n$ differential equation, we can use that information to transform the system into an order $n-k$ differential equation with no known solutions. This is rather useful as lower differential equations are easier to solve, and it becomes extremely useful if we know one solution of a second order differential equation as first order differential equations are always formally solvable (we will discuss this in more detail later).
 \item Examples (page 174 of textbook): $xf''(x)-f'(x)+4x^3f(x)=0$ with $f_1(x)=\sin(x^2)$, $(x-1)f''(x)-xf'(x)+f(x)=0$ with $f_1(x)=e^x$.
+\item We introduced the Levi-Civita symbol $\e::\{\Z^+,\dots,\Z^+\}\to\Z$ and discussed its properties.
+\bea 
+\e::{}&{}\{\Z^+,\dots,\Z^+\}\to\Z\\
+\e={}&{}\{a_1,\dots,a_n\}\to\left\{\begin{aligned}
+1&\quad\text{ if }(a_1a_2\dots a_n)\text{ is an even permutation of }(12\dots n)\\
+-1&\quad\text{ if }(a_1a_2\dots a_n)\text{ is an odd permutation of }(12\dots n)\\
+0&\quad\text{ otherwise}
+\end{aligned}\right.
+\eea 
+Example: $(132)\to(123)$: we need 1 permutation for $(132)$: $\e_{132}=-1$. $(2314)\to(2134)\to(1234)$: we need 2 permutations for $2314$: $\e_{2314}=1$.\\
+Properties: $\e_{\dots a\dots a\dots }=0$, $\e_{\dots a\dots b\dots}=- \e_{\dots b\dots a\dots}$
+\item We introduced the function $\det::\mathfrak{M}_{n\x n}(\C)\to\C$ in terms of Levi-Civita symbol $\e$ and discussed its properties.
+\bea 
+\det::{}&{}\mathfrak{M}_{n\x n}(\C)\to\C\\
+\det={}&{}\begin{pmatrix}
+a_{11}&a_{12}&\dots & a_{1n}\\
+a_{21}&a_{22}&\dots & a_{2n}\\
+\dots \\
+a_{n1}&a_{n2}&\dots & a_{nn}
+\end{pmatrix}\to\sum\limits_{i_1,\dots,i_n}\e_{i_1\dots i_n}a_{1i_1}\dots a_{ni_n}
+\eea 
+
+\item We discussed linear independence of solutions and introduced the Wronskian determinant to check if given set of solutions span the solution space.
+
+The summary of the discussion is as follows. Assume that we are given an order$-n$ linear ordinary differential equation $g\left(x,\rdr{}{x}\right)f(x)=h(x)$, and assume that we have found $n-$solutions $f_i(x)$. If these solutions are linearly independent, they span the solution space and can be used to match any initial condition uniquely, i.e.
+\bea 
+\sum\limits_{i=1}^n c_i f_i(x_0)=&f(x_0)\\
+\sum\limits_{i=1}^n c_i f_i'(x_0)=&f'(x_0)\\
+\dots\\
+\sum\limits_{i=1}^n c_i f_i^{(n-1)}(x_0)=&f^{(n-1)}(x_0)
+\eea  
+for the unique set of numbers $c_i$. As a matrix equation, this means
+\be 
+\begin{pmatrix}
+f_1(x_0)&f_2(x_0)&\dots &f_n(x_0)\\
+f_1'(x_0)&f_2'(x_0)&\dots &f_n'(x_0)\\
+\dots\\
+f_1^{(n-1)}(x_0)&f_2^{(n-1)}(x_0)&\dots &f_n^{(n-1)}(x_0)
+\end{pmatrix}\begin{pmatrix}
+c_1\\c_2\\\dots\\c_n
+\end{pmatrix}=\begin{pmatrix}
+f(x_0)\\f'(x_0)\\\dots\\f^{(n-1)}(x_0)
+\end{pmatrix}
+\ee  
+We can find out the unique $c_i$ only if we can invert the matrix, which is only possible if it is full rank, which requires its determinant to be nonzero. That determinant is called Wronskian determinant and its value tells us if the given set of solutions span the solution space or not.
+\item Started talking about Taylor series, how it can be interpreted as an expansion over an infinite dimensional vector space, and how series expansion can turn a differential equation into infinitely many algebraic equations. This is similar to turning vector equations into multiple scalar equations by expanding vectors on a basis and working with the components instead.
 \end{enumerate}
 }
 
