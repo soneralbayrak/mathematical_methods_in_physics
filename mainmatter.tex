@@ -933,8 +933,120 @@ f(x_0)\\f'(x_0)\\\dots\\f^{(n-1)}(x_0)
 \ee  
 We can find out the unique $c_i$ only if we can invert the matrix, which is only possible if it is full rank, which requires its determinant to be nonzero. That determinant is called Wronskian determinant and its value tells us if the given set of solutions span the solution space or not.
 \item Started talking about Taylor series, how it can be interpreted as an expansion over an infinite dimensional vector space, and how series expansion can turn a differential equation into infinitely many algebraic equations. This is similar to turning vector equations into multiple scalar equations by expanding vectors on a basis and working with the components instead.
-\end{enumerate}
-}
+\item Solved explicitly the differential equation  $f''(x)-x f(x)=0$. Note that 
+\begin{itemize}
+	\item Not with constant coefficients
+	\item not in $\cD_1\.\cD_2\.f=0$ form
+	\item cannot do reparametrization as $\frac{q'+2pq}{2q^{3/2}}$ is not constant for $p=0$ and $q=x$
+	\item $f(x)$ is not missing and we do not know one of the solutions (cannot reduce order)
+	\item equation is not exact, hence cannot be rewritten as a nonhomogeneous lower-order equation
+\end{itemize}
+So we have to use series expansion!
+
+\item Discussed expansions around different points, i.e. $f(x)=\sum\limits_{n=0}^\infty a_n(x-x_0)^n$
+
+\item Introduced the classification of expansion points: given the differential equation 
+\be 
+\left[P_n(x)\rdr{^n}{x^n}+P_{n-1}(x)\rdr{^{n-1}}{x^{d-1}}+\dots+ P_0(x)\right]f(x)=0
+\ee 
+for the analytic functions $P_i(x)$, a point $x_0$ is called ``ordinary point'' if $\frac{P_i(x)}{P_n(x)}$ is analytic for all $i$, and is called ``singular point'' otherwise. For instance $x=0$ is an ordinary points of $\left(x\rdr{}{x}+\sin(x)\right)f(x)=0$.
+\item Around ordinary points, Taylor series expansion works and one can get all solutions correctly.
+\item  Rewrite the differential equation above as 
+\be 
+\left[\rdr{^n}{x^n}+Q_{n-1}(x)\rdr{^{n-1}}{x^{d-1}}+\dots+ Q_0(x)\right]f(x)=0
+\ee
+If $Q_{n-i}(x)$ has a pole of order at most $i$ at $x_0$ for all $i$, then the singular point is called ``regular singular point''. Otherwise, it is called ``essential singular point'' (or non-regular singular point).
+\item Around regular singular points, we can use Taylor series expansion with an unknown monomial as an overall factor; i.e. we can take $f(x)=(x-x_0)^r\sum\limits_{n=0}^\infty a_n (x-x_0)^n$ for the unknowns $a_n$ and $r$. This is called Frobenius method.
+\item We do not use series expansions around essential singular points; even if there is a way to do that, I do not know!
+\item In class, we solved explicitly the diff eqn.
+\be 
+x^2f''(x)-xf'(x)+(1+x)f(x)=0
+\ee 
+around $x=0$.
+
+\item Discussion of how series solutions are \emph{local solutions} in the complex plane: they have (usually) finite radius of convergence, and one needs to construct different series solutions to access values of the function in different locations of the complex plane. In some cases, we might get lucky as we can recognize the series series as a particular representation of a more general function such as Bessel function; in such cases, with one series solutions, we can discover more general properties of the solution for the given differential equation. However, if we are not lucky, we need to construct other series solutions for different points, and we cannot really see the whole picture.
+\item Another problem with the series solutions is that they do not make use of the global properties of the unknown function such as its symmetries. For instance, if I'm trying to solve a differential equation and I know that the solution function should have a symmetry (such as $f(x+a)=f(x)$ for some $a$), this information should in principle help me constraint the solution further. But as series expansions focus on local properties (such as analyticity in and around expansion point), they do not make use of such global information.
+\item If we know some global properties of a function (such as it being spherically symmetric), we may be better off with a different kind of expansion. In fact, there are infinitely many different expansions (in group theoretical language, this is because we can use unitary irreducible representation of any group as a basis). To understand that, we need to discuss the concept of unitarity.
+\item We started a new discussion: concept of unitarity. To understand that, we introduced the following definitions:
+\bea 
+*{}::{}&{}\C\to\C\\
+*{}={}&{}z\to z^*=\Re{z}-i\Im{z}\\
+T{}::{}&{}\mathfrak{M}_{n\x n}(\C)\to\mathfrak{M}_{n\x n}(\C)\\
+T{}={}&{}\begin{pmatrix}
+	a_{11}&a_{12}&\dots & a_{1n}\\
+	a_{21}&a_{22}&\dots & a_{2n}\\
+	\dots \\
+	a_{n1}&a_{n2}&\dots & a_{nn}
+\end{pmatrix}\to\begin{pmatrix}
+	a_{11}&a_{21}&\dots & a_{n1}\\
+	a_{12}&a_{22}&\dots & a_{n2}\\
+	\dots \\
+	a_{1n}&a_{2n}&\dots & a_{nn}
+\end{pmatrix}\\
+\dagger{}::{}&{}\mathfrak{M}_{n\x n}(\C)\to\mathfrak{M}_{n\x n}(\C)\\
+\dagger{}={}&{}\begin{pmatrix}
+	a_{11}&a_{12}&\dots & a_{1n}\\
+	a_{21}&a_{22}&\dots & a_{2n}\\
+	\dots \\
+	a_{n1}&a_{n2}&\dots & a_{nn}
+\end{pmatrix}\to\begin{pmatrix}
+a_{11}^*&a_{21}^*&\dots & a_{n1}^*\\
+a_{12}^*&a_{22}^*&\dots & a_{n2}^*\\
+\dots \\
+a_{1n}^*&a_{2n}^*&\dots & a_{nn}^*
+\end{pmatrix}
+\eea 
+where $*,T,\dagger$ are called to output \emph{the complex conjugate}, \emph{the transpose}, and \emph{the hermitian conjugate} of the input respectively; for illustration, $A^\dagger$ is called the hermitian conjugate of the matrix $A$.
+\item A \emph{unitary} ordinary number is a complex number with unit length, i.e. $z$ with $\abs{z}=z z^*=1$. To matrices, this can be generalized with the hermitian conjugation: \emph{a unitary matrix $A$ is a matrix such that $A\. A^\dagger=\mathbb{I}$ for the unit matrix $\mathbb{I}$.} 
+\item Unitarity can be generalized beyond those inputs: an invertible object $U$ is called \emph{unitary} if it satisfies the condition $U^\dagger=U^{-1}$. $U$ can be wilder objects in principle, such as an infinite dimensional matrix or a general operator; for instance, $U=\exp(i\rdr{}{x})$ is a unitary operator for $x\in\R$.
+
+\item Concept of unitarity is important, because there exists unitary matrices with functional entries which can be used as a basis to expand any given function. This is similar to Taylor series expansion: there, we used some sort of orthogonality of $x^m$ and $x^n$ for $m\ne n$ and used $\{x^i\}$ as a basis over which we expand $f(x)$. We state that similar basis (in fact, infinitely many of them) exist and we can expand any given function in terms of such basis consisting of an infinite set of particular unitary matrices of functional entries.
+
+\item The modern way to understand such expansions is through \emph{group theory}! Since we will not learn about these details, we only present a very important and general theorem: we will not dwell on its details and we will not try to do actual computations with that. We only present this to emphasize that Fourier transform (or spherical harmonics expansion, or Mellin transform, or many more) are special examples of a very general and fundamental branch of mathematics called \emph{harmonic analysis}!
+
+The main result of harmonic analysis is as follows:
+\bea 
+f(g)=&\int\limits_{\hat G} d\pi \tr(\hat\pi(g)^{-1}\hat f(\pi))\\
+\hat f(\pi)=&\int\limits_G dh \hat\pi(g)f(h)
+\eea 
+\item We will \emph{not} discuss the details of above formula, and no one needs to know the following for this course! What we need to know is that there exist such a general result, and most of the stuff we see around (such as Fourier transform) are special cases of this general result! Nevertheless, for completeness, I list the ingredients as follows:
+\begin{itemize}
+	\item $G$: space of a group, with $dh$ being the measure in this space invariant under the action of the group (Haar measure)
+	\item $\hat G$: space of the unitary irreducible representations of $G$, with $d\pi$ being the Plancheral measure
+	\item $\hat\pi :: g\to\mathrm{End}(V_\pi)$ is a map from the group element $g$ to the space of endomorphisms on the vector space of the representations of the group. Such endomorphisms can be implemented as a matrix acting on this vector space, therefore $\hat\pi$ is a simple matrix on the representation space (which is why we take a trace in the first integral)
+	\item $f(g)$ is a function on the group space
+	\item $\hat f(\pi)$ is generalization of \emph{Fourier coefficients}: this is a matrix in the representation space
+\end{itemize}
+\item We can make the following analogy:\\
+\begin{tabular}{llll}
+	Object & Basis & Decomposition & Components\\ 
+	$\vec{v}$ & $\{\hat i,\hat j,\hat k\}$ & $\vec{v}=v_x\hat i+v_y\hat j+v_z\hat k$ & $\{v_x,v_y,v_z\}$ (a finite set)\\ 
+	$f(x)$&$\{x^i\}$&$f(x)=\sum\limits_{n=0}^\infty a_n x^n$&$\{a_n\}$ (countable infinite set)\\
+	$f(g)$ &$\{\hat\pi(g)\}$& $f(g)=\int\limits_{\hat G} d\pi \tr(\hat\pi(g)^{-1}\hat f(\pi))$ & $\{\hat f(\pi)\}$ (uncountable infinite set)
+\end{tabular}
+
+\item Simplest example of Harmonic analysis is the Fourier transform. In this case, $\hat\pi$ is a one-dimensional unitary function $\hat\pi= e^{-i k x}$, $\pi$ are spanned by one continuous real parameter $k$ (meaning $\hat G=\R$), and the original function space is one dimensional real line as well (hence $G=\R$ with $g=x$). One can derive that the Plancheral measure is $\frac{dk}{2\pi}$, hence we have
+\bea 
+f(x)=&\int\limits_{\R}\frac{dk}{2\pi} \left(e^{-ikx}\right)^{-1}\hat f(k)\\
+\hat f(k)&=\int\limits_\R dx e^{-i k x} f(x)
+\eea 
+hence we can specialize the table above for Fourier transform as 
+\begin{tabular}{llll}
+	Object & Basis & Decomposition & Components\\ 
+	$\vec{v}$ & $\{\hat i,\hat j,\hat k\}$ & $\vec{v}=v_x\hat i+v_y\hat j+v_z\hat k$ & $\{v_x,v_y,v_z\}$ (a finite set)\\ 
+	$f(x)$&$\{x^i\}$&$f(x)=\sum\limits_{n=0}^\infty a_n x^n$&$\{a_n\}$ (countable infinite set)\\
+	$f(x)$ &$\{e^{ikx}\}$& $f(x)=\int\limits_{-\infty}^\infty dk e^{ikx} \hat f(k)$ & $\left\{\hat f(k)=\int\limits_{-\infty}^\infty e^{-ikx}f(x)\right\}$ (uncountable infinite set)
+\end{tabular}
+\item We can now use periodicity information if we know that a function $f$ satisfies $f(x)=f(x+a)$: the identification $x\sim x+a$ means some of our basis components should be absent as we dictate $e^{ikx}\sim e^{ik(x+a)}$. We see that this is possible only if $k$ is actually discrete, i.e. 
+\be 
+k=\frac{2\pi}{a}n\text{ for }n\in\Z
+\ee
+This leads to discrete time fourier series:
+\bea 
+f(x)=&\frac{1}{a}\sum\limits_{n=-\infty}^{\infty}e^{i\frac{2\pi n}{a}x}\hat f(n)\\
+\hat f(n)&=\int\limits_0^a dx e^{-i\frac{2\pi n}{a} x} f(x)
+\eea  
+\end{enumerate}}
 
 
 \chapter{Linear nonhomogeneous equations with functional coefficients}
