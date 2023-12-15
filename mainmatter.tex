@@ -1018,17 +1018,18 @@ f(g)=&\int\limits_{\hat G} d\pi \tr(\hat\pi(g)^{-1}\hat f(\pi))\\
 	\item $\hat f(\pi)$ is generalization of \emph{Fourier coefficients}: this is a matrix in the representation space
 \end{itemize}
 \item We can make the following analogy:\\
-\begin{tabular}{llll}
-	Object & Basis & Decomposition & Components\\ 
-	$\vec{v}$ & $\{\hat i,\hat j,\hat k\}$ & $\vec{v}=v_x\hat i+v_y\hat j+v_z\hat k$ & $\{v_x,v_y,v_z\}$ (a finite set)\\ 
-	$f(x)$&$\{x^i\}$&$f(x)=\sum\limits_{n=0}^\infty a_n x^n$&$\{a_n\}$ (countable infinite set)\\
-	$f(g)$ &$\{\hat\pi(g)\}$& $f(g)=\int\limits_{\hat G} d\pi \tr(\hat\pi(g)^{-1}\hat f(\pi))$ & $\{\hat f(\pi)\}$ (uncountable infinite set)
+\begin{tabular}{lllll}
+	Object & Basis & Decomposition & Components& Extracting components\\ 
+	$\vec{v}$ & $\{\hat i,\hat j,\hat k\}$ & $\vec{v}=v_x\hat i+v_y\hat j+v_z\hat k$ & $\{v_x,v_y,v_z\}$ (a finite set)& $v_x=\vec{v}\.\hat i$\\ 
+	$f(x)$&$\{x^i\}$&$f(x)=\sum\limits_{n=0}^\infty a_n x^n$&$\{a_n\}$ (countable infinite set)& {\footnotesize Cauchy's integral formula,see 210}\\
+	$f(g)$ &$\{\hat\pi(g)\}$& $f(g)=\int\limits_{\hat G} d\pi \tr(\hat\pi(g)^{-1}\hat f(\pi))$ & $\{\hat f(\pi)\}$ (uncountable infinite set)&$\hat f(\pi)=\int\limits_G dh \hat\pi(g)f(h)$
 \end{tabular}
+
 
 \item Simplest example of Harmonic analysis is the Fourier transform. In this case, $\hat\pi$ is a one-dimensional unitary function $\hat\pi= e^{-i k x}$, $\pi$ are spanned by one continuous real parameter $k$ (meaning $\hat G=\R$), and the original function space is one dimensional real line as well (hence $G=\R$ with $g=x$). One can derive that the Plancheral measure is $\frac{dk}{2\pi}$, hence we have
 \bea 
 f(x)=&\int\limits_{\R}\frac{dk}{2\pi} \left(e^{-ikx}\right)^{-1}\hat f(k)\\
-\hat f(k)&=\int\limits_\R dx e^{-i k x} f(x)
+\hat f(k)=&\int\limits_\R dx e^{-i k x} f(x)
 \eea 
 hence we can specialize the table above for Fourier transform as 
 \begin{tabular}{llll}
@@ -1046,10 +1047,169 @@ This leads to discrete time fourier series:
 f(x)=&\frac{1}{a}\sum\limits_{n=-\infty}^{\infty}e^{i\frac{2\pi n}{a}x}\hat f(n)\\
 \hat f(n)&=\int\limits_0^a dx e^{-i\frac{2\pi n}{a} x} f(x)
 \eea  
+
+\item In class, we introduced four different Fourier analysis:
+\begin{itemize}
+	\item Fourier transform:
+	\bea 
+	f{}::{}&{}\C\to\C\\
+	\hat f{}::&{}\C\to\C\\ f(x)=&\int\limits_{-\infty}^\infty\frac{dk}{2\pi} e^{ikx}\hat f(k)\\
+	\hat f(k)=&\int\limits_{-\infty}^\infty dx e^{-i k x} f(x)
+	\eea 
+	\item Fourier series:
+	\bea 
+	f{}::{}&{}[a,a+T]\to\C\\
+	\hat f{}::&{}\Z\to\C\\ 	f(x)=&\frac{1}{T}\sum\limits_{n=-\infty}^\infty e^{i\frac{2\pi n}{T}x}\hat f(n)\\
+	\hat f(n)=&\int\limits_{b}^{b+T} dx e^{-i\frac{2\pi n}{T}x} f(x)
+\eea 
+for arbitrary $a,b\in\R$. Note that this is also applicable for periodic functions: for any periodic function with a period $T$, we can use Fourier series as instructed above!
+
+\item Discrete-time Fourier transform:
+\bea 
+ f{}::&{}\Z\to\C\\ 
+\hat f{}::{}&{}[a,a+T]\to\C\\
+ f(n)=&\frac{1}{T}\int\limits_{b}^{b+T} dx e^{i\frac{2\pi n}{T}k} \hat f(k)\\
+\hat f(k)=&\sum\limits_{n=-\infty}^\infty e^{-i\frac{2\pi n}{T}k} f(n)\\
+\eea
+where $\Z_N$ denotes the set $\{0,1,\dots,N-1\}$.
+
+\item Discrete Fourier series:
+\bea 
+f{}::&{}\Z_N\to\Z_N\\ 
+\hat f{}::{}&{}\Z_N\to\Z_N\\ 
+f(n)=&\frac{1}{N}\sum\limits_{m=0}^{N-1} e^{i\frac{2\pi n m}{T}} \hat f(m)\\
+\hat f(m)=&\sum\limits_{n=0}^{N-1} e^{-i\frac{2\pi n m}{T}} f(n)\\
+\eea
+for arbitrary $a,b\in\R$.
+\end{itemize}
+\item Summary: finite range/periodic in one domain $\leftrightarrow$ discrete in the other domain
+\item Drew plots of these transformations for visualization in class.
+
+\item Introduced two higher order functions $E$ and $O$:
+\bea 
+E{}::&{}\left(\C\to\C\right)\to\left(\C\to\C\right)\\ 
+E={}&{}\left(x\to f(x)\right)\to\left(x\to f_E(x)=\frac{f(x)+f(-x)}{2}\right)\\
+O{}::&{}\left(\C\to\C\right)\to\left(\C\to\C\right)\\ 
+O={}&{}\left(x\to f(x)\right)\to\left(x\to f_E(x)=\frac{f(x)-f(-x)}{2}\right)
+\eea
+with which any single-argument function satisfies $f=E\.f+O\.f$, or with a more common notation, $f(x)=f_E(x)+f_O(x)$. As any function can also be decomposed into its real and imaginary part, we arrive at
+\be 
+f(x)=f_{RE}(x)+f_{RO}(x)+i f_{IE}(x)+i f_{IO}(x)
+\ee 
+
+\item Since Fourier transform is linear, we can reconstruct $(\mathrm{F.T.}\.f)(k)$ from $(\mathrm{F.T.}\.f_{RE})(k)$ and so on.
+
+\item $f_{RE}(k)$ etc. and their Fourier transforms satisfy nice properties. We derived a few of them in the class, for instance taking complex conjugation and changing the dummy variable $x\to -x$ leads to
+\be 
+\left[(\mathrm{F.T.}\.f_{RE})(k)\right]^*=(\mathrm{F.T.}\.f_{RE})(k)
+\ee 
+Likewise, taking $k\to -k$ and $x\to -x$ leads to
+\be 
+(\mathrm{F.T.}\.f_{RE})(-k)=(\mathrm{F.T.}\.f_{RE})(k)
+\ee 
+hence we conclude Fourier transform of $f_{RE}$ is itself even and real. On the contrary, Fourier transform of $F_{RO}$ is purely-imaginary and odd.
+\item For real functions,  $(\mathrm{F.T.}\.f_{R})(-k)=\left[(\mathrm{F.T.}\.f_{R})(k)\right]^*$, hence we only need to know positive frequencies, consistent with our everyday experience.
+\item Consider the Fourier transform of the function 
+\bea 
+f{}::&{}\left[-\frac{T}{2},\frac{T}{2}\right]\to\C\\
+f={}&{}x\to 1
+\eea 
+We computed Fourier series expansion of this in class, found $\hat f(n)=T\de_{n0}$ and checked consistency. We then considered the limit $T\to\infty$ and argued that Kronecker-delta function turns into Dirac-delta distribution.
+\item We also considered the function
+\bea 
+f{}::&{}\R\to\C\\
+f={}&{}x\to \left\{\begin{aligned}
+1\quad&\abs{x}\le \frac{T}{2}\\0\quad&\text{ otherwise}
+\end{aligned}\right.
+\eea 
+ We computed the Fourier transformation of this, introduced the $\mathrm{sinc}$ function, discussed its properties, talked about its usage in single-slit experiment, optics, and signal process. We then also discussed how $T\to\infty$ takes $\mathrm{sinc}$ functio to the Dirac-delta distribution.
+
 \end{enumerate}}
 
 
 \chapter{Linear nonhomogeneous equations with functional coefficients}
 \label{chapter: Linear nonhomogeneous equations with functional coefficients}
+\draftnote{
+	Summary of what we have discussed in class (to be typed later, maybe next year):
+\begin{enumerate}
+	\item The particular solution to a differential equation is unique: we haven't proven this but it is actually most easily seen if the unknown function is expanded in a basis where the action of the differential operator becomes \emph{diagonal}; i.e., the differential equation then becomes algebraic and there is a unique solution for an algebraic equation $ax=b$ for $x$.
+	\item As particular solutions are unique, we can get away with guessing it if we can: the simplest way to find the particular solution is to guess it and then check that it satisfies the differential equation.
+	\item The next simplest thing we can try is to guess the \emph{functional form} of the particular solution with some arbitrary coefficients and then fix them imposing the differential equation. This approach is called \emph{method of undetermined coefficients}. As an example, for
+	\be 
+	x f'(x)-2f(x)=6 x^4
+	\ee 
+	we can guess $f_p(x)= a x^b$: inserting it into the differential equation, we find that $f_p(x)=2x^4$.
+	\item For differential equations with constant coefficients, we can find the particular solution more systematically as we have reviewed in the beginning of the semester: convolution of nonhomogeneous piece with the impulse response.
+	\item A similar systematic approach exists for more general differential equations: it is called \emph{method of variation of parameters}. Let us consider a general linear ordinary differential equation
+	\be 
+	\label{temp-2}
+	\left(\rdr{^n}{x^n}+a_{n-1}(x)\rdr{^{n-1}}{x^{n-1}}+a_0(x)\right)f(x)=h(x)
+	\ee
+	If we find the homogeneous solutions $f_1(x),\dots,f_n(x)$, then we know that the most general solution can be written as 
+	\be 
+	f(x)=\sum\limits_{i=1}^nc_i f_i(x)+f_p(x)
+	\ee  
+	for arbitrary coefficients $c_i$. Here, we have one unknown function $f_p(x)$ and we trade it for $n$ unknown functions by rewriting this equation as 
+	\be
+	\label{temp-1}
+	f(x)=\sum\limits_{i=1}^nc_i(x) f_i(x) 
+	\ee 
+	for undetermined functions $c_i(x)$, i.e. we \emph{varied the parameters}. We can clearly do this, as we had 1 unknown functional degree of freedom and know we have $n$ unknown functional degrees of freedom. In fact, we can impose $n-1$ constraints, which we choose as 
+	\be 
+	\label{temp-3}
+	\sum\limits_{i=1}^nc_i'(x)f_i^{(k-1)}(x)=0\qquad\text{ for }k=1,2,\dots,n-1
+	\ee 
+	If we know insert \eqref{temp-1} into \eqref{temp-2} and use these constraints and the fact that $f_i(x)$ are homogeneous solutions, we end up with
+	\be 
+	\label{temp-4}
+	\sum\limits_{i=1}^nc_i'(x)f_i^{(n-1)}(x)=g(x)
+	\ee 	
+	The equations \eqref{temp-3} and \eqref{temp-4} can be combined to solve for $c_i'(x)$ as 
+	\be 
+	\begin{pmatrix}
+		c_1'(x)\\c_2'(x)\\\dots\\c_n'(x)
+	\end{pmatrix}=\begin{pmatrix}
+	f_1(x)&f_2(x)&\dots&f_n(x)\\
+	f_1'(x)&f_2'(x)&\dots&f_n'(x)\\
+	\dots \\
+	f_1^{(n-1)}(x)&f_2^{(n-1)}(x)&\dots&f_n^{(n-1)}(x)\\
+	\end{pmatrix}^{-1}	\begin{pmatrix}
+	0\\0\\\dots\\g(x)
+	\end{pmatrix}
+	\ee 
+	\item In summary, inverse of the Wronskian matrix and the nonhomogeneous piece is sufficient to find $c_i'(x)$. By integrating these, we get both the homogeneous solution (through the integration constants) and particular solution.
+	\item In practice, computer programs (such as Mathematica) are the best way to compute matrix inverses (avoid pen and paper if you can). However, it is better if we learn the math behind such implementations. To understand the computation of a matrix inverse, we need to define a new operation:
+	\bea 
+	\mathrm{adj}{}::&{}\cM_{n\x n}(\C)\to\cM_{n\x n}(\C)\\
+	\mathrm{adj}={}&{}\begin{pmatrix}
+	a_{11}&a_{12}&\dots & a_{1n} \\
+	a_{21}&a_{22}&\dots & a_{2n} \\
+	\dots \\
+	a_{n1}&a_{n2}&\dots & a_{nn}
+	\end{pmatrix}\to \begin{pmatrix}
+	b_{11}&b_{12}&\dots & b_{1n} \\
+	b_{21}&b_{22}&\dots & b_{2n} \\
+	\dots \\
+	b_{n1}&b_{n2}&\dots & b_{nn}
+	\end{pmatrix}\quad\text{ where }\\
+	&{}b_{i_n k_n}=\frac{1}{(n-1)!}\e_{i_1\dots i_n}\e_{k_1\dots k_n} a_{i_1k_1}\dots a_{i_{n-1}k_{n-1}}
+	\eea 
+	where $\mathrm{adj}$ yields the \emph{adjugate} of the given matrix. We can now give the inverse of a matrix as
+	\be 
+	A^{-1}=\frac{\mathrm{adj}(A)}{\det A}
+	\ee 
+	where we have defined and discussed determinant before:
+	\bea 
+	\det::{}&{}\mathfrak{M}_{n\x n}(\C)\to\C\\
+	\det={}&{}\begin{pmatrix}
+		a_{11}&a_{12}&\dots & a_{1n}\\
+		a_{21}&a_{22}&\dots & a_{2n}\\
+		\dots \\
+		a_{n1}&a_{n2}&\dots & a_{nn}
+	\end{pmatrix}\to\sum\limits_{i_1,\dots,i_n}\e_{i_1\dots i_n}a_{1i_1}\dots a_{ni_n}
+	\eea 
+	\item Computed adjugate and inverse of a $2\x 2$ matrix in the class.
+\end{enumerate}
+}
 \chapter{First order differential equations and their formal solutions}
 \chapter{Partial differential equations}
