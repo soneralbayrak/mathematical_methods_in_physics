@@ -1212,4 +1212,82 @@ f={}&{}x\to \left\{\begin{aligned}
 \end{enumerate}
 }
 \chapter{First order differential equations and their formal solutions}
+\draftnote{
+	Summary of what we have discussed in class (to be typed later, maybe next year):
+	\begin{enumerate}
+		\item We reviewed in class that we have learned various methods to solve differential equations. In this chapter, we will see one last method: \emph{conversion of generic linear ordinary differential equations to first order system of differential equations}.
+		\item Learning how to solve first order differential equations of matrices is important for multiple reasons:
+		\begin{enumerate}
+			\item Any linear ordinary differential equation can be rewritten as a first order differential equation of a column matrix.
+			\item There exists coupled systems which can only be solved through differential equations of matrices
+			\item There is a conceptual reason to consider such diffential equations of matrices: phase space, using momenta, etc.
+		\end{enumerate}
+		\item We introduced systems of linear ordinary differential equations: multiple unknown functions, one independent variable.
+		\item As an example, we considered a one-dimensional system of two masses attached to a wall via two springs (something like \mbox{$|\sim\square\sim\square$}), and showed that this system is described by a system of two differential equations. The unknown functions are two positions of the masses, the independent variable is the time, and the key point is that this is a coupled system: the differential equations cannot be solved independently! Indeed, the system is best described as 
+		\be 
+		\rdr{^2}{t^2}\begin{pmatrix}
+		x_1\\x_2
+		\end{pmatrix}=\begin{pmatrix}
+		-\frac{k_1+k_2}{m_1}&\frac{k_2}{m_1}\\\frac{k_2}{m_2}&-\frac{k_2}{m_2}
+		\end{pmatrix}\begin{pmatrix}
+		x_1\\x_2
+		\end{pmatrix}
+		\ee 
+		\item One can solve this differential equation by various ways. One common method is to find the normal modes of this system by diagonalizing the square matrix: this will tell us the combinations of $x_1$ and $x_2$ which oscillate independently: for those variables, we have two independent differential equations that can be solved separately. We will not discuss this further in this class.
+		\item Another approach to solve such a differential equation is to bring it to a first order form. We motivate this by using our physical intuition: momentum (in addition to position) also describes a current state of the system, so we should work with four variables instead of two! Indeed, we can rewrite the above differential equation as 
+		\be 
+		\rdr{}{t}\begin{pmatrix}
+		x_1\\p_1\\x_2\\p_2
+		\end{pmatrix}=\begin{pmatrix}
+		0&\frac{1}{m_1}&0&0\\-(k_1+k_2)&0&k_2&0\\0&0&0&\frac{1}{m_2}\\k_2&0&-k_2&0
+		\end{pmatrix}\begin{pmatrix}
+		x_1\\p_1\\x_2\\p_2
+		\end{pmatrix}
+		\ee 
+		\item This approach is generalizable to a set of differential equations for $m$ unknown functions where the highest order derivative for each unknown function is $n_1$, $n_2$,$\dots$, $n_m$. This system is equivalent to a first-order differential equation for a vector of $\sum\limits_{i=1}^m n_i$ components!
+		
+		\item As example, we solved $f''(x)+3f'(x)+2f(x)=0$ by converting it into the matrix equation
+		\be 
+		\rdr{}{x}V(x)+A\. V(x)=0
+		\ee 
+		for 
+		\be 
+		A=\begin{pmatrix}
+		0&-1\\2&3
+		\end{pmatrix}
+		\ee
+		and
+		\be 
+		V(x)=\begin{pmatrix}
+			f(x)\\f'(x)
+		\end{pmatrix}
+		\ee 
+		We immediately say that the solution is 
+		\be 
+		V(x)=(\exp{-A x})\. C
+		\ee 
+		for the arbitrary column matrix $C$.
+		\item We computed $\exp(A x)$ explicitly in class using its definition:
+		\be 
+		\exp(A x)=\mathbb{I}+x A+\frac{x^2}{2!}A\.A+\frac{x^3}{3!}A\.A\.A+\dots
+		\ee 
+		\item In class, we discussed that if $A$ is $t-$independent, then we can use the generalization
+		\be 
+		\left[f'(t)=af(t)\rightarrow f(t)=\exp(at)c\right]\Rightarrow\left[V'(t)=A\.V(t)\rightarrow V(t)=\exp(At)\.C\right]
+		\ee
+		which means for any first-order differential equation with constant $A$ is immediately solvable this way. A similar generalization exists even if $A$ is $t-$dependent, but it is nontrivial: 
+		\be 
+		f'(t)=a(t)f(t)\rightarrow f(t)=\exp\left(\int a(t)dt\right)c
+		\ee
+		however
+		\be 
+		V'(t)=A(t)\.V(t)\rightarrow V(t)\ne \exp\left(\int A(t)dt\right)\.C
+		\ee 
+		The correct version is 
+		\be 
+		V'(t)=A(t)\.V(t)\rightarrow V(t)=\mathcal{T}\left\{\exp\left(\int A(t)dt\right)\right\}\.C
+		\ee 
+		where $\cT$ is called \emph{time-ordering operator}! There is a purely mathematical derivation of this via Volterra integral equation (we will see this), but the physical implications are rather important in its usage in quantum mechanics: the measurements at different times (by $A(t)$) should be time-ordered, i.e. causality has to be preserved! You will learn more about this when you solve Schrödinger's equation (a first order diff. equation of operators, which can be represented with matrices)!
+	\end{enumerate}
+}
 \chapter{Partial differential equations}
