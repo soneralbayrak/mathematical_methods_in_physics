@@ -844,8 +844,8 @@ We have covered several topics in class but I will not be able to type them in t
 \end{enumerate}
 }
 
-\chapter{Linear homogeneous equations with functional coefficients}
-
+\chapter{Linear equations with functional coefficients}
+\section{Homogeneous solution}
 \draftnote{
 Summary of what we have discussed in class (to be typed later, maybe next year):
 \begin{enumerate}
@@ -1127,7 +1127,7 @@ f={}&{}x\to \left\{\begin{aligned}
 \end{enumerate}}
 
 
-\chapter{Linear nonhomogeneous equations with functional coefficients}
+\section{Particular solution}
 \label{chapter: Linear nonhomogeneous equations with functional coefficients}
 \draftnote{
 	Summary of what we have discussed in class (to be typed later, maybe next year):
@@ -1211,7 +1211,7 @@ f={}&{}x\to \left\{\begin{aligned}
 	\item Computed adjugate and inverse of a $2\x 2$ matrix in the class.
 \end{enumerate}
 }
-\chapter{First order differential equations and their formal solutions}
+\chapter{Systems of first order linear differential equations}
 \draftnote{
 	Summary of what we have discussed in class (to be typed later, maybe next year):
 	\begin{enumerate}
@@ -1288,6 +1288,222 @@ f={}&{}x\to \left\{\begin{aligned}
 		V'(t)=A(t)\.V(t)\rightarrow V(t)=\mathcal{T}\left\{\exp\left(\int A(t)dt\right)\right\}\.C
 		\ee 
 		where $\cT$ is called \emph{time-ordering operator}! There is a purely mathematical derivation of this via Volterra integral equation (we will see this), but the physical implications are rather important in its usage in quantum mechanics: the measurements at different times (by $A(t)$) should be time-ordered, i.e. causality has to be preserved! You will learn more about this when you solve Schrödinger's equation (a first order diff. equation of operators, which can be represented with matrices)!
-	\end{enumerate}
+	\item We solved in class $f''(x)+3f'(x)+2f(x)=0$ as an example. We already know that the characteristic equation is $(r+2)(r+1)=0$ hence the answer is $f(x)=c_1 e^{-x}+c_2 e^{-2x}$. Nevertheless, let's see how we can get this answer through matrix computation.
+
+We realize that this equation can be rewritten as
+\be 
+\rdr{}{x}\begin{pmatrix}
+	f(x)\\f'(x)
+\end{pmatrix}=\begin{pmatrix}
+	0&1\\-2&-3
+\end{pmatrix}\begin{pmatrix}
+	f(x)\\f'(x)
+\end{pmatrix}
+\ee 
+hence we can immediately write down the answer as
+\be 
+\begin{pmatrix}
+	f(x)\\f'(x)
+\end{pmatrix}=e^{\begin{pmatrix}
+0&1\\-2&-3
+\end{pmatrix}}\begin{pmatrix}
+c_1\\c_2
+\end{pmatrix}
+\ee 
+
+In class, we calculated the exponentiation of this matrix by computing first few terms in the Taylor expansion, finding the pattern, and then resumming all terms.
+
+\item We emphasize that this approach does not wotk if the matrix is not constant: as we mentioned above, we instead need the \emph{time-ordering}. In class, we schematically derived this as follows.
+
+Start with
+\be 
+\rdr{}{t}V(t)=A(t)\.V(t)
+\ee  
+Any non-homogeneous piece can be ignored as the particular solutions can always be found via variation of parameters method \emph{after} homogeneous solutions are computed. By integrating this equation, we get \emph{Volterra integral equation}
+\be 
+V(t)=V(0)+\int\limits_{0}^t A(t')\. V(t')dt'
+\ee 
+Now consider a modified version of this as 
+\be 
+V(\e,t)=V(0)+\e\int\limits_{0}^t A(t')\. V(\e,t')dt'
+\ee
+where $V(t)=V(1,t)$. Let us expand $V(\e,t)$ around $\e=0$ as follows:
+\be 
+V(\e,t)=V_{(0)}(t)+\e V_{(1)}(t)+\e^2 V_{(2)}(t)+\dots
+\ee 
+Note that $V(0,t)=V_{(0)}(t)=V(0)$ so this series is definitely well defined around $\e\sim 0$, but we do not yet know its radius of convergence so we might in principle not be able to take $\e\to 1$ to  obtain $V(t)$ at the end. Nevertheless, we will see that the radius of convergence is actually infinite as the expansion will turn out to be that of the exponential function. For now, let us proceed by inserting this into the modified Volterra equation:
+\be 
+\left(V(0)+\e V_{(1)}(t)+\e^2 V_{(2)}(t)+\dots\right)=V(0)+\e\int\limits_{0}^t A(t')\. \left(V(0)+\e V_{(1)}(t')+\e^2 V_{(2)}(t')+\dots\right)dt'
+\ee
+which leads to
+\be 
+V_{(n+1)}(t)=\int\limits_{0}^t A(t')\. V_{(n)}(t')dt'
+\ee
+if we match different orders of $\e$. But inserting this back, we obtain
+\be 
+V(\e,t)=V(0)+\left[\e\int\limits_{0}^t A(t')dt'\right]\. V(0)+\left[\e^2\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt'' A(t')\. A(t'')\right]\. V(0)+\dots 
+\ee 
+which can be rewritten as 
+\be 
+\label{temp1}
+V(\e,t)=\left(\mathbb{I}+\left[\e\int\limits_{0}^t A(t')dt'\right]+\left[\e^2\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt'' A(t')\. A(t'')\right]+\dots\right)\. V(0)
+\ee 
+
+One can show that the integration ranges $\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt''$ and $\int\limits_{0}^t dt'' \int\limits_{0}^{t''}dt'$ actually cover two triangles that add upto a square in the $t'-t''$ plane, given by the integration range $\int\limits_{0}^t dt' \int\limits_{0}^{t}dt''$. Therefore, we see that 
+\be 
+\int\limits_{0}^t dt' \int\limits_{0}^{t}dt'' f(t',t'')=\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt'' f(t',t'')+\int\limits_{0}^t dt'' \int\limits_{0}^{t''}dt' f(t',t'')
+\ee 
+which can be rewritten by changing the dummy variable as 
+\be 
+\int\limits_{0}^t dt' \int\limits_{0}^{t}dt'' f(t',t'')=\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt''\left(f(t',t'')+f(t'',t')\right)
+\ee 
+Observe that if we define 
+\be 
+f(t,t')=\left\{\begin{aligned}
+g(t,t')\text{ if }t>t'\\
+g(t',t)\text{ if }t'>t
+\end{aligned}\right.
+\ee 
+then we get
+\be 
+\half\int\limits_{0}^t dt' \int\limits_{0}^{t}dt'' f(t',t'')=\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt''g(t',t'')
+\ee 
+Note that $f$ is just the function $g$ in a way that its arguments are rearranged in the decreasing order. If we then define \emph{time-ordering} $\cT$ as 
+\be 
+\cT::{}&{} (\R^n\to \C)\to(\R^n\to \C)\\
+\cT={}&{} \Big((t_1,\dots,t_n)\to f(t_1,\dots,t_n)\Big)\to\Big((t_1,\dots,t_n)\to f\.\cO_>\.(t_1,\dots,t_n)\Big)
+\ee 
+where $\cO_>$ is the ordering function acting on \emph{list of real numbers}
+\be 
+\cO_>::{}&{} \R^n\to\R^n\\
+\cO_>={}&{}(t_1,\dots,t_n)\to (t_{i_1},\dots,t_{i_n}) \text{ such that } t_{i_a}\le t_{i_b}\text{ if }a<b
+\ee 
+we then see that 
+\be 
+\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt''g(t',t'')=\half\int\limits_{0}^t dt' \int\limits_{0}^{t}dt'' \cT\.g(t',t'')
+\ee 
+One can actually observe the same pattern in higher order versions, hence
+\be 
+\int\limits_{0}^t dt_1 \int\limits_{0}^{t_1} dt_2  \int\limits_{0}^{t_{n-1}} dt_n g(t_1,\dots,t_n)=\frac{1}{n!}\int\limits_{0}^t dt_1\dots \int\limits_{0}^t dt_n \cT\.g(t_1\dots,t_n)
+\ee 
+
+One can use this result in \eqref{temp1} and after some manipulation, we obtain
+\be
+V(\e,t)=\cT\left(e^{\e\int\limits_0^t A(t') dt'}\right)\. V(0)
+\ee 
+where $\cT$ is understood to apply products of $A$ when exponential is expanded. Since the Taylor expansion of exponential function has infinite radius of convergence, we can take $\e\to 1$ and obtain the final result:
+\be
+V(t)=\cT\left(e^{\int\limits_0^t A(t') dt'}\right)\. V(0)
+\ee 
+In Physics, this is mostly known as Dyson series.
+\item In class, I emphasized that this is a hard topic and the students are not expected to understand it fully. No question was asked about this in any homework or examination.
+\end{enumerate}}
+
+\chapter{Eigensystems and Sturm-Lioville theory}
+\draftnote{
+\begin{enumerate}
+\item Getting back to the simple case of constant $A(t)$, we solved some explicit examples in class. We considered an RLC circuit of resistor, capacitor, and inductor in parallel (and nothing else). We have shown in class that this system is coupled, hence one needs to work with matrices to find the, say, current over inductor as a function of time if there was initial energy in the system. Indeed, the system is described by
+\be 
+\rdr{}{t}\begin{pmatrix}
+	I_L(t)\\ V(t)
+\end{pmatrix}= \begin{pmatrix}
+	0&1/L\\-1/C&-1/(RC)
+\end{pmatrix}\begin{pmatrix}
+	I_L(t)\\ V(t)
+\end{pmatrix}
+\ee 
+We solved in class for $C=1 mF$, $L=200 H$, and $R=1/6 kOhm$ via exponentiation of the matrix. As teasor, I also showed that the differential equations for the variables $S_1=I_L+10^{-3}V$ and $S_2=I_L+5 10^{-3}V$ are actually decoupled: these are called normal mods, and we will learn about how to get these (finding the eigenvalues and eigenfunctions of a system) below!
+
+\item How to compute exponential of a matrix? As an example, consider
+\be 
+e^{\begin{pmatrix}
+		a&b\\c&d
+\end{pmatrix}}=&\begin{pmatrix}
+	1&0\\0&1
+\end{pmatrix}+\begin{pmatrix}
+	a&b\\c&d
+\end{pmatrix}+\half \begin{pmatrix}
+	a&b\\c&d
+\end{pmatrix}\.\begin{pmatrix}
+	a&b\\c&d
+\end{pmatrix}+\frac{1}{3!}\begin{pmatrix}
+	a&b\\c&d
+\end{pmatrix}\.\begin{pmatrix}
+	a&b\\c&d
+\end{pmatrix}\.\begin{pmatrix}
+	a&b\\c&d
+\end{pmatrix}+\dots
+\\
+=&\begin{pmatrix}
+	f_{11}(a,b,c,d)&f_{12}(a,b,c,d)\\f_{21}(a,b,c,d)&f_{22}(a,b,c,d)
+\end{pmatrix}
+\ee 
+This is tedious!
+
+Observe that 
+\be 
+A=U\.D\.U^{-1} \quad e^A=U\.e^D\.U^{-1}
+\ee 
+which one can check by expanding matrices. If $D$ is diagonal, then
+\be 
+e^A=U\.\begin{pmatrix}
+	e^{\lambda_1}& 0& \dots & 0\\
+	0& e^{\lambda_2}& \dots & 0\\
+	\dots \\
+	0&\dots & 0 & e^{\lambda_n}
+\end{pmatrix}\. U^{-1}
+\ee 
+where $\lambda_i$ are diagonal entries of the matrix $D$.
+\item We now try to solve the question: how do we find the matrix $U$ for a given $A$? If we write $U$ in terms of its column vectors as $U=\begin{pmatrix}
+	\vec{u}_1&\vec{u}_2&\dots&\vec{u}_n
+\end{pmatrix}$, then $A\.U=U\.D$ implies
+\be 
+A\.\begin{pmatrix}
+	\vec{u}_1&\vec{u}_2&\dots&\vec{u}_n
+\end{pmatrix}=\begin{pmatrix}
+	\lambda_1\vec{u}_1&\l_2\vec{u}_2&\dots&\l_n\vec{u}_n
+\end{pmatrix}
+\ee 
+which implies 
+\be
+\label{temp2} 
+A\.\vec{u}_i=\lambda_i \vec{u}_i\quad \forall i
+\ee 
+$u_i$ (we'll drop the vector sign for simplicity) are called \emph{right eigenvectors} of $A$, and $\l_i$ are called \emph{eigenvalues} of $A$. We can find an analogous equation in terms of \emph{left eigenvectors} of $A$ ($\vec{v}_i\.A=\vec{v}_i\l_i$), where $\vec{v}$ are actually row vectors of $U$ (unlike $\vec{u}$, which are column vectors of $U$). We'll only work with right eigenvectors so we'll drop the adjective right from now on.
+
+\item Observe that finding the matrix $U$, which is also called \emph{modal matrix}, is equivalent to solving the equation \eqref{temp2}, which can be rewritten as
+\be 
+\left(A-\lambda_i\mathbb{I}\right)\. u_i=0
+\ee
+If $\left(A-\lambda_i\mathbb{I}\right)$ is invertible, then we contract the equation above with $\left(A-\lambda_i\mathbb{I}\right)^{-1}$ from the left, which gives $u_i=\left(A-\lambda_i\mathbb{I}\right)^{-1}\.0$ hence the only solution is the trivial solution $u_i=0$. Therefore, for nontrivial $u_i$, we need $\left(A-\lambda_i\mathbb{I}\right)$ to be non-invertible, which means its determinant is zero:
+\be 
+\det \left(A-\lambda_i\mathbb{I}\right) =0
+\ee 
+This gives us a polynomial in $\l_i$, which is called \emph{characteristic polynomial} of $A$. For the matrix $A$ that describes a single linear ordinary differential equation with constant coefficients, the characteristic polynomial reduces to the characteristic equation that we have learned earlier.
+
+\item In class, we have solved two examples: the RLC circuit earlier, and $f''(x)+3f'(x)+2f(x)=0$. We found their eigensystem (and hence normal modes).
+\item Discussed physical importance of this \emph{similarity transformation}, i.e. 
+\be 
+A=U\.D\.U^{-1}
+\ee 
+where $U$ is called a similarity transformation and the diagonal matrix $D$ is called the spectrum. This mathematical terminology is in line with our physical intuitions and usage of the term spectrum. Indeed, in optics, electromagnetic theory, atomic \& nuclear physics, and chemical physics, we use the term spectrum to refer to the different frequencies of light in the emission (or absorption) spectrum of  some system/material. These different frequencies are actually the eigenvalues of the system as monochromatic light with different frequencies are \emph{eigenfunctions} that form a basis on which any electromagnetic disturbance can be decomposed. This is most easily seen in a prism where light right gets decomposed into monochromotic light (remember Pink Floyd :D): this is simply expansion of white light in the basis of eigenfunctions of the light ($e^{ikx}$). In fact, the Harmonic analysis that we have learned before (Fourier transform being one example) are generally expansions over eigenfunctions of a differential operator! (that differential operator being Casimir operator and eigenfunctions being unitary irreducible representations of the relevant group, but this is a story for another time!)
+\item Extending this whole discussion of spectrum and matrix transformation to infinite dimensions is equivalent to extending our eigenvalue equation to functions from finite dimensional column vectors: we now have
+\be 
+\cD\. f(x)=\l f(x)
+\ee 
+for a differential operator $\cD$, where $f(x)$ is its eigenfunction and $\l$ is its eigenvalue.
+\item The analysis of eigensystem of operators is immensely important, but to make further progress, we need to define \emph{inner products}!
+\item Remind dot products over real vector spaces $(.)::(\R^n,\R^n)\to \R$, extend them to functions $\R\to\R$ by defining the inner product $\<,\>::(\R\to\R,\R\to\R)\to\R$ as $\<f,g\>=\int\limits_\R f(x)g(x)dx$, and then generalize this further to complex functions as 
+\bea
+\<,\>_\w::{}&{}(A\to\C,A\to\C)\to\C \\
+\<f,g\>_\w={}&{}\int\limits_A \Big(f(x)\Big)^*g(x)\w(x)dx
+\eea
+for $A\subseteq\R$.
+\item In class, we defined adjoint of an operator wrt an inner product, discussed its properties, showed that self-adjoint operators have a real spectrum and orthogonal eigenfunctions. Add further discussion regarding symmetric vs self-adjoint operators.
+\item Sturm-Liouville problem is basically analysis of the eigensystem of \emph{second order self adjoint differential operators}.
+\end{enumerate}
 }
-\chapter{Partial differential equations}
+
+\chapter{Beyond linear ordinary differential equations}
+\section{Non-linear ordinary differential equations}
+\section{Partial differential equations}
