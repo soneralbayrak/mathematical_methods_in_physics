@@ -1505,5 +1505,72 @@ for $A\subseteq\R$.
 }
 
 \chapter{Beyond linear ordinary differential equations}
+\begin{enumerate}
+	\item Talked about abstract concept of a system S, with input I, and with output O, where their types are $\cS$, $\cI$, and $\cO$. Talked about how systems can be represented in different frameworks, as differential equations, as algebraic equations, or etc. Discussed how certain transformations actually act like a map between different representations of a system, e.g. Fourier transform can take a differential representation in one domain to an algebraic representation in another domain.
+	\item Discussed how systems can have properties (such as bounded input bounded output, casual, linear, etc.), and how we have been focused on linear systems with single input (hence can be represented by an linear ordinary differential equations), and how natural generalizations to nonlinear systems or multiple inputs lead to non-linear and/or partial differential equations.
+\end{enumerate}
 \section{Non-linear ordinary differential equations}
+\begin{enumerate}
+	\item Discussed exact equations, separable equations, Bernoulli equations, and solved examples.
+\end{enumerate}
 \section{Partial differential equations}
+\begin{enumerate}
+	\item Introduced \emph{tuples}, which are ordered lists:
+	\be 
+	(x_1,x_2,\dots,x_n)::T_1\x T_2\x \cdots \x T_n
+	\ee 
+	where $\x$ denotes a product, and $T_1\x T_2\x \cdots \x T_n$ is called a \emph{product type}. $\x$ creates a new product type from individual types; its inverse is \emph{projection} denoted by $\pi_i$ which works such that
+
+
+
+	\bea 
+\pi_i ::{}&{} \left(T_1\x T_2\x \cdots \x T_n\right)\to T_i\\
+\pi_i={}&{}(x_1,x_2,\dots,x_n)\to x_i
+\eea
+
+What does it mean to take products of types? What do we really mean by, say, $\cM_{n\x n}(\C)\x \R$?
+\begin{itemize}
+	\item In computer science, vast applications via so-called algebraic data types
+	\item In logic, product of types are actually related to $\land$ (and) operation via Curry-Howard correspondence
+	\item In abstract math, product of any family of objects is defined as \emph{``the most general thing''} from which individual objects can be extracted (category theory).
+\end{itemize}
+
+We are really used to taking products of types in Physics; for instance, Cartesian plane is $\R^2=\R\x\R$ is simply product of two real types. However, there is actually subtlety with such products in more general cases; for instance, the mathematical framework for quantum information theory is the so-called \texttt{Hilb} category which does not admit a Cartesian product (the only available products are non-cartesian), hence we do not actually have projection operations in this category. The well known physical result of this mathematical fact is that you cannot copy information in a quantum computer!
+
+\item If the elements of a tuple are of the same type, we use the easier notation $(x_1,\dots,x_n)::T^n$.
+
+\item Multi-variable functions are functions from tuples:
+\bea 
+f::{}&{} \R^3\to\R \\
+f={}&{} (x_1,x_2,x_3)\to f(x_1,x_2,x_3)
+\eea 
+
+\item Introduced D-notation:
+\bea 
+D::{}&{}\Z_+\to(\R^n\to\C)\to(\R^n\to\C)\\ 
+D={}&{}i\to\left((x_1,\dots,x_n)\to f(x_1,\dots,x_n)\right)\to \left((x_1,\dots,x_n)\to \frac{\partial f(x_1,\dots,x_n)}{\partial x_i}\right)
+\eea 
+e.g. $\displaystyle D_2f(x,y)=\frac{\partial f(x,y)}{\partial y}$
+
+\item Chain rule:
+\be 
+\rdr{}{x} f(g_1(x),\dots,g_k(x))=\sum\limits_{i=1}^k\left(\rdr{}{x}g_i(x)\right)D_if(g_1(x),\dots,g_k(x))
+\ee 
+
+\item Consider two functions $f$ and $g$:
+\be 
+f::{}&{}(X\x Y)\to Z\\
+g::{}&{} X\to (Y\to Z)
+\ee 
+We can \emph{choose} $g$ such that $g(x)(y)=f(x,y)$. This is called \emph{currying}, i.e. we curried $f$ into this new form as $g$. The reverse (rewriting a function like $g$ as a function like $f$) is called \emph{uncurrying}.
+
+\item Discussed several important examples of partial differential equations:
+\bea
+D_1 f(t,x)-\a^2 D_2^2 f(t,x)={}&{}0\qquad(\text{heat conductance equation})\\
+D_1^2 f(t,x)-c^2 D_2^2 f(t,x)={}&{}0\qquad(\text{wave equation})\\
+D_1^2 f(t,x)+ D_2^2 f(t,x)={}&{}0\qquad(\text{Laplace equation})
+\eea 
+
+\item We solved these equations both via method of seperation of variables, and also proposing solutions of the form $f(x,t)=g(x+a t)$.
+\item We discussed how partial differential equations can have undetermined functions in the answer just like how ordinary differential equations have undetermined coefficients in the answer!
+\end{enumerate}
