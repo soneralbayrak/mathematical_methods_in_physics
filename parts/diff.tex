@@ -1,0 +1,1576 @@
+\chapter{Definition and Classification of Differential Equations}
+\section{Preliminaries: some basic terminology}
+
+\subsection{Type notation and functions}
+
+Consider the number $2$. It is an integer, which mathematicians denote as $2\in \Z$, where $\Z$ denotes the set of integers.\footnote{$\Z$ is actually an integral domain.} Computer scientists on the other hand would denote this as
+\be 
+2::\texttt{Integer}
+\ee 
+where $a::b$ reads as \emph{``a is of type b''}. Further examples would be
+\bea 
+3/2::{}&\texttt{Rational}\\
+1.56::{}&\texttt{Real}\\
+1+i::{}&\texttt{Complex}
+\eea 
+Note that an object may be of multiple types. Mathematically, $3\in\Z$ and $3\in\R$, meaning
+\bea 
+3::{}&\texttt{Integer}\\
+3::{}&\texttt{Real}
+\eea 
+A somewhat hybrid notation between mathematicians and computer scientists would be 
+\bea 
+3::{}&\Z\\
+3::{}&\R
+\eea 
+We shall use this notation in the rest of the book.\footnote{I personally find this notation clearer when we use it with higher order functions such as derivatives.} 
+
+Just as we do with the explicit numbers above, we can \emph{define} variables with explicit types; for instance,
+\be 
+x::\Z
+\ee 
+It is up to us to choose what we want for the type, we can even left the type unknown; for instance,
+\be 
+y::\texttt{A}
+\ee 
+means that $y$ is a variable of the type \texttt{A},\footnote{This is called a \emph{type variable}.} where \texttt{A} can be anything.\footnote{It could be a simple field such as $\Z$ or $\N$, or it could be a more complex object such as $\mathfrak{M}_{2\x2}(\C)$ which denotes two by two matrices with complex entries.}
+
+Unlike the numbers or the variables above, the functions have an input and an output, hence their type actually reads differently.\footnote{
+	Physicists tend to refer to multi-valued relations as functions as well: this is a justifiable habit as such relations can always be treated as genuine functions by appropriately restricting their domains.\footnotemark We will stick to this convention in the rest of the book and  refer all multi-valued relations (such as an arctan) as functions.
+}
+\footnotetext{
+	Mathematically, a function yields a unique output for a given input, therefore so-called multi-valued ``functions'' are not really functions in their full analytic domain. For instance, the relation \mbox{$\texttt{sqrt}=\lambda\to\sqrt{\lambda}$} is not a function in the complete complex plane, as \mbox{$\texttt{sqrt}(4)=\pm 2$}. One solution is to choose a \emph{restricted domain} so that the relation actually yields a unique solution for a given input from the domain, hence making the relation a genuine function, e.g. choosing the domain $\R^+$ for \texttt{sqrt}. In principle, we do not need to make an arbitrary restriction: the strategy would be to analyze the \emph{Riemann surface} of the relation, and then determine the codomain in which the relation yields a unique result; in the case of \texttt{sqrt}, we can state
+	\mbox{$\texttt{sqrt}::\C\to \texttt{A}$} where $x\in\texttt{A}$ if and only if\; $0\le\arg(x)<\pi$. This means that $\texttt{sqrt}\left(re^{i\theta}\right)=\sqrt{r}e^{i\theta/2}$ for $\theta$ chosen in the range $0\le\theta< 2\pi$ with $r>0$; hence, $\texttt{sqrt}(4)=2$.
+	
+	The regions of the codomain in which the multi-valued relation becomes a genuine function are called \emph{sheets}; in the example above, we choose a principle sheet (or a first sheet) for the relation \texttt{sqrt}: we can move on to the \emph{other sheets} by removing the restriction on $\theta$. Indeed, we have on the second sheet $\texttt{sqrt}(4)=\texttt{sqrt}\left(4e^{i2\pi}\right)=\sqrt{4}e^{i\pi}=-2$, the other solution! One could go on to higher sheets to find even more solutions; in the case of \texttt{sqrt}, $n-$th sheet is actually identified with $(n-2)-$th sheet, hence we have only two solutions (as expected from a square root operation).
+	
+	Somewhat more traditional approach to the Riemann surfaces is the \emph{analysis of branch cuts}. We \textbf{(1)} take one of the solutions of the relation as the output (called \emph{principal value}), \textbf{(2)} determine some lines on the complex plane (branch cuts), \textbf{(3)} impose discontinuity on the cuts such that the relation is a true function in the rest of the complex plane! With the insight from Riemann surfaces, we know that moving across such lines actually takes us from one sheet to another ---previous (next) sheet if we pass the branch cut (counter)clockwise. For \texttt{sqrt}, the conventionally chosen principle value is $\sqrt{r^2}=r$ for $r\in\R^+$, and branch cut is the line $(-\infty,0)$: $\texttt{sqrt}(z)$ for any other $z\in\C$ can then be uniquely determined to be consistent with these; for instance $\texttt{sqrt}\left(-1\pm i 10^{-100}\right)\sim 6\x 10^{-17}\pm i$ ---note the jump!
+} For instance,
+\be 
+f::\Z\to\Z
+\ee 
+denotes \emph{``a function that acts on integers and produces another integer}. An example would be
+\be 
+f = \l \to \l^2
+\ee 
+which gives the integer $f(x)=x^2$ when acted on the integer $x$.\footnote{I'd like to note that there is a common misconception (especially) in the physics community. $f(x)$ is \emph{not} the function, the function is $f$. $f$ acts on the input $x$, and produces the output $f(x)$.} Another example would be 
+\be 
+g(y)=y/3
+\ee 
+for which we can write down\footnote{If you couldn't remember, $\Q$ denotes the set of rational numbers.}
+\bea 
+g::{}&\Z\to\Q\\
+y::{}&\Z\\
+g(y)::{}&\Q
+\eea 
+Of course, we can also extend our interested regime for the input $y$ and simply state
+\bea 
+g::{}&\C\to\C\\
+y::{}&\C\\
+g(y)::{}&\C
+\eea 
+which is still true for $g(y)=y/3$. In fact, we can even write $g::{}\texttt{A}\to\texttt{B}$ if we do not care for the explicit types of input and output.\footnote{We use different letters for the type variables (\texttt{A} and \texttt{B}) so that the input and output are not necessarily of the same type. On the contrary, the function $h::{}\texttt{A}\to\texttt{A}$ can only produce integers when acted on integers, reals when acted on reals, and so on.}
+
+\subsection{Higher order functions and the derivative}
+Consider the operation $T$ of \emph{``doubling the output of a function''}. If we apply this operation $T$ to a function $f$, then it yields a function $g$ such that $g(x)=2 f(x)$. For instance,
+\bea 
+f={}&\l\to\l+5\\
+g={}&\l\to2\l+10
+\eea 
+The question now is this: what is the type of the operation $T$?
+
+Clearly, $T=f\to g$ as it takes the function $f$ as an input and produces the function $g$ as the output. Thus, we can write it as 
+\be 
+T::{}&\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{C}\to\texttt{D}\right)
+\ee 
+which means if 
+\be 
+f::{}&\texttt{A}\to\texttt{B}
+\ee 
+then 
+\be 
+\left(g=T\.f\right)::{}&\texttt{C}\to\texttt{D}
+\ee 
+$T$ is called \emph{a higher order function}: it acts on a function and produces another function.
+
+The derivative operator \emph{is} a higher order function, i.e.
+\be 
+\label{eq: type of derivative operator}
+\rdr{}{x}::{}&\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{A}\to\texttt{C}\right)
+\ee 
+which means\footnote{We are using the common convention $f'\coloneqq \rdr{f}{x}$ and $f'(x)\coloneqq \rdr{f}{x}(x)$ for brevity.}
+\bea 
+x::{}&\texttt{A}\\
+f::{}&\texttt{A}\to\texttt{B}\\
+f(x)::{}&\texttt{B}\\
+f'::{}&\texttt{A}\to\texttt{C}\\
+f'(x)::{}&\texttt{C}
+\eea  
+For example, 
+\bea
+f::{}&\R\to\C\\
+f={}&\l\to\l^2+2i
+\eea
+leads to
+\bea
+f'::{}&\R\to\R\\
+f'={}&\l\to 2\l
+\eea
+where the type variables in \equref{eq: type of derivative operator} are $\texttt{A}=\texttt{C}=\R$ and $\texttt{B}=\C$.
+
+The derivatives can shrink the codomain of a function;\footnote{Reminder: if $f=\texttt{A}\to\texttt{B}$, we call $A$ ($B$) the (co)domain of $f$.} in the above example, the original codomain (that of $f$) was $\C$ whereas the new codomain (that of $f'$) is $\R$. Nevertheless, we can always \emph{embed} the smaller codomain into a larger one (e.g. all real numbers can be considered as complex numbers as well), hence we can always take \mbox{$\rdr{}{x}::{}\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{A}\to\texttt{B}\right)$}. This shows that the derivative is a higher order function that can be \emph{repeatedly applied}; thus, we say\footnote{We will use the notation such that $f^{(n)}$ is the $n-$th derivative of the function $f$.}
+\bea 
+\label{eq: type of nth order derivatives}
+\rdr{{}^n}{x^n}::{}&\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{A}\to\texttt{B}\right)\\
+f::{}&\texttt{A}\to\texttt{B}\\
+f^{(n)}::{}&\texttt{A}\to\texttt{B}
+\eea  
+
+\subsection{Functionals and the integral}
+In the previous section, we have seen that the derivative is a higher-order function, i.e. it takes a function to another function. Naturally, its inverse is also a higher-order function:\footnote{In principle, the anti-derivative can \emph{extend} the codomain of a function, just as derivative shrinks it. We can see this via \emph{integration constant}, which can be anything as long as it is $x-$independent. We put this subtlety aside as we can always extend the original codomain such that it matches the new one, hence \eqref{eq: anti-derivative}.}
+\bea 
+\rdr{{}^{-1}}{x^{-1}}::{}&\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{A}\to\texttt{B}\right)\label{eq: anti-derivative}\\
+g::{}&\texttt{A}\to\texttt{B}\\
+g^{(-1)}::{}&\texttt{A}\to\texttt{B}
+\eea  
+where $g^{(-n)}=\left(\rdr{{}^{-1}}{x^{-1}}\right)\.g^{(1-n)}$ with $g^{(0)}=g$, in line with the notation for derivatives. Fundamental theorem of calculus then tells us that the output \mbox{$g^{(-1)}(x)::\texttt{B}$} can be written as
+\be 
+g^{(-1)}(x)=\int\limits_0^x g(t) dt
+\ee 
+which is compatible with $\rdr{}{x}g^{(-1)}(x)=g(x)$.
+
+We have shown above that the \emph{the indefinite integral} is a higher order function, but how about a definite integral? How do we determine its type?
+
+We can start by writing down a generic definite integral:
+\be 
+\int\limits_{0}^{\pi/2} \cos(x) dx= 1
+\ee 
+Clearly, we take a function ($\cos$) and a range over which we do the integration (between $0$ and $\pi/2$). We can always specify the integration range via the domain of the function,\footnote{
+	For instance, if we would like to do the integration from $0$ to $1$, we can restrict the function $f(x)::\texttt{A}\to\texttt{B}$ to $f(x)::\texttt{UnitReal}\to\texttt{B}$ where $x::\texttt{UnitReal}$ means $x\in[0,1]$.
+} thus
+\be 
+\int\limits :: (\texttt{A}\to\texttt{B})\to\texttt{C}
+\ee 
+as the integration turns the function cosine into a number $1$.
+
+Operations that turn functions into numbers are called \emph{functionals}, and definite integration is a functional.  For instance, the operation to compute the area under a curve is a functional: if we call that operation $T$, we then have
+\bea 
+T::{}&\left(\R\to\R\right)\to\R\\
+f::{}&\R\to\R\\
+\left(T\.f = \int\limits_{-\infty}^\infty f(x)dx\right)::{}&\R
+\eea  
+
+Note that the parentheses in the type definition is important; for instance, 
+\bea 
+T::{}&\left(\R\to\R\right)\to\R\\
+F::{}&\R\to\left(\R\to\R\right)
+\eea 
+denote different objects: $T$ is a functional, which produces a number if given a function as input. $F$ on the other hand produces a function when fed a number, i.e. $F(x)=f$ is a function, whose output can be written as $F(x)(y)=f(y)$. This show that we can actually interpret $F$ as a function of two variables!\footnote{
+	This property can be generalized. A higher order function
+	\be 
+	f::\texttt{A}_1\to\left(
+	\texttt{A}_2\to\left(\dots\to\left(
+	\texttt{A}_{n-1}\to\left(\texttt{A}_{n}\to\texttt{B}
+	\right)\right)\right)\right)
+	\ee 
+	produces a function of $n-1$ variable once given a variable as input. That function then produces another function of $n-2$ variable once given a variable as input, and so on. Indeed, it means
+	\bea 
+	x_i::{}&\texttt{A}_i\\
+	f(x_1)(x_2)\dots(x_n)::{}&\texttt{B}
+	\eea 
+	which can easily be re-interpreted as $f(x_1,\dots,x_n)::\texttt{B}$.
+	
+	This concept of turning higher-order functions into functions of multiple variables (and vise versa) is called \emph{currying}, see bla bla bla. \draftnote{Put some sources here.}
+}
+
+\section{Differential equations}
+\subsection{Basics}
+\label{section: basics of diff eqn}
+Very broadly, we could define any relation that contains the derivative higher order function $\rdr{}{x}$ and an unknown function $f$ as a differential equation. For instance,
+\be 
+\cos\left(\exp(\rdr{}{x})f(x)+\frac{1}{f(x)}\right)=0
+\ee 
+is a differential equation: but it is neither real-world motivated nor easy-to-solve, so let's skip it and focus on more relevant and simpler cases.\footnote{\label{footnote: exponentiated differential}
+	You may be surprised with the expression $\exp(\rdr{}{x})$. To understand it, let's first view the taking-the-$n^{\text{th}}$-power operation as a higher order function:
+	\be 
+	P_n::{}&(\texttt{A}\to\texttt{B})\to(\texttt{A}\to\texttt{B})
+	\ee 
+	and
+	\bea
+	\left(P_0\.f=f\right)::{}&\texttt{A}\to\texttt{B}\\
+	\bigg(P_n\.f=f\.(P_{n-1}\.f)\bigg)::{}&\texttt{A}\to\texttt{B}
+	\eea
+	meaning 
+	\bea
+	x::{}&\texttt{A}\\
+	(P_n\.f)(x)=f(f(\dots f(x)))::{}&\texttt{B}
+	\eea
+	For instance, $P_2\.\cos= \l\to\cos(\cos(\l))$.
+	
+	We can now define \emph{exponentiation} as a higher order operation:
+	\bea
+	\exp::{}&(\texttt{A}\to\texttt{B})\to(\texttt{A}\to\texttt{B})\\
+	\exp={}&\sum\limits_{n=0}^\infty\frac{1}{n!}P_n
+	\eea
+	One can then immediately compute, say,
+	\be
+	\exp(\rdr{}{x})x^3={}&x^3+3x^2+3x+1\\
+	\exp(\rdr{}{x})e^{k x}={}&e^ke^{k x}
+	\ee 
+	and so on.
+}
+
+The simplest differential equation is
+\bea 
+x::{}&\R\\
+\left(\rdr{}{x}\.f\right)::{}&\tA\to\tB\\
+\label{eq:simplest dif equation}\rdr{}{x}\.f={}&0
+\eea
+which states that \emph{there is an unknown function $f$ such that ``the derivative higher order function acting on it'' leads to the zero function}.\footnote{
+	We use the convention such that $0$ can be of any type that yields the ordinary number zero (\mbox{$0::\C$}) as the output. In \equref{eq:simplest dif equation}, $0$ has the type \mbox{$\tA\to(0::\C)$}, which we call \emph{the zero function}.
+} You may hope to formally solve this equation by applying $\rdr{^{-1}}{x^{-1}}$ to the both sides and use $\rdr{^{-1}}{x^{-1}}\.\rdr{}{x}\.f=f$, but this actually leads to a circular argument.\footnote{
+	Naively applying $\rdr{^{-1}}{x^{-1}}$ would lead to the equation $f=\rdr{^{-1}}{x^{-1}}\.0$ but this equation is not necessarily equivalent to the original one. Indeed, both  $f=\rdr{^{-1}}{x^{-1}}\.0$ and  $f=g+\rdr{^{-1}}{x^{-1}}\.0$ would lead to the original equation if $\rdr{}{x}\.g=0$ as well.
+	\draftnote{burada kernel kavramindan, homojen ve hetetojen denklemlerden bahset.}
+	
+} Instead, let us proceed to apply this function to a real variable and write
+\be
+\left(\rdr{}{x}\.f\right)(x)\equiv\rdr{f}{x}(x)\equiv f'(x)=0
+\ee
+for which one usually writes down the result as
+\be 
+f(x)=\textrm{constant}
+\ee 
+immediately. This makes sense, as the derivative of a constant is always zero.
+
+The next simplest example would be the following differential equation
+\be 
+\rdr{}{x}\.f=f
+\ee 
+for the unknown function $f$. Solving this equation is equivalent to answering this question: \emph{what function is equal to its derivative?}
+
+Even though what we know and what we try to solve for are all \emph{functions}, the traditional way of writing down such equations is in terms of \emph{the values of functions}; in other words, we say
+\be 
+\label{eq: exponential diff}
+f'(x)=f(x)
+\ee 
+is the differential equation, and we are trying to find the output $f(x)$ that satisfies this. Indeed, in the rest of the notes, we will mostly stick to this more traditional form.
+
+Let us ask the question again: what is the function that is equal to its derivative? We will provide three equivalent answer.
+\begin{enumerate}
+	\item We \emph{define} a function as solution of this equation. Indeed, most of the famous mathematical functions (Hypergeometric, Bessel, Hankel, Gegenbauer, etc.) are \emph{defined} as solutions to various differential equations. Analogously, we define
+	\bea 
+	\exp::{}&\C\to\C\\
+	\exp={}&x\to \exp(x)\text{ such that } \rdr{\exp(x)}{x}=\exp(x)
+	\eea 
+	We call this function \emph{exponential} and usually denote it as \mbox{$\exp(x)=e^x$}.\footnote{By using various numerical methods, we can compute the value of this function for arbitrary complex numbers, e.g. $e^{0}=1,\;e^1\sim 2.72,\;e^{1+i}\sim1.5+2.3i$, and so on.}
+	
+	\item We first assume that $f(x)\ne 0$, with which we can rewrite \equref{eq: exponential diff} as
+	\be 
+	\frac{1}{f'(x)}=\frac{1}{f(x)}
+	\ee 
+	By chain rule, we have
+	\be 
+	\rdr{f(x)}{x}\rdr{x}{f(x)}=1
+	\ee 
+	hence the above equation becomes
+	\be 
+	\rdr{x}{f(x)}=\frac{1}{f(x)}
+	\ee 
+	If we now replace $x=f^{-1}(y)$ where $f^{-1}$ is the inverse of the function $f$,\footnote{This means
+		\bea 
+		f::{}&\C\to\C\\
+		f^{-1}::{}&\C\to\C\\
+		f={}&x\to f(x)\\
+		f^{-1}={}&f(x)\to x
+		\eea 
+	} we get
+	\be 
+	\rdr{f^{-1}(y)}{dy}=\frac{1}{y}
+	\ee 
+	By integrating this function, we get
+	\be 
+	f^{-1}(y)=\int\frac{dy}{y}
+	\ee 
+	If we now \emph{define} the function \emph{logarithm} as the right hand side, we arrive at the solution that \emph{the function whose derivative is equal to itself is the inverse of the logarithm function}, which we call the exponential function.\footnote{We can now check that our very initial assumption $f(x)\ne 0$ is indeed satisfied.}
+\end{enumerate}
+
+\paragraph{Summary} In the first approach, we \emph{defined} the exponential function as the solution of the differential equation $f'(x)=f(x)$. We can then \emph{derive} that its inverse (logarithmic function) can be given as the integral of $1/x$.\footnote{We can show this by using the fundamental theorem of calculus.} In the second approach, we \emph{defined} the logarithmic function as the integral of $1/x$, and then \emph{derived} that its inverse (exponential function) solves the differential equation. Which one we choose is purely conventional.
+
+\paragraph{What did we learn?} In math, we \emph{define} many objects as our initial data, and then \emph{derive} other quantities based on those. What we \emph{choose to define} is purely conventional; however, we cannot afford to define too many things and still remain consistent. For instance, in the example above, we actually show that if we give two of the following three statements, the third one is already fixed by the other two: (1) \emph{exponential and logarithm functions are inverse of each other}, (2) \emph{exponential function is the solution of the differential equation $f'(x)=f(x)$}, and (3) \emph{logarithm function is the integration of $1/x$}.
+
+\subsection{Classification}
+In the beginning of the section above, we defined differential equations as any relation that contains the derivative operator $\rdr{}{x}$ and an unknown function $f(x)$.\footnote{As stated earlier, $f(x)$ is actually \emph{not} the function but the \emph{output} of the function $f$. Nevertheless, I'll abuse terminology here and there to remain more familiar to physicists.} There is nothing that stops us from generalizing this to multiple variables;\footnote{Alternatively, we can generalize to multiple \emph{functions}; for instance,
+	\be 
+	\rdr{f(x)}{x}=g(x)\;,\quad\rdr{g(x)}{x}=-f(x)\;.
+	\ee 
+	Such relations are called \emph{systems of differential equations}. We will see more about such systems in \S~\ref{chapter: Linear nonhomogeneous equations with functional coefficients}.
+} indeed, an expression that contains the partial derivatives $\frac{\partial}{\partial x}$ and  $\frac{\partial}{\partial y}$ (along with an unknown function $f(x,y)$) is \emph{also} a differential equation. We then divide all differential equations into two categories:
+\be 
+\text{A differential equation is called}\left\{\begin{aligned}
+	\text{ordinary}\\\text{partial}
+\end{aligned}\right\}\text{ if there are}
+\\
+\text{derivatives with respect to}\left\{\begin{aligned}
+	\text{one}\\\text{more than one}
+\end{aligned}\right\}\text{variables.}
+\ee 
+For instance,
+\be 
+\frac{\partial f(x,y)}{\partial x}+\frac{\partial f(x,y)}{\partial y}+ f(x,y)=0
+\ee 
+is a partial differential equation. Until the last chapter, we will only focus on \emph{ordinary} differential equations!
+
+We also define the \emph{order} of a differential equation to be the highest number of derivatives in it; for instance,
+\be 
+\rdr{^{3}}{x^{3}}f(x)=0
+\ee 
+is a third order differential equation,\footnote{
+	See if you can convince yourself that 
+	\be 
+	f(x)=c_0+c_1x+c_2x^2
+	\ee 
+	for the coefficients $c_i$ is the solution to this equation.
+} whereas
+\be 
+\rdr{^{3}}{x^{3}}f(x)+f(x)\rdr{^{4}}{x^{4}}f(x)+x\rdr{}{x}f(x)=0
+\ee 
+is a fourth order one. Note that not all differential equations have to have a finite order.\footnote{
+	It is perfectly possible to define the differential equation
+	\be 
+	\exp(\rdr{}{x})f(x)={}& f(x)+3x^2+3x+1
+	\ee 
+	for which 
+	\be 
+	f(x)=x^3
+	\ee 
+	is a solution (see the footnote~\ref{footnote: exponentiated differential}). However, clearly, this differential equation has arbitrarily high numbers of derivatives, hence it is of infinite order.
+}
+
+The differential equations are also grouped according to the \emph{linearity} of the unknown function $f$. For instance, the differential equation
+\be 
+\rdr{^{2}}{x^2}f(x)+f(x)=1
+\ee 
+is called a \emph{linear differential equation}, whereas
+\be 
+f(x)\rdr{}{x}f(x)=x^3
+\ee 
+is a \emph{nonlinear} differential equation.\footnote{\label{footnote:superposition}
+	One important feature of linear differential equations is that their solutions obey \emph{the principle of supersposition}; that is, if $f(x)$ and $g(x)$ are two solutions to the linear differential equation, then $c_1f(x)+c_2g(x)$ is also a solution for arbitrary constants $c_{1,2}$.
+} An easy way to check if a differential equation is linear or nonlinear is to apply the transformation $f(x)\rightarrow \lambda f(x)$ for the constant $\lambda$: if the differential equation is linear in $\lambda$ (i.e. it can be written as $\lambda(\dots)+(\dots)=0$), then the differential equation is a linear differential equation; otherwise, it is a nonlinear differential equation.
+
+Nonlinear equations are way harder to solve than the linear equations; in fact, we actually do not know how to solve most of the nonlinear equations! In practice, one usually handles them numerically, which is beyond of the scope of this course. If you are only interested in a particular regime, you can also \emph{linearize} a nonlinear equation around that regime, which is what most physicists do in practice. For instance, consider the nonlinear differential equation
+\be 
+\label{eq: nonlinear example}
+\rdr{}{x}f(x)+\sin(f(x))=0
+\ee 
+If we say that we are only interested in the results $f(x)\ll1$, then we can linearize this equation as 
+\be 
+\rdr{}{x}f(x)+f(x)=0
+\ee 
+which has the solution
+\be 
+f(x)=c e^{-x}
+\ee 
+which satisfies our necessary condition for $x\gg 1$.\footnote{
+	We can actually solve the full nonlinear differential equation \equref{eq: nonlinear example}; the result is
+	\be 
+	f(x)=2\arccot(\frac{2e^x}{c})
+	\ee 
+	which matches the linearized result in the regime it is valid, i.e. 
+	\be 
+	\lim\limits_{x\rightarrow\infty}2\arccot(\frac{2e^x}{c})=\lim\limits_{x\rightarrow\infty} c e^{-x}
+	\ee 
+}
+
+A last classification we can do with our differential equations is their \emph{homogeneity}: a differential equation is said to be \emph{homogeneous} if it is invariant under the scaling of the unknown function. This is just a fancy way of saying that the differential equation does not change even if we replace $f(x)$ with $\lambda f(x)$ for an unknown constant $\lambda$.  
+
+We can summarize the classification of all differential equations with examples as given in Table~\ref{table: Illustration of various differential equations}
+\begin{table}
+	\caption{\label{table: Illustration of various differential equations}Illustration of various differential equations}
+	\centering
+	\footnotesize
+	\begin{tabular}{llll}
+		\textbf{Example differential equation}&\textbf{ordinary?}&\textbf{linear?}&\textbf{homogeneous?}\\
+		$\displaystyle\rdr{^2f(x)}{x^2}+f(x)=0$&\cmark&\cmark&\cmark
+		\\\\
+		$\displaystyle\rdr{^2f(x)}{x^2}+f(x)=x^2$&\cmark&\cmark&\xmark
+		\\\\
+		$\displaystyle f(x)\rdr{^3f(x)}{x^3}+\left(\rdr{f(x)}{x}\right)^2=0$&\cmark&\xmark&\cmark
+		\\\\
+		$\displaystyle\rdr{^2f(x)}{x^2}+\sin(f(x))=0$&\cmark&\xmark&\xmark
+		\\\\
+		$\displaystyle\pdr{^2f(x,y)}{x\partial y}+f(x,y)=0$&\xmark&\cmark&\cmark
+		\\\\
+		$\displaystyle\pdr{^2f(x,y)}{x^2}+f(x,y)=x^2$&\xmark&\cmark&\xmark
+		\\\\
+		$\displaystyle f(x)\pdr{^3f(x,y)}{x^3}+\left(\pdr{f(x,y)}{y}\right)^2=0$&\xmark&\xmark&\cmark
+		\\\\
+		$\displaystyle\pdr{^2f(x,y)}{x\partial y}+\sin(f(x,y))=0$&\xmark&\xmark&\xmark
+	\end{tabular}
+\end{table}
+
+\chapter{Linear equations with constant coefficients}
+\section{Linear mappings and kernels}
+Formally, we could write down the most generic linear ordinary differential equation for the unknown function $f$ as
+\be 
+g\left(x,\rdr{}{x}\right)f(x)=h(x)
+\ee 
+for arbitrary known functions $g$ and $h$. Indeed, this is a linear equation in the function $f$, and it has only one kind of derivative, $\rdr{}{x}$, hence it is an ordinary differential equation.
+
+Let's assume that we are given such an equation for known $g$ and $h$, and we are trying to solve for $f$. A naive attempt would be to write down
+\be 
+f(x)=\frac{1}{g\left(x,\rdr{}{x}\right)}h(x)
+\ee 
+which looks like a total nonsense! Nevertheless, we cannot help but realize that it does somewhat work in some cases; for instance, for
+\be 
+\rdr{}{x}f(x)=x^2
+\ee 
+we can write down
+\be 
+f(x)=\left(\rdr{}{x}\right)^{-1}x^2
+\ee 
+which we can rewrite as 
+\be 
+f(x)=\int dx x^2=\frac{x^3}{3}+\text{constant}
+\ee 
+by observing that integral is \emph{the inverse of derivative}.\footnote{Rigorously speaking, we are referring to indefinite integrals (also known as antiderivatives or Newton integrals).}
+
+We need to be careful with such manipulations, but physicists \emph{tend to} define things \emph{formally}, which allows such expressions. For instance, we could say that \emph{the formal solution} to the differential equation
+\be 
+\left(\rdr{^2}{x^2}+c^2\right)f(x)=0
+\ee 
+is
+\be 
+f(x)=\left(\rdr{^2}{x^2}+c^2\right)^{-1}0
+\ee 
+For a physicist, there is nothing wrong with writing things like the equation above \emph{as long as we are careful with what we mean}! To spell out what we really mean with such an equation, we need to set up some terminology.
+
+Remember how we defined the derivative higher order function (or its integer powers) in \equref{eq: type of nth order derivatives}:
+\bea 
+\rdr{{}^n}{x^n}::{}&\left(\texttt{A}\to\texttt{B}\right)\to\left(\texttt{A}\to\texttt{B}\right)\\
+f::{}&\texttt{A}\to\texttt{B}\\
+f^{(n)}::{}&\texttt{A}\to\texttt{B}
+\eea  
+The operation of taking derivatives is \emph{a map of functions to functions}; in fact, it is a \emph{linear map}!\footnote{We can easily see the linearity by noting the relation
+	\be 
+	\rdr{^n}{x^n}\left(c_1 f(x)+c_2 g(x)\right)=c_1\rdr{^n}{x^n}f(x)+c_2\rdr{^n}{x^n}g(x)
+	\ee 
+	for arbitrary coefficients $c_1$ and $c_2$.
+} Linear maps are really useful when we work with vectors, but we will see below that an important notion called \emph{kernel} can be extended from vector spaces to the functions as well.\footnote{
+	The analogy is as follows: functions are like vectors, and linear transformations due to derivatives are like matrix multiplications. Indeed, a matrix $M$ (say $\begin{pmatrix}
+		1&1\\0&1
+	\end{pmatrix}$) acting on a vector $v$ (say $\begin{pmatrix}
+		2\\3
+	\end{pmatrix}$) is a linear mapping, just as the derivative $\rdr{}{x}$ turning the function $x^2$ into $2x$.
+	
+	The analogy extends to the equations. We could solve $M\.w=v$ for the unknown vector $w$, similar to how we solve $\rdr{}{x}f(x)=x^2$ for the function $f$. In fact such analogies can be made more precise if we realize that a function $f$ is in some sense an infinite dimensional vector. Indeed, in a neighborhood containing the point $c$ in which the function $f$ is analytic, we can just do a Taylor expansion and rewrite $f(x)$ as 
+	\be 
+	f(x)=\sum\limits_{n=0}^{\infty}f_n x^n
+	\ee  
+	where $f_n$ can be viewed as an infinite-dimensional vector $f_n=\left(f_0,f_1,\dots\right)$.\footnotemark
+}\footnotetext{
+	If we take a step back, we can actually realize that the converse is also true (in fact, it is \emph{generically} true): \emph{any vector $v$ is simply a function from integers to the domain of the components of the vector}.
+	
+	What do we mean by that? Consider the vector $\vec{v}=\begin{pmatrix}
+		1\\0\\-3
+	\end{pmatrix}$. This vector is equivalent to the set of relations $v_1=1$, $v_2=0$, and $v_3=-3$. But that is simply a function
+	\bea 
+	v::{}&\N\to\R\\
+	v={}&n\to\left\{\begin{aligned}
+		1&\text{ if }n=1\\
+		0&\text{ if }n=2\\
+		-3&\text{ if }n=3\\
+		\text{undefined}&\text{ otherwise}
+	\end{aligned}\right.
+	\eea 
+	
+	This process can be generalized to any finite or infinite dimensional vector.
+} 
+
+In vector spaces linear transformations are implemented by matrices; for instance, the transformation ``clockwise rotation by $\pi/4$'' on $2d$ vectors can be implemented by the matrix
+\be 
+R(-\pi/4)=\frac{1}{\sqrt{2}}\begin{pmatrix}
+	1&1\\-1&1
+\end{pmatrix}
+\ee 
+which indeed rotates any vector $\vec{v}=\begin{pmatrix}
+	v_x\\v_y
+\end{pmatrix}$ to its rotated version\linebreak \mbox{$R(-\pi/4)\.\vec{v}$}; for instance, the unit vector pointing to NorthEast direction on a map ---i.e. $\frac{1}{\sqrt{2}}\begin{pmatrix}
+	1\\1
+\end{pmatrix}$--- gets rotated to the vector pointing to the East by this $45$ degrees of clockwise rotation:
+\be 
+\frac{1}{\sqrt{2}}\begin{pmatrix}
+	1&1\\-1&1
+\end{pmatrix}\frac{1}{\sqrt{2}}\begin{pmatrix}
+	1\\1
+\end{pmatrix}=\begin{pmatrix}
+	1\\0
+\end{pmatrix}
+\ee 
+In fact \emph{a general counterclockwise rotation by an angle $\theta$} can be implemented by the matrix
+\be 
+R(-\pi/4)=\begin{pmatrix}
+	\cos(\theta)&\sin(\theta)\\-\sin(\theta)&\cos(\theta)
+\end{pmatrix}
+\ee 
+
+The \emph{kernel of a map} (or equivalently the kernel of the matrix that implements that map) is the set of vectors that are mapped to \emph{zero vector}; for instance, we can show that the only such vector for the rotation matrix is the zero vector itself; in other words,
+\be 
+\begin{pmatrix}
+	\cos(\theta)&\sin(\theta)\\-\sin(\theta)&\cos(\theta)
+\end{pmatrix}\begin{pmatrix}
+	a\\b
+\end{pmatrix}=\begin{pmatrix}
+	0\\0
+\end{pmatrix}
+\ee 
+is true only if $a=b=0$; thus, we write
+\be 
+\ker\left[R(\theta)\right]=\{\vec{0}\}
+\ee 
+which means \emph{the only vector that can be rotated to the zero vector is the zero vector itself}. When said this way, it clearly makes sense!
+
+Let's look at another example: we define the matrix $S$ as
+\be 
+S=\begin{pmatrix}
+	1&2\\2&4
+\end{pmatrix}
+\ee 
+If we now look at the \emph{kernel of this linear transformation}, we find a non-trivial result; in fact, we can immediately write down
+\be 
+\ker [S]=\left\{\vec{0},\begin{pmatrix}
+	2a\\-a
+\end{pmatrix}\right\}
+\ee 
+which means not only the zero vector gets mapped to zero vector, but also any vector of the form $\begin{pmatrix}
+	2a\\-a
+\end{pmatrix}$ becomes zero under the action of this matrix. Indeed, we see that
+\be 
+\begin{pmatrix}
+	1&2\\2&4
+\end{pmatrix}\begin{pmatrix}
+	2a\\-a
+\end{pmatrix}=\begin{pmatrix}0\\0\end{pmatrix}
+\ee 
+
+What does this mean? And what is the action of this linear transformation? Just like the rotation matrix rotates any input vector, this $S$ matrix also transforms the input vectors, but it actually \emph{squeezes} them. Indeed, we see that for any vector pointing in any direction, the action of this transformation squeezes them into the $\begin{pmatrix}
+	1\\2
+\end{pmatrix}$ direction. We can see this explicitly:
+\bea 
+S\.\vec{v}_{\text{input}}={}&\vec{v}_{\text{output}}\\
+\vec{v}_{\text{input}}={}&\begin{pmatrix}
+	a\\b
+\end{pmatrix}
+\\
+\vec{v}_{\text{output}}={}&(a+2b)\begin{pmatrix}
+	1\\2\end{pmatrix}
+\eea
+
+\paragraph{Summary:} We have seen with examples that some linear transformations (such as rotation) has a \emph{trivial kernel},\footnote{We say that a kernel is trivial if it only includes the identity element ($\vec{0}$ vector in the case of vector spaces).} whereas other transformations (such as squeezing) may have a nontrivial kernel. 
+\paragraph{Quick check in vector spaces:} Whether a linear transformation has a trivial kernel or not can immediately be checked in the case of vector spaces by computing the \emph{determinant} of the matrix that implements that transformation. If the determinant is zero (e.g. $\det S=0$), then the kernel is nontrivial; otherwise ($\det R = 1$) the kernel is trivial.
+\paragraph{The importance of nontrivial kernel:} If the kernel is nontrivial, then the transformation is not uniquely invertible. For instance, if we have 
+\be 
+\begin{pmatrix}
+	1&2\\2&4
+\end{pmatrix}\begin{pmatrix}
+	x\\y
+\end{pmatrix}=\begin{pmatrix}
+	1\\2
+\end{pmatrix}
+\ee 
+Then $\begin{pmatrix}
+	1\\0
+\end{pmatrix}$ is a solution, but so is $\begin{pmatrix}
+	3\\-1
+\end{pmatrix}$ or $\begin{pmatrix}
+	-1\\1
+\end{pmatrix}$. In fact, the full family of solutions is given as 
+\be 
+\begin{pmatrix}
+	x\\y
+\end{pmatrix}=\begin{pmatrix}
+	1\\0
+\end{pmatrix}+\begin{pmatrix}
+	2a\\-a
+\end{pmatrix}
+\ee 
+On the other hand, the rotation having a trivial kernel makes sure that we have a unique answer; for instance, 
+\be 
+\frac{1}{\sqrt{2}}\begin{pmatrix}
+	1&1\\-1&1
+\end{pmatrix}\begin{pmatrix}
+	x\\y
+\end{pmatrix}=\begin{pmatrix}
+	1\\2
+\end{pmatrix}
+\ee 
+has the unique answer
+\be 
+\begin{pmatrix}
+	x\\y
+\end{pmatrix}=\frac{1}{\sqrt{2}}\begin{pmatrix}
+	-1\\3
+\end{pmatrix}
+\ee 
+\paragraph{Back to the differential equations:} The story with the matrices immediately carries over to the differential equations: the differential operators have nontrivial kernels, and these results are called \emph{homogeneous solutions}. For the general differential equation
+\be 
+g\left(x,\rdr{}{x}\right)f(x)=h(x)
+\ee 
+the solution then becomes
+\be 
+f(x)=p(x)+\ker \left[g\left(x,\rdr{}{x}\right)\right]
+\ee 
+where $p(x)$ is called the \emph{particular solution}, and the elements of the kernel are the homogeneous solutions.
+
+\section{Homogeneous solutions}
+\subsection{Basics}
+We have discussed in \S~\ref{section: basics of diff eqn} that the solution to the differential equation $f'(x)=f(x)$ is given as\footnote{As we discussed in that section, this result is either a definition or a derived result depending our conventions.}
+\be 
+f(x)=e^x
+\ee 
+We can actually generalize this to\footnote{
+	One way to show this is the judicious use of the chain rule as follows:
+	\be 
+	\rdr{}{x}e^{x}=e^{x}\xrightarrow{\text{define }x=\lambda y} \rdr{}{x}e^{\lambda y}=e^{\l y}\\
+	\xrightarrow{\text{use chain rule}}\rdr{y}{x}\rdr{}{y}e^{\lambda y}=e^{\l y}\\\xrightarrow{\text{use }y=x/\l}\frac{1}{\l}\rdr{}{y}e^{\lambda y}=e^{\l y}
+	\\\xrightarrow{\text{rewrite}}\left(\rdr{}{y}-\l\right)e^{\lambda y}=0
+	\ee 
+}
+\be 
+\left(\rdr{}{y}-\l\right)e^{\lambda y}=0
+\ee 
+which says the \emph{linear ordinary differential equation with constant coefficient}
+\be 
+\left(\rdr{}{x}-\l\right)f(x)=0
+\ee 
+has the \emph{solution}
+\be 
+f(x)=e^{\lambda x}
+\ee 
+In the fancy language, we can now write this result as 
+\be 
+\ker\left[\left(\rdr{}{x}-\l\right)\right]=\left\{0,e^{\lambda x}\right\}
+\ee 
+which means that
+\be 
+\left(\rdr{}{x}-\l\right)f(x)=h(x)\quad\Rightarrow\quad f(x)=p(x)+ce^{\l x}
+\ee 
+for the arbitrary variable $c$, where we will discuss the computation of particular solution $p(x)$ later.
+
+One immediate observation we can make is that $e^{\l x}$ would still be a solution if there were more terms to the left of the equation; in other words,
+\be 
+g\left(x,\rdr{}{x}\right)\left(\rdr{}{x}-\l\right)f(x)=0
+\ee 
+is still satisfied for $f(x)=e^{\l x}$. This becomes particularly interesting if $g\left(x,\rdr{}{x}\right)$ is a product of $\left(\rdr{}{x}-a\right)$, i.e.
+\be
+\label{eq: product form diff eqn} 
+\left(\rdr{}{x}-r_1\right)\left(\rdr{}{x}-r_2\right)\cdots\left(\rdr{}{x}-r_n\right)f(x)=0
+\ee 
+Clearly $e^{r_nx}$ is a solution, but as these terms commute with each other, we can immediately write down the full solution as\footnote{This follows from the principle of superposition, see footnote~\ref{footnote:superposition}.}
+\bea 
+f::{}&{}\C\to\C\\
+f={}&{}x\to \sum\limits_{i=1}^n c_i e^{r_i x}
+\eea
+for arbitrary constants $c_i$.
+
+Differential equations are usually given in the form
+\be 
+\left(a_0+a_1\rdr{}{x}+a_2\rdr{^2}{x^2}+\dots+a_n\rdr{^n}{x^n}\right)f(x)=0
+\ee 
+which can be brought to the form \equref{eq: product form diff eqn} by simply finding the roots of the equation\footnote{This equation is called \emph{characteristic equation} of the given system.}
+\be 
+a_0+a_1r+a_2r^2+\dots+a_nr^n=0
+\ee 
+If the coefficients $a_i$ are simply complex numbers (or real numbers as a special case of complex numbers), we can always find $n$ complex roots $r_i$!\footnote{
+	The field of complex numbers is algebraically closed, hence such polynomials \emph{always} have solutions. In contrast, the field of real numbers is \emph{not} algebraically closed; for instance, $x^2+1=0$ has no real root. For more information on these, see \emph{fundamental theorem of algebra}.
+}
+
+\subsection{Repeated roots}
+Consider the differential equation
+\be
+\left(\rdr{}{x}-r_1\right)\left(\rdr{}{x}-r_2\right)f(x)=0
+\ee 
+which has the solution $f(x)=c_1 e^{r_1x}+c_2e^{r_2x}$. If we now do a change of parameters as
+\be 
+\label{eq: repeated root transformation}
+r_1=r\;,\quad r_2=r+\de\;,\quad c_1=a-\frac{b}{\de}\;,\quad c_2=\frac{b}{\de}
+\ee 
+our statement becomes
+\be 
+\left(\rdr{}{x}-r\right)\left(\rdr{}{x}-(r+\de)\right)f(x)=0\quad f(x)=a e^{r x}+b\frac{e^{(r+\de)x}-e^{rx}}{\de}
+\ee 
+If we now take the limit $\de\to 0$ and recognize the definition of derivative, we arrive at
+\be 
+\label{eq: repeated result}
+\left(\rdr{}{x}-r\right)^2f(x)=0\quad\rightarrow\quad f(x)=a e^{r x}+bxe^{rx}
+\ee 
+
+The way we arrived at this curious result is not satisfactory: we did a particular transformation in \equref{eq: repeated root transformation} and we do not have a strong reason to choose that transformation. For instance, if we instead choose
+\be 
+\label{eq: repeated root transformation 2}
+r_1=r\;,\quad r_2=r+\de\;,\quad c_1=a-b\;,\quad c_2=b
+\ee 
+and then take the limit $\de\to0$, we end up with
+\be 
+\label{eq: repeated result 2}
+\left(\rdr{}{x}-r\right)^2f(x)=0\quad\xrightarrow{???}\quad f(x)=a e^{r x}
+\ee 
+We missed the second piece of $f(x)$ in \equref{eq: repeated result}.
+
+What is the resolution of this discrepancy? We have two potential scenarios: \textbf{(a)} $x e^{ax}$ is \emph{a spurious solution},\footnote{Spurious solutions are fake results that emerge as solutions even though they actually do not solve the problem.} or \textbf{(b)} \equref{eq: repeated result 2} misses one of the solutions.
+
+We can check it straightforwardly that the option \textbf{(b)} is the correct case,\footnote{
+	We only need to check
+	\be 
+	\left(\rdr{}{x}-r\right)^2(xe^{rx})=0
+	\ee 
+} indicating that out choice of reparametrization of the variables in terms of infinitesimal variable $\de$ affects which solutions we obtain. This then begs the question: \emph{can we potentially have more solutions?}
+
+We have mathematical arguments why a second order differential equation should have two solutions,\footnote{\draftnote{Maybe expand on this more.}} so we can already infer that \equref{eq: repeated result} is the full solution; however, let's see another method to derive why this is the case.
+
+Define a new function $g$ such that $f(x)=g(x)e^{rx}$.\footnote{Note that we can do this \emph{without a loss of generality}!} If we insert this into the original differential equation, we immediately see that
+\be 
+\left(\rdr{}{x}-r\right)^2 f(x)=0\quad\xrightarrow{f(x)=g(x)e^{rx}}\quad \rdr{^2}{x^2}g(x)=0
+\ee 
+which tells us that \emph{the most general result} is $f(x)=(ax+b)e^{rx}$. In fact, this derivation generalizes, i.e.
+\be 
+\left(\rdr{}{x}-r\right)^n f(x)=0\quad\xrightarrow{f(x)=g(x)e^{rx}}\quad \rdr{^n}{x^n}g(x)=0
+\ee
+yielding $f(x)=(a_1+a_2 x+\dots a_n x^{n-1})e^{rx}$.
+
+With the discussion above, we can now write down the most general homogeneous solution to a linear ordinary differential equation with constant coefficients:
+\bea
+\left(\rdr{}{x}-r_1\right)^{m_1+1} \left(\rdr{}{x}-r_2\right)^{m_2+1}\cdots \left(\rdr{}{x}-r_n\right)^{m_n+1}f(x)=0\\
+\Rightarrow\qquad f(x)=\sum\limits_{i=1}^n\left[\left(\sum\limits_{k=0}^m c_{ik} x^k\right)e^{r_i x}\right]
+\eea 
+for arbitrary coefficients $c_{ij}$.
+
+
+\subsection{Examples}
+\draftnote{RLC circuits, damper-spring systems, traffic models, etc.}
+
+\section{Laplace transform}
+Consider the following higher order function:\footnote{
+	Note that the letters on the left hand side of an arrow are \emph{placeholders}, i.e. they do not inherently carry information. Such parameters are called dummy variables in math (or scooping variables in computer science) and they are ubiquitous in math and physics; for instance, the integrals $\int dx f(x)$ and $\int dy f(y)$ are the same expression as $x$ and $y$ are dummy variables. Similarly, the expressions $x\to f(x)$ and $y\to f(y)$ are equivalent.
+	
+	It gets complicated with the higher order functions as they include multiple arrows; in such cases, the left hand side of \emph{each arrow} contains only placeholders for \emph{the right hand side of that particular arrow}. For example, let us rewrite \equref{eq: general integral transform} in a colorful way:
+	\bea
+	\mathfrak{IT}::{}&(\C\to\C)\to (\C\to\C)\\
+	\mathfrak{IT}={}&\bm{(\textcolor{orange}{x}\textcolor{orange}{\to} \textcolor{red}{f}(\textcolor{orange}{x}))\textcolor{red}{\to}\left(\textcolor{blue}{s}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{black}{\a}}^{\textcolor{black}{\b}}} K(\textcolor{magenta}{x},\textcolor{blue}{s})\textcolor{red}{f}(\textcolor{magenta}{x})d\textcolor{magenta}{x}\right)}
+	\eea  
+	Variables of the same color can be changed as they are dummy variables for the same color arrow (in the case of the color magenta, the variables are dummy variables of the integration operation). For instance, following expressions are all equivalent:
+	\begin{equation*}
+		\begin{aligned}
+			\mathfrak{IT}={}&\bm{(\textcolor{orange}{x}\textcolor{orange}{\to} \textcolor{red}{f}(\textcolor{orange}{x}))\textcolor{red}{\to}\left(\textcolor{blue}{s}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{black}{\a}}^{\textcolor{black}{\b}}} K(\textcolor{magenta}{x},\textcolor{blue}{s})\textcolor{red}{f}(\textcolor{magenta}{x})d\textcolor{magenta}{x}\right)}
+			\\
+			\mathfrak{IT}={}&\bm{(\textcolor{orange}{y}\textcolor{orange}{\to} \textcolor{red}{f}(\textcolor{orange}{y}))\textcolor{red}{\to}\left(\textcolor{blue}{z}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{black}{\a}}^{\textcolor{black}{\b}}} K(\textcolor{magenta}{x},\textcolor{blue}{z})\textcolor{red}{f}(\textcolor{magenta}{x})d\textcolor{magenta}{x}\right)}
+			\\
+			\mathfrak{IT}={}&\bm{(\textcolor{orange}{y}\textcolor{orange}{\to} \textcolor{red}{g}(\textcolor{orange}{y}))\textcolor{red}{\to}\left(\textcolor{blue}{z}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{black}{\a}}^{\textcolor{black}{\b}}} K(\textcolor{magenta}{s},\textcolor{blue}{z})\textcolor{red}{g}(\textcolor{magenta}{s})d\textcolor{magenta}{s}\right)}
+		\end{aligned}
+	\end{equation*}
+	Note that the letters $K$, $\a$, $\b$ are not dummy variables as they are externally fixed. Nevertheless, we \emph{can} turn them into dummy variables of the equal sign $=$ by defining them in the left hand side of $=$; e.g.
+	\begin{equation*}
+		\begin{aligned}
+			\mathfrak{IT}_{\textcolor{cyan}{K},\textcolor{cyan}{\a},\textcolor{cyan}{\b}}\textcolor{cyan}{=}{}&\bm{(\textcolor{orange}{y}\textcolor{orange}{\to} \textcolor{red}{g}(\textcolor{orange}{y}))\textcolor{red}{\to}\left(\textcolor{blue}{z}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{cyan}{\a}}^{\textcolor{cyan}{\b}}} \textcolor{cyan}{K}(\textcolor{magenta}{s},\textcolor{blue}{z})\textcolor{red}{g}(\textcolor{magenta}{s})d\textcolor{magenta}{s}\right)}
+			\\
+			\mathfrak{IT}_{\textcolor{cyan}{T},\textcolor{cyan}{\g},\textcolor{cyan}{\l}}\textcolor{cyan}{=}{}&\bm{(\textcolor{orange}{y}\textcolor{orange}{\to} \textcolor{red}{g}(\textcolor{orange}{y})) \textcolor{red}{\to}\left(\textcolor{blue}{z}\textcolor{blue}{\to}\textcolor{magenta}{\int_{\textcolor{cyan}{\g}}^{\textcolor{cyan}{\l}}} \textcolor{cyan}{T}(\textcolor{magenta}{s},\textcolor{blue}{z})\textcolor{red}{g}(\textcolor{magenta}{s})d\textcolor{magenta}{s}\right)}
+		\end{aligned}
+	\end{equation*}
+	are equivalent expressions ---just like \mbox{$f(x)=x^2$} and \mbox{$f(y)=y^2$} being equivalent expressions.
+}
+\bea[eq: general integral transform]
+\mathfrak{IT}::{}&(\C\to\C)\to (\C\to\C)\\
+\mathfrak{IT}={}&(x\to f(x))\to\left(s\to\int\limits_\a^\b K(x,s)f(x)dx\right)
+\eea 
+where $\mathfrak{IT}$ is an \emph{integral transform}, i.e. it maps a function to another one by using the integration operation. The function $K$ above is called \emph{the kernel of the tranformation}: different kernels (along with different integration ranges) lead to different integral transforms.
+
+The Laplace transform is a special kind of an integral transformation:
+\bea[eq: laplace transform]
+\cL::{}&(\C\to\C)\to (\C\to\C)\\
+\cL={}&(x\to f(x))\to\left(s\to\int\limits_0^\infty e^{-xs}f(x)dx\right)
+\eea 
+which plays a immense role in the analysis of linear ordinary differential equations with constant coefficients because such equations become algebraic under this transformation. To see this, consider how the laplace transform interacts with the derivative operation: replace $f$ with $g'$ above, and integrate by parts
+\be 
+\cL={}&(x\to g'(x))\to\left(s\to \left[s\int\limits_0^\infty e^{-xs}g(x)dx-g(0)+\lim\limits_{x\rightarrow\infty}e^{-xs}g(x)\right]\right)
+\ee 
+We will assume that the last piece is zero, which is a necessary condition for the Laplace transform to be well-defined in the first place.\footnote{Otherwise, the integral in the definition does not converge.} Thus
+\be 
+\cL\.g'={}&s\to \left(s(\cL\.g)(s)-g(0)\right)
+\ee 
+or in a more conventional notation, we state
+\be 
+\rdr{g(x)}{x}\xrightarrow{\text{Laplace transform}} s G(s)-g(0)
+\ee 
+where $G(s)$ is the laplace transform of $g(x)$.
+
+One can repeat this process iteratively for higher numbers of derivative; in fact, we can immediately write down the Laplace transform of $n-$the derivative of a function:
+\be 
+\left(\cL\.g^{(n)}\right)(s)=s^n\left(\cL\.g\right)(s)-\sum\limits_{i=0}^{n-1} s^{n-i-1}g^{(i)}(0)
+\ee 
+
+We can now justify our previous statement of \emph{\textbf{Laplace transform converts  linear ordinary differential equations with constant coefficients into algebraic ones}}! Start with the most generic such differential equation:
+\be 
+\label{eq: general constant coefficient differential equation}
+\sum\limits_{i=0}^n a_i f^{(i)}(x)=g(x)
+\ee 
+which is \emph{homogeneous} if $g(x)=0$ and nonhomogeneous otherwise. If we take the Laplace transform of this equation, we end up with
+\be 
+\sum\limits_{i=0}^n a_i \left[s^i F(s)-\sum\limits_{k=0}^{i-1}s^{i-k-1}f^{(k)}(0)\right]=G(s)
+\ee 
+where $F(s)\coloneqq (\cL\.f)(s)$ and $G(s)\coloneqq (\cL\.g)(s)$ are defined for brevity. By using algebra, we can rewrite this equation in the form
+\be 
+F(s)=\frac{\displaystyle\sum\limits_{i=0}^{n-1}f^{(i)}(0)\left[\sum\limits_{k=1+i}^na_ks^{k-i-1}\right]}{\displaystyle\sum\limits_{i=0}^na_is^i}+\frac{G(s)}{\displaystyle\sum\limits_{i=0}^na_is^i}
+\ee 
+
+Let us comment on this result a little bit. \textbf{Firstly}, we can immediately state that the solution $f(x)$ to the differential equation in \equref{eq: general constant coefficient differential equation} is simply the \emph{inverse Laplace transform} of $F(s)$. Even though this is a well-defined transformation that we can introduce, we actually do not need it: we will discuss other methods to obtain $f(x)$ from $F(s)$. \textbf{Secondly}, we can actually see that the first piece is the homogeneous solution to the differential equation, and the second piece is the particular solution: Laplace transform allowed us to solve both of them at once!
+
+Consider the simple case of $n=2$:
+\be 
+F(s)=\frac{f(0)\left(a_1+a_2s\right)+f^{(1)}(0) a_2}{a_0+a_1s+a_2s^2}+\frac{G(s)}{a_0+a_1s+a_2s^2}
+\ee 
+If $r_1$ and $r_2$ are two distinct roots of $a_0+a_1s+a_2s^2=0$, we can simply write down this expression as \emph{bla bla bla bla}\draftnote{ to be written later, probably next year.}
+
+\draftnote{
+	We have covered several topics in class but I will not be able to type them in time. So I'm postponing that to next year; after all, all of those topics are already in the textbook --- chapter 6 of Elementary Differential Equations and Boundary Value Problems” by Boyce and Diprima (10th edition). The summary is as follows:
+	\begin{enumerate}
+		\item Derive laplace transforms of common functions
+		\item Solving homogeneous differential equations using Laplace transformation, and "proof" of why characteristic equation method works
+		\item Discussion of particular solutions in Laplace domain; example: RLC circuit with an AC input
+		\item Discussion of how it is tiresome to repeat the computations for each nonhomogeneous piece and why we need a universal solution true for any non-homogeneous piece. For this, we need to find an operation that maps to multiplication in Laplace domain
+		\item Derive $H(s)=F(s)G(s)$ means $h(x)= $convolution of $f(s)$ and $g(x)$, i.e. derive convolution
+		\item Introduce impulse response: it is the solution to the same differential equation with nonhomogeneous part $H(s)=1$ in laplace domain (with $i(0)=i'(0)=\dots=0$).
+		\item Introduce Dirac-delta distribution, discuss why it is a generalized function but not a well defined function. Show that it maps to $1$ as needed.
+		\item Write down the most generic solution to a linear ordinary differential equation with constant coefficients. Show examples.
+	\end{enumerate}
+}
+
+\chapter{Linear equations with functional coefficients}
+\section{Homogeneous solution}
+\draftnote{
+	Summary of what we have discussed in class (to be typed later, maybe next year):
+	\begin{enumerate}
+		\item Differential equations with functional coefficients \emph{do not necessarily have generic analytic solutions}: we do not know how to solve them except the isolated cases!
+		\item Explicit solutions of $\left(x\rdr{}{x}+a\right)f(x)=0$ and $\left(x^k\rdr{}{x}+a\right)f(x)=0$ for $k\ne 1$.
+		\item How these differential operators can be chained, and how it leads to the following form:
+		\be 
+		\left(x^k\rdr{}{x}+a_1\right)\cdots\left(x^k\rdr{}{x}+a_n\right)f(x)=0
+		\ee 
+		for both $k=1$ \& $k\ne 1$.
+		\item How these equations are secretly related to the differential equations with constants coefficients through a reparametrization, i.e. 
+		\be 
+		\rdr{}{y}=\frac{1}{1-n}x^n\rdr{}{x}\text{ for }y=x^{-n+1}\\
+		\rdr{}{y}=x\rdr{}{x}\text{ for }y=\log(x)
+		\ee 
+		\item Lesson: The differential equations with constant coefficients are nice guys with straightforward general solutions: do your best to check if a given differential equation can be brought to that form! Usually, the physics of the problem gives us insight as to whether that would be possible.
+		\item Discuss why $k=1$ case above is treated differently, show a little bit about scale invariance, and informally mention the Mellin transform: we do not need to know this for this course (but it is super relevant in modern physics)!
+		
+		\item Introduce Euler equations: show how this is solvable simple because of the scale invariance and how it is actually a subset of similar higher order equations.
+		
+		\item Discuss change of variables to make equations constant coefficients:
+		\begin{multline}
+			f''(x)+p(x)f'(x)+q(x)f(x)=0\\\Rightarrow\\
+			(u')^2 f''(u)+(u''(x)+u'(x)p(x))y'(u)+q(x)y(u)=0
+		\end{multline}
+		for a change of parameter $x\rightarrow u(x)$. For this to be constant coefficient, we need $u(x)=\int \sqrt{q(x)}dx$ and $\frac{u''(x)+u'(x)p(x)}{(u')^2}=$constant. 
+		\item An example equation where change of variables would work: $ty''+(t^2-1)y'+t^3y=0$.
+		
+		\item Reparametrization is harder to do generically for higher orders! For those equations (also for second order equations without reparametrization), check if the function $f(x)$ is missing. If that is missing, we can lower the order of differential equation by writing it in terms of a new function $g(x)=f'(x)$. If both $f(x)$ and $f'(x)$ are missing, use $g(x)=f''(x)$, and so on!
+		\item Examples (page 135 of textbook): $xf''(x)+f'(x)=0$, $x^2f''(x)+2xf'(x)=2$. Solve these!
+		\item Another thing to check is if the equation is \emph{exact}, i.e. if it can be rewritten as a total derivative:
+		\begin{multline*}
+			\left[p_n(x)\rdr{^n}{x^n}+\dots+p_1(x)\rdr{}{x}+p_0(x)\right]f(x)=0\\
+			\xRightarrow{???}\\
+			\rdr{}{x}\left(\left[q_{n-1}(x)\rdr{^{n-1}}{x^{n-1}}+\dots+q_1(x)\rdr{}{x}+q_0(x)\right]f(x)\right)=0
+		\end{multline*}
+		If that is the case, then we can turn an order-$n$ (non)homogeneous differential equation into an order-$(n-1)$ nonhomogeneous one.
+		\item For a second order differential equation $p(x)f''(x)+q(x)f'(x)+r(x)f(x)=0$, the condition $p''(x)-q'(x)+r(x)=0$ is sufficient for it to be exact.
+		\item Examples (page 157 of textbook): $f''(x)+xf'(x)+f(x)=0$, $x^2f''(x)+xf'(x)-f(x)=0$.
+		\item \textbf{Reduction of order:} if we already know $k$ solutions of an order $n$ differential equation, we can use that information to transform the system into an order $n-k$ differential equation with no known solutions. This is rather useful as lower differential equations are easier to solve, and it becomes extremely useful if we know one solution of a second order differential equation as first order differential equations are always formally solvable (we will discuss this in more detail later).
+		\item Examples (page 174 of textbook): $xf''(x)-f'(x)+4x^3f(x)=0$ with $f_1(x)=\sin(x^2)$, $(x-1)f''(x)-xf'(x)+f(x)=0$ with $f_1(x)=e^x$.
+		\item We introduced the Levi-Civita symbol $\e::\{\Z^+,\dots,\Z^+\}\to\Z$ and discussed its properties.
+		\bea 
+		\e::{}&{}\{\Z^+,\dots,\Z^+\}\to\Z\\
+		\e={}&{}\{a_1,\dots,a_n\}\to\left\{\begin{aligned}
+			1&\quad\text{ if }(a_1a_2\dots a_n)\text{ is an even permutation of }(12\dots n)\\
+			-1&\quad\text{ if }(a_1a_2\dots a_n)\text{ is an odd permutation of }(12\dots n)\\
+			0&\quad\text{ otherwise}
+		\end{aligned}\right.
+		\eea 
+		Example: $(132)\to(123)$: we need 1 permutation for $(132)$: $\e_{132}=-1$. $(2314)\to(2134)\to(1234)$: we need 2 permutations for $2314$: $\e_{2314}=1$.\\
+		Properties: $\e_{\dots a\dots a\dots }=0$, $\e_{\dots a\dots b\dots}=- \e_{\dots b\dots a\dots}$
+		\item We introduced the function $\det::\mathfrak{M}_{n\x n}(\C)\to\C$ in terms of Levi-Civita symbol $\e$ and discussed its properties.
+		\bea 
+		\det::{}&{}\mathfrak{M}_{n\x n}(\C)\to\C\\
+		\det={}&{}\begin{pmatrix}
+			a_{11}&a_{12}&\dots & a_{1n}\\
+			a_{21}&a_{22}&\dots & a_{2n}\\
+			\dots \\
+			a_{n1}&a_{n2}&\dots & a_{nn}
+		\end{pmatrix}\to\sum\limits_{i_1,\dots,i_n}\e_{i_1\dots i_n}a_{1i_1}\dots a_{ni_n}
+		\eea 
+		
+		\item We discussed linear independence of solutions and introduced the Wronskian determinant to check if given set of solutions span the solution space.
+		
+		The summary of the discussion is as follows. Assume that we are given an order$-n$ linear ordinary differential equation $g\left(x,\rdr{}{x}\right)f(x)=h(x)$, and assume that we have found $n-$solutions $f_i(x)$. If these solutions are linearly independent, they span the solution space and can be used to match any initial condition uniquely, i.e.
+		\bea 
+		\sum\limits_{i=1}^n c_i f_i(x_0)=&f(x_0)\\
+		\sum\limits_{i=1}^n c_i f_i'(x_0)=&f'(x_0)\\
+		\dots\\
+		\sum\limits_{i=1}^n c_i f_i^{(n-1)}(x_0)=&f^{(n-1)}(x_0)
+		\eea  
+		for the unique set of numbers $c_i$. As a matrix equation, this means
+		\be 
+		\begin{pmatrix}
+			f_1(x_0)&f_2(x_0)&\dots &f_n(x_0)\\
+			f_1'(x_0)&f_2'(x_0)&\dots &f_n'(x_0)\\
+			\dots\\
+			f_1^{(n-1)}(x_0)&f_2^{(n-1)}(x_0)&\dots &f_n^{(n-1)}(x_0)
+		\end{pmatrix}\begin{pmatrix}
+			c_1\\c_2\\\dots\\c_n
+		\end{pmatrix}=\begin{pmatrix}
+			f(x_0)\\f'(x_0)\\\dots\\f^{(n-1)}(x_0)
+		\end{pmatrix}
+		\ee  
+		We can find out the unique $c_i$ only if we can invert the matrix, which is only possible if it is full rank, which requires its determinant to be nonzero. That determinant is called Wronskian determinant and its value tells us if the given set of solutions span the solution space or not.
+		\item Started talking about Taylor series, how it can be interpreted as an expansion over an infinite dimensional vector space, and how series expansion can turn a differential equation into infinitely many algebraic equations. This is similar to turning vector equations into multiple scalar equations by expanding vectors on a basis and working with the components instead.
+		\item Solved explicitly the differential equation  $f''(x)-x f(x)=0$. Note that 
+		\begin{itemize}
+			\item Not with constant coefficients
+			\item not in $\cD_1\.\cD_2\.f=0$ form
+			\item cannot do reparametrization as $\frac{q'+2pq}{2q^{3/2}}$ is not constant for $p=0$ and $q=x$
+			\item $f(x)$ is not missing and we do not know one of the solutions (cannot reduce order)
+			\item equation is not exact, hence cannot be rewritten as a nonhomogeneous lower-order equation
+		\end{itemize}
+		So we have to use series expansion!
+		
+		\item Discussed expansions around different points, i.e. $f(x)=\sum\limits_{n=0}^\infty a_n(x-x_0)^n$
+		
+		\item Introduced the classification of expansion points: given the differential equation 
+		\be 
+		\left[P_n(x)\rdr{^n}{x^n}+P_{n-1}(x)\rdr{^{n-1}}{x^{d-1}}+\dots+ P_0(x)\right]f(x)=0
+		\ee 
+		for the analytic functions $P_i(x)$, a point $x_0$ is called ``ordinary point'' if $\frac{P_i(x)}{P_n(x)}$ is analytic for all $i$, and is called ``singular point'' otherwise. For instance $x=0$ is an ordinary points of $\left(x\rdr{}{x}+\sin(x)\right)f(x)=0$.
+		\item Around ordinary points, Taylor series expansion works and one can get all solutions correctly.
+		\item  Rewrite the differential equation above as 
+		\be 
+		\left[\rdr{^n}{x^n}+Q_{n-1}(x)\rdr{^{n-1}}{x^{d-1}}+\dots+ Q_0(x)\right]f(x)=0
+		\ee
+		If $Q_{n-i}(x)$ has a pole of order at most $i$ at $x_0$ for all $i$, then the singular point is called ``regular singular point''. Otherwise, it is called ``essential singular point'' (or non-regular singular point).
+		\item Around regular singular points, we can use Taylor series expansion with an unknown monomial as an overall factor; i.e. we can take $f(x)=(x-x_0)^r\sum\limits_{n=0}^\infty a_n (x-x_0)^n$ for the unknowns $a_n$ and $r$. This is called Frobenius method.
+		\item We do not use series expansions around essential singular points; even if there is a way to do that, I do not know!
+		\item In class, we solved explicitly the diff eqn.
+		\be 
+		x^2f''(x)-xf'(x)+(1+x)f(x)=0
+		\ee 
+		around $x=0$.
+		
+		\item Discussion of how series solutions are \emph{local solutions} in the complex plane: they have (usually) finite radius of convergence, and one needs to construct different series solutions to access values of the function in different locations of the complex plane. In some cases, we might get lucky as we can recognize the series series as a particular representation of a more general function such as Bessel function; in such cases, with one series solutions, we can discover more general properties of the solution for the given differential equation. However, if we are not lucky, we need to construct other series solutions for different points, and we cannot really see the whole picture.
+		\item Another problem with the series solutions is that they do not make use of the global properties of the unknown function such as its symmetries. For instance, if I'm trying to solve a differential equation and I know that the solution function should have a symmetry (such as $f(x+a)=f(x)$ for some $a$), this information should in principle help me constraint the solution further. But as series expansions focus on local properties (such as analyticity in and around expansion point), they do not make use of such global information.
+		\item If we know some global properties of a function (such as it being spherically symmetric), we may be better off with a different kind of expansion. In fact, there are infinitely many different expansions (in group theoretical language, this is because we can use unitary irreducible representation of any group as a basis). To understand that, we need to discuss the concept of unitarity.
+		\item We started a new discussion: concept of unitarity. To understand that, we introduced the following definitions:
+		\bea 
+		*{}::{}&{}\C\to\C\\
+		*{}={}&{}z\to z^*=\Re{z}-i\Im{z}\\
+		T{}::{}&{}\mathfrak{M}_{n\x n}(\C)\to\mathfrak{M}_{n\x n}(\C)\\
+		T{}={}&{}\begin{pmatrix}
+			a_{11}&a_{12}&\dots & a_{1n}\\
+			a_{21}&a_{22}&\dots & a_{2n}\\
+			\dots \\
+			a_{n1}&a_{n2}&\dots & a_{nn}
+		\end{pmatrix}\to\begin{pmatrix}
+			a_{11}&a_{21}&\dots & a_{n1}\\
+			a_{12}&a_{22}&\dots & a_{n2}\\
+			\dots \\
+			a_{1n}&a_{2n}&\dots & a_{nn}
+		\end{pmatrix}\\
+		\dagger{}::{}&{}\mathfrak{M}_{n\x n}(\C)\to\mathfrak{M}_{n\x n}(\C)\\
+		\dagger{}={}&{}\begin{pmatrix}
+			a_{11}&a_{12}&\dots & a_{1n}\\
+			a_{21}&a_{22}&\dots & a_{2n}\\
+			\dots \\
+			a_{n1}&a_{n2}&\dots & a_{nn}
+		\end{pmatrix}\to\begin{pmatrix}
+			a_{11}^*&a_{21}^*&\dots & a_{n1}^*\\
+			a_{12}^*&a_{22}^*&\dots & a_{n2}^*\\
+			\dots \\
+			a_{1n}^*&a_{2n}^*&\dots & a_{nn}^*
+		\end{pmatrix}
+		\eea 
+		where $*,T,\dagger$ are called to output \emph{the complex conjugate}, \emph{the transpose}, and \emph{the hermitian conjugate} of the input respectively; for illustration, $A^\dagger$ is called the hermitian conjugate of the matrix $A$.
+		\item A \emph{unitary} ordinary number is a complex number with unit length, i.e. $z$ with $\abs{z}=z z^*=1$. To matrices, this can be generalized with the hermitian conjugation: \emph{a unitary matrix $A$ is a matrix such that $A\. A^\dagger=\mathbb{I}$ for the unit matrix $\mathbb{I}$.} 
+		\item Unitarity can be generalized beyond those inputs: an invertible object $U$ is called \emph{unitary} if it satisfies the condition $U^\dagger=U^{-1}$. $U$ can be wilder objects in principle, such as an infinite dimensional matrix or a general operator; for instance, $U=\exp(i\rdr{}{x})$ is a unitary operator for $x\in\R$.
+		
+		\item Concept of unitarity is important, because there exists unitary matrices with functional entries which can be used as a basis to expand any given function. This is similar to Taylor series expansion: there, we used some sort of orthogonality of $x^m$ and $x^n$ for $m\ne n$ and used $\{x^i\}$ as a basis over which we expand $f(x)$. We state that similar basis (in fact, infinitely many of them) exist and we can expand any given function in terms of such basis consisting of an infinite set of particular unitary matrices of functional entries.
+		
+		\item The modern way to understand such expansions is through \emph{group theory}! Since we will not learn about these details, we only present a very important and general theorem: we will not dwell on its details and we will not try to do actual computations with that. We only present this to emphasize that Fourier transform (or spherical harmonics expansion, or Mellin transform, or many more) are special examples of a very general and fundamental branch of mathematics called \emph{harmonic analysis}!
+		
+		The main result of harmonic analysis is as follows:
+		\bea 
+		f(g)=&\int\limits_{\hat G} d\pi \tr(\hat\pi(g)^{-1}\hat f(\pi))\\
+		\hat f(\pi)=&\int\limits_G dh \hat\pi(g)f(h)
+		\eea 
+		\item We will \emph{not} discuss the details of above formula, and no one needs to know the following for this course! What we need to know is that there exist such a general result, and most of the stuff we see around (such as Fourier transform) are special cases of this general result! Nevertheless, for completeness, I list the ingredients as follows:
+		\begin{itemize}
+			\item $G$: space of a group, with $dh$ being the measure in this space invariant under the action of the group (Haar measure)
+			\item $\hat G$: space of the unitary irreducible representations of $G$, with $d\pi$ being the Plancheral measure
+			\item $\hat\pi :: g\to\mathrm{End}(V_\pi)$ is a map from the group element $g$ to the space of endomorphisms on the vector space of the representations of the group. Such endomorphisms can be implemented as a matrix acting on this vector space, therefore $\hat\pi$ is a simple matrix on the representation space (which is why we take a trace in the first integral)
+			\item $f(g)$ is a function on the group space
+			\item $\hat f(\pi)$ is generalization of \emph{Fourier coefficients}: this is a matrix in the representation space
+		\end{itemize}
+		\item We can make the following analogy:\\
+		\begin{tabular}{lllll}
+			Object & Basis & Decomposition & Components& Extracting components\\ 
+			$\vec{v}$ & $\{\hat i,\hat j,\hat k\}$ & $\vec{v}=v_x\hat i+v_y\hat j+v_z\hat k$ & $\{v_x,v_y,v_z\}$ (a finite set)& $v_x=\vec{v}\.\hat i$\\ 
+			$f(x)$&$\{x^i\}$&$f(x)=\sum\limits_{n=0}^\infty a_n x^n$&$\{a_n\}$ (countable infinite set)& {\footnotesize Cauchy's integral formula,see 210}\\
+			$f(g)$ &$\{\hat\pi(g)\}$& $f(g)=\int\limits_{\hat G} d\pi \tr(\hat\pi(g)^{-1}\hat f(\pi))$ & $\{\hat f(\pi)\}$ (uncountable infinite set)&$\hat f(\pi)=\int\limits_G dh \hat\pi(g)f(h)$
+		\end{tabular}
+		
+		
+		\item Simplest example of Harmonic analysis is the Fourier transform. In this case, $\hat\pi$ is a one-dimensional unitary function $\hat\pi= e^{-i k x}$, $\pi$ are spanned by one continuous real parameter $k$ (meaning $\hat G=\R$), and the original function space is one dimensional real line as well (hence $G=\R$ with $g=x$). One can derive that the Plancheral measure is $\frac{dk}{2\pi}$, hence we have
+		\bea 
+		f(x)=&\int\limits_{\R}\frac{dk}{2\pi} \left(e^{-ikx}\right)^{-1}\hat f(k)\\
+		\hat f(k)=&\int\limits_\R dx e^{-i k x} f(x)
+		\eea 
+		hence we can specialize the table above for Fourier transform as 
+		\begin{tabular}{llll}
+			Object & Basis & Decomposition & Components\\ 
+			$\vec{v}$ & $\{\hat i,\hat j,\hat k\}$ & $\vec{v}=v_x\hat i+v_y\hat j+v_z\hat k$ & $\{v_x,v_y,v_z\}$ (a finite set)\\ 
+			$f(x)$&$\{x^i\}$&$f(x)=\sum\limits_{n=0}^\infty a_n x^n$&$\{a_n\}$ (countable infinite set)\\
+			$f(x)$ &$\{e^{ikx}\}$& $f(x)=\int\limits_{-\infty}^\infty dk e^{ikx} \hat f(k)$ & $\left\{\hat f(k)=\int\limits_{-\infty}^\infty e^{-ikx}f(x)\right\}$ (uncountable infinite set)
+		\end{tabular}
+		\item We can now use periodicity information if we know that a function $f$ satisfies $f(x)=f(x+a)$: the identification $x\sim x+a$ means some of our basis components should be absent as we dictate $e^{ikx}\sim e^{ik(x+a)}$. We see that this is possible only if $k$ is actually discrete, i.e. 
+		\be 
+		k=\frac{2\pi}{a}n\text{ for }n\in\Z
+		\ee
+		This leads to discrete time fourier series:
+		\bea 
+		f(x)=&\frac{1}{a}\sum\limits_{n=-\infty}^{\infty}e^{i\frac{2\pi n}{a}x}\hat f(n)\\
+		\hat f(n)&=\int\limits_0^a dx e^{-i\frac{2\pi n}{a} x} f(x)
+		\eea  
+		
+		\item In class, we introduced four different Fourier analysis:
+		\begin{itemize}
+			\item Fourier transform:
+			\bea 
+			f{}::{}&{}\C\to\C\\
+			\hat f{}::&{}\C\to\C\\ f(x)=&\int\limits_{-\infty}^\infty\frac{dk}{2\pi} e^{ikx}\hat f(k)\\
+			\hat f(k)=&\int\limits_{-\infty}^\infty dx e^{-i k x} f(x)
+			\eea 
+			\item Fourier series:
+			\bea 
+			f{}::{}&{}[a,a+T]\to\C\\
+			\hat f{}::&{}\Z\to\C\\ 	f(x)=&\frac{1}{T}\sum\limits_{n=-\infty}^\infty e^{i\frac{2\pi n}{T}x}\hat f(n)\\
+			\hat f(n)=&\int\limits_{b}^{b+T} dx e^{-i\frac{2\pi n}{T}x} f(x)
+			\eea 
+			for arbitrary $a,b\in\R$. Note that this is also applicable for periodic functions: for any periodic function with a period $T$, we can use Fourier series as instructed above!
+			
+			\item Discrete-time Fourier transform:
+			\bea 
+			f{}::&{}\Z\to\C\\ 
+			\hat f{}::{}&{}[a,a+T]\to\C\\
+			f(n)=&\frac{1}{T}\int\limits_{b}^{b+T} dx e^{i\frac{2\pi n}{T}k} \hat f(k)\\
+			\hat f(k)=&\sum\limits_{n=-\infty}^\infty e^{-i\frac{2\pi n}{T}k} f(n)\\
+			\eea
+			where $\Z_N$ denotes the set $\{0,1,\dots,N-1\}$.
+			
+			\item Discrete Fourier series:
+			\bea 
+			f{}::&{}\Z_N\to\Z_N\\ 
+			\hat f{}::{}&{}\Z_N\to\Z_N\\ 
+			f(n)=&\frac{1}{N}\sum\limits_{m=0}^{N-1} e^{i\frac{2\pi n m}{T}} \hat f(m)\\
+			\hat f(m)=&\sum\limits_{n=0}^{N-1} e^{-i\frac{2\pi n m}{T}} f(n)\\
+			\eea
+			for arbitrary $a,b\in\R$.
+		\end{itemize}
+		\item Summary: finite range/periodic in one domain $\leftrightarrow$ discrete in the other domain
+		\item Drew plots of these transformations for visualization in class.
+		
+		\item Introduced two higher order functions $E$ and $O$:
+		\bea 
+		E{}::&{}\left(\C\to\C\right)\to\left(\C\to\C\right)\\ 
+		E={}&{}\left(x\to f(x)\right)\to\left(x\to f_E(x)=\frac{f(x)+f(-x)}{2}\right)\\
+		O{}::&{}\left(\C\to\C\right)\to\left(\C\to\C\right)\\ 
+		O={}&{}\left(x\to f(x)\right)\to\left(x\to f_E(x)=\frac{f(x)-f(-x)}{2}\right)
+		\eea
+		with which any single-argument function satisfies $f=E\.f+O\.f$, or with a more common notation, $f(x)=f_E(x)+f_O(x)$. As any function can also be decomposed into its real and imaginary part, we arrive at
+		\be 
+		f(x)=f_{RE}(x)+f_{RO}(x)+i f_{IE}(x)+i f_{IO}(x)
+		\ee 
+		
+		\item Since Fourier transform is linear, we can reconstruct $(\mathrm{F.T.}\.f)(k)$ from $(\mathrm{F.T.}\.f_{RE})(k)$ and so on.
+		
+		\item $f_{RE}(k)$ etc. and their Fourier transforms satisfy nice properties. We derived a few of them in the class, for instance taking complex conjugation and changing the dummy variable $x\to -x$ leads to
+		\be 
+		\left[(\mathrm{F.T.}\.f_{RE})(k)\right]^*=(\mathrm{F.T.}\.f_{RE})(k)
+		\ee 
+		Likewise, taking $k\to -k$ and $x\to -x$ leads to
+		\be 
+		(\mathrm{F.T.}\.f_{RE})(-k)=(\mathrm{F.T.}\.f_{RE})(k)
+		\ee 
+		hence we conclude Fourier transform of $f_{RE}$ is itself even and real. On the contrary, Fourier transform of $F_{RO}$ is purely-imaginary and odd.
+		\item For real functions,  $(\mathrm{F.T.}\.f_{R})(-k)=\left[(\mathrm{F.T.}\.f_{R})(k)\right]^*$, hence we only need to know positive frequencies, consistent with our everyday experience.
+		\item Consider the Fourier transform of the function 
+		\bea 
+		f{}::&{}\left[-\frac{T}{2},\frac{T}{2}\right]\to\C\\
+		f={}&{}x\to 1
+		\eea 
+		We computed Fourier series expansion of this in class, found $\hat f(n)=T\de_{n0}$ and checked consistency. We then considered the limit $T\to\infty$ and argued that Kronecker-delta function turns into Dirac-delta distribution.
+		\item We also considered the function
+		\bea 
+		f{}::&{}\R\to\C\\
+		f={}&{}x\to \left\{\begin{aligned}
+			1\quad&\abs{x}\le \frac{T}{2}\\0\quad&\text{ otherwise}
+		\end{aligned}\right.
+		\eea 
+		We computed the Fourier transformation of this, introduced the $\mathrm{sinc}$ function, discussed its properties, talked about its usage in single-slit experiment, optics, and signal process. We then also discussed how $T\to\infty$ takes $\mathrm{sinc}$ functio to the Dirac-delta distribution.
+		
+\end{enumerate}}
+
+
+\section{Particular solution}
+\label{chapter: Linear nonhomogeneous equations with functional coefficients}
+\draftnote{
+	Summary of what we have discussed in class (to be typed later, maybe next year):
+	\begin{enumerate}
+		\item The particular solution to a differential equation is unique: we haven't proven this but it is actually most easily seen if the unknown function is expanded in a basis where the action of the differential operator becomes \emph{diagonal}; i.e., the differential equation then becomes algebraic and there is a unique solution for an algebraic equation $ax=b$ for $x$.
+		\item As particular solutions are unique, we can get away with guessing it if we can: the simplest way to find the particular solution is to guess it and then check that it satisfies the differential equation.
+		\item The next simplest thing we can try is to guess the \emph{functional form} of the particular solution with some arbitrary coefficients and then fix them imposing the differential equation. This approach is called \emph{method of undetermined coefficients}. As an example, for
+		\be 
+		x f'(x)-2f(x)=6 x^4
+		\ee 
+		we can guess $f_p(x)= a x^b$: inserting it into the differential equation, we find that $f_p(x)=2x^4$.
+		\item For differential equations with constant coefficients, we can find the particular solution more systematically as we have reviewed in the beginning of the semester: convolution of nonhomogeneous piece with the impulse response.
+		\item A similar systematic approach exists for more general differential equations: it is called \emph{method of variation of parameters}. Let us consider a general linear ordinary differential equation
+		\be 
+		\label{temp-2}
+		\left(\rdr{^n}{x^n}+a_{n-1}(x)\rdr{^{n-1}}{x^{n-1}}+a_0(x)\right)f(x)=h(x)
+		\ee
+		If we find the homogeneous solutions $f_1(x),\dots,f_n(x)$, then we know that the most general solution can be written as 
+		\be 
+		f(x)=\sum\limits_{i=1}^nc_i f_i(x)+f_p(x)
+		\ee  
+		for arbitrary coefficients $c_i$. Here, we have one unknown function $f_p(x)$ and we trade it for $n$ unknown functions by rewriting this equation as 
+		\be
+		\label{temp-1}
+		f(x)=\sum\limits_{i=1}^nc_i(x) f_i(x) 
+		\ee 
+		for undetermined functions $c_i(x)$, i.e. we \emph{varied the parameters}. We can clearly do this, as we had 1 unknown functional degree of freedom and know we have $n$ unknown functional degrees of freedom. In fact, we can impose $n-1$ constraints, which we choose as 
+		\be 
+		\label{temp-3}
+		\sum\limits_{i=1}^nc_i'(x)f_i^{(k-1)}(x)=0\qquad\text{ for }k=1,2,\dots,n-1
+		\ee 
+		If we know insert \eqref{temp-1} into \eqref{temp-2} and use these constraints and the fact that $f_i(x)$ are homogeneous solutions, we end up with
+		\be 
+		\label{temp-4}
+		\sum\limits_{i=1}^nc_i'(x)f_i^{(n-1)}(x)=g(x)
+		\ee 	
+		The equations \eqref{temp-3} and \eqref{temp-4} can be combined to solve for $c_i'(x)$ as 
+		\be 
+		\begin{pmatrix}
+			c_1'(x)\\c_2'(x)\\\dots\\c_n'(x)
+		\end{pmatrix}=\begin{pmatrix}
+			f_1(x)&f_2(x)&\dots&f_n(x)\\
+			f_1'(x)&f_2'(x)&\dots&f_n'(x)\\
+			\dots \\
+			f_1^{(n-1)}(x)&f_2^{(n-1)}(x)&\dots&f_n^{(n-1)}(x)\\
+		\end{pmatrix}^{-1}	\begin{pmatrix}
+			0\\0\\\dots\\g(x)
+		\end{pmatrix}
+		\ee 
+		\item In summary, inverse of the Wronskian matrix and the nonhomogeneous piece is sufficient to find $c_i'(x)$. By integrating these, we get both the homogeneous solution (through the integration constants) and particular solution.
+		\item In practice, computer programs (such as Mathematica) are the best way to compute matrix inverses (avoid pen and paper if you can). However, it is better if we learn the math behind such implementations. To understand the computation of a matrix inverse, we need to define a new operation:
+		\bea 
+		\mathrm{adj}{}::&{}\cM_{n\x n}(\C)\to\cM_{n\x n}(\C)\\
+		\mathrm{adj}={}&{}\begin{pmatrix}
+			a_{11}&a_{12}&\dots & a_{1n} \\
+			a_{21}&a_{22}&\dots & a_{2n} \\
+			\dots \\
+			a_{n1}&a_{n2}&\dots & a_{nn}
+		\end{pmatrix}\to \begin{pmatrix}
+			b_{11}&b_{12}&\dots & b_{1n} \\
+			b_{21}&b_{22}&\dots & b_{2n} \\
+			\dots \\
+			b_{n1}&b_{n2}&\dots & b_{nn}
+		\end{pmatrix}\quad\text{ where }\\
+		&{}b_{i_n k_n}=\frac{1}{(n-1)!}\e_{i_1\dots i_n}\e_{k_1\dots k_n} a_{i_1k_1}\dots a_{i_{n-1}k_{n-1}}
+		\eea 
+		where $\mathrm{adj}$ yields the \emph{adjugate} of the given matrix. We can now give the inverse of a matrix as
+		\be 
+		A^{-1}=\frac{\mathrm{adj}(A)}{\det A}
+		\ee 
+		where we have defined and discussed determinant before:
+		\bea 
+		\det::{}&{}\mathfrak{M}_{n\x n}(\C)\to\C\\
+		\det={}&{}\begin{pmatrix}
+			a_{11}&a_{12}&\dots & a_{1n}\\
+			a_{21}&a_{22}&\dots & a_{2n}\\
+			\dots \\
+			a_{n1}&a_{n2}&\dots & a_{nn}
+		\end{pmatrix}\to\sum\limits_{i_1,\dots,i_n}\e_{i_1\dots i_n}a_{1i_1}\dots a_{ni_n}
+		\eea 
+		\item Computed adjugate and inverse of a $2\x 2$ matrix in the class.
+	\end{enumerate}
+}
+\chapter{Systems of first order linear differential equations}
+\draftnote{
+	Summary of what we have discussed in class (to be typed later, maybe next year):
+	\begin{enumerate}
+		\item We reviewed in class that we have learned various methods to solve differential equations. In this chapter, we will see one last method: \emph{conversion of generic linear ordinary differential equations to first order system of differential equations}.
+		\item Learning how to solve first order differential equations of matrices is important for multiple reasons:
+		\begin{enumerate}
+			\item Any linear ordinary differential equation can be rewritten as a first order differential equation of a column matrix.
+			\item There exists coupled systems which can only be solved through differential equations of matrices
+			\item There is a conceptual reason to consider such diffential equations of matrices: phase space, using momenta, etc.
+		\end{enumerate}
+		\item We introduced systems of linear ordinary differential equations: multiple unknown functions, one independent variable.
+		\item As an example, we considered a one-dimensional system of two masses attached to a wall via two springs (something like \mbox{$|\sim\square\sim\square$}), and showed that this system is described by a system of two differential equations. The unknown functions are two positions of the masses, the independent variable is the time, and the key point is that this is a coupled system: the differential equations cannot be solved independently! Indeed, the system is best described as 
+		\be 
+		\rdr{^2}{t^2}\begin{pmatrix}
+			x_1\\x_2
+		\end{pmatrix}=\begin{pmatrix}
+			-\frac{k_1+k_2}{m_1}&\frac{k_2}{m_1}\\\frac{k_2}{m_2}&-\frac{k_2}{m_2}
+		\end{pmatrix}\begin{pmatrix}
+			x_1\\x_2
+		\end{pmatrix}
+		\ee 
+		\item One can solve this differential equation by various ways. One common method is to find the normal modes of this system by diagonalizing the square matrix: this will tell us the combinations of $x_1$ and $x_2$ which oscillate independently: for those variables, we have two independent differential equations that can be solved separately. We will not discuss this further in this class.
+		\item Another approach to solve such a differential equation is to bring it to a first order form. We motivate this by using our physical intuition: momentum (in addition to position) also describes a current state of the system, so we should work with four variables instead of two! Indeed, we can rewrite the above differential equation as 
+		\be 
+		\rdr{}{t}\begin{pmatrix}
+			x_1\\p_1\\x_2\\p_2
+		\end{pmatrix}=\begin{pmatrix}
+			0&\frac{1}{m_1}&0&0\\-(k_1+k_2)&0&k_2&0\\0&0&0&\frac{1}{m_2}\\k_2&0&-k_2&0
+		\end{pmatrix}\begin{pmatrix}
+			x_1\\p_1\\x_2\\p_2
+		\end{pmatrix}
+		\ee 
+		\item This approach is generalizable to a set of differential equations for $m$ unknown functions where the highest order derivative for each unknown function is $n_1$, $n_2$,$\dots$, $n_m$. This system is equivalent to a first-order differential equation for a vector of $\sum\limits_{i=1}^m n_i$ components!
+		
+		\item As example, we solved $f''(x)+3f'(x)+2f(x)=0$ by converting it into the matrix equation
+		\be 
+		\rdr{}{x}V(x)+A\. V(x)=0
+		\ee 
+		for 
+		\be 
+		A=\begin{pmatrix}
+			0&-1\\2&3
+		\end{pmatrix}
+		\ee
+		and
+		\be 
+		V(x)=\begin{pmatrix}
+			f(x)\\f'(x)
+		\end{pmatrix}
+		\ee 
+		We immediately say that the solution is 
+		\be 
+		V(x)=(\exp{-A x})\. C
+		\ee 
+		for the arbitrary column matrix $C$.
+		\item We computed $\exp(A x)$ explicitly in class using its definition:
+		\be 
+		\exp(A x)=\mathbb{I}+x A+\frac{x^2}{2!}A\.A+\frac{x^3}{3!}A\.A\.A+\dots
+		\ee 
+		\item In class, we discussed that if $A$ is $t-$independent, then we can use the generalization
+		\be 
+		\left[f'(t)=af(t)\rightarrow f(t)=\exp(at)c\right]\Rightarrow\left[V'(t)=A\.V(t)\rightarrow V(t)=\exp(At)\.C\right]
+		\ee
+		which means for any first-order differential equation with constant $A$ is immediately solvable this way. A similar generalization exists even if $A$ is $t-$dependent, but it is nontrivial: 
+		\be 
+		f'(t)=a(t)f(t)\rightarrow f(t)=\exp\left(\int a(t)dt\right)c
+		\ee
+		however
+		\be 
+		V'(t)=A(t)\.V(t)\rightarrow V(t)\ne \exp\left(\int A(t)dt\right)\.C
+		\ee 
+		The correct version is 
+		\be 
+		V'(t)=A(t)\.V(t)\rightarrow V(t)=\mathcal{T}\left\{\exp\left(\int A(t)dt\right)\right\}\.C
+		\ee 
+		where $\cT$ is called \emph{time-ordering operator}! There is a purely mathematical derivation of this via Volterra integral equation (we will see this), but the physical implications are rather important in its usage in quantum mechanics: the measurements at different times (by $A(t)$) should be time-ordered, i.e. causality has to be preserved! You will learn more about this when you solve Schrödinger's equation (a first order diff. equation of operators, which can be represented with matrices)!
+		\item We solved in class $f''(x)+3f'(x)+2f(x)=0$ as an example. We already know that the characteristic equation is $(r+2)(r+1)=0$ hence the answer is $f(x)=c_1 e^{-x}+c_2 e^{-2x}$. Nevertheless, let's see how we can get this answer through matrix computation.
+		
+		We realize that this equation can be rewritten as
+		\be 
+		\rdr{}{x}\begin{pmatrix}
+			f(x)\\f'(x)
+		\end{pmatrix}=\begin{pmatrix}
+			0&1\\-2&-3
+		\end{pmatrix}\begin{pmatrix}
+			f(x)\\f'(x)
+		\end{pmatrix}
+		\ee 
+		hence we can immediately write down the answer as
+		\be 
+		\begin{pmatrix}
+			f(x)\\f'(x)
+		\end{pmatrix}=e^{\begin{pmatrix}
+				0&1\\-2&-3
+		\end{pmatrix}}\begin{pmatrix}
+			c_1\\c_2
+		\end{pmatrix}
+		\ee 
+		
+		In class, we calculated the exponentiation of this matrix by computing first few terms in the Taylor expansion, finding the pattern, and then resumming all terms.
+		
+		\item We emphasize that this approach does not wotk if the matrix is not constant: as we mentioned above, we instead need the \emph{time-ordering}. In class, we schematically derived this as follows.
+		
+		Start with
+		\be 
+		\rdr{}{t}V(t)=A(t)\.V(t)
+		\ee  
+		Any non-homogeneous piece can be ignored as the particular solutions can always be found via variation of parameters method \emph{after} homogeneous solutions are computed. By integrating this equation, we get \emph{Volterra integral equation}
+		\be 
+		V(t)=V(0)+\int\limits_{0}^t A(t')\. V(t')dt'
+		\ee 
+		Now consider a modified version of this as 
+		\be 
+		V(\e,t)=V(0)+\e\int\limits_{0}^t A(t')\. V(\e,t')dt'
+		\ee
+		where $V(t)=V(1,t)$. Let us expand $V(\e,t)$ around $\e=0$ as follows:
+		\be 
+		V(\e,t)=V_{(0)}(t)+\e V_{(1)}(t)+\e^2 V_{(2)}(t)+\dots
+		\ee 
+		Note that $V(0,t)=V_{(0)}(t)=V(0)$ so this series is definitely well defined around $\e\sim 0$, but we do not yet know its radius of convergence so we might in principle not be able to take $\e\to 1$ to  obtain $V(t)$ at the end. Nevertheless, we will see that the radius of convergence is actually infinite as the expansion will turn out to be that of the exponential function. For now, let us proceed by inserting this into the modified Volterra equation:
+		\be 
+		\left(V(0)+\e V_{(1)}(t)+\e^2 V_{(2)}(t)+\dots\right)=V(0)+\e\int\limits_{0}^t A(t')\. \left(V(0)+\e V_{(1)}(t')+\e^2 V_{(2)}(t')+\dots\right)dt'
+		\ee
+		which leads to
+		\be 
+		V_{(n+1)}(t)=\int\limits_{0}^t A(t')\. V_{(n)}(t')dt'
+		\ee
+		if we match different orders of $\e$. But inserting this back, we obtain
+		\be 
+		V(\e,t)=V(0)+\left[\e\int\limits_{0}^t A(t')dt'\right]\. V(0)+\left[\e^2\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt'' A(t')\. A(t'')\right]\. V(0)+\dots 
+		\ee 
+		which can be rewritten as 
+		\be 
+		\label{temp1}
+		V(\e,t)=\left(\mathbb{I}+\left[\e\int\limits_{0}^t A(t')dt'\right]+\left[\e^2\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt'' A(t')\. A(t'')\right]+\dots\right)\. V(0)
+		\ee 
+		
+		One can show that the integration ranges $\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt''$ and $\int\limits_{0}^t dt'' \int\limits_{0}^{t''}dt'$ actually cover two triangles that add upto a square in the $t'-t''$ plane, given by the integration range $\int\limits_{0}^t dt' \int\limits_{0}^{t}dt''$. Therefore, we see that 
+		\be 
+		\int\limits_{0}^t dt' \int\limits_{0}^{t}dt'' f(t',t'')=\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt'' f(t',t'')+\int\limits_{0}^t dt'' \int\limits_{0}^{t''}dt' f(t',t'')
+		\ee 
+		which can be rewritten by changing the dummy variable as 
+		\be 
+		\int\limits_{0}^t dt' \int\limits_{0}^{t}dt'' f(t',t'')=\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt''\left(f(t',t'')+f(t'',t')\right)
+		\ee 
+		Observe that if we define 
+		\be 
+		f(t,t')=\left\{\begin{aligned}
+			g(t,t')\text{ if }t>t'\\
+			g(t',t)\text{ if }t'>t
+		\end{aligned}\right.
+		\ee 
+		then we get
+		\be 
+		\half\int\limits_{0}^t dt' \int\limits_{0}^{t}dt'' f(t',t'')=\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt''g(t',t'')
+		\ee 
+		Note that $f$ is just the function $g$ in a way that its arguments are rearranged in the decreasing order. If we then define \emph{time-ordering} $\cT$ as 
+		\be 
+		\cT::{}&{} (\R^n\to \C)\to(\R^n\to \C)\\
+		\cT={}&{} \Big((t_1,\dots,t_n)\to f(t_1,\dots,t_n)\Big)\to\Big((t_1,\dots,t_n)\to f\.\cO_>\.(t_1,\dots,t_n)\Big)
+		\ee 
+		where $\cO_>$ is the ordering function acting on \emph{list of real numbers}
+		\be 
+		\cO_>::{}&{} \R^n\to\R^n\\
+		\cO_>={}&{}(t_1,\dots,t_n)\to (t_{i_1},\dots,t_{i_n}) \text{ such that } t_{i_a}\le t_{i_b}\text{ if }a<b
+		\ee 
+		we then see that 
+		\be 
+		\int\limits_{0}^t dt' \int\limits_{0}^{t'} dt''g(t',t'')=\half\int\limits_{0}^t dt' \int\limits_{0}^{t}dt'' \cT\.g(t',t'')
+		\ee 
+		One can actually observe the same pattern in higher order versions, hence
+		\be 
+		\int\limits_{0}^t dt_1 \int\limits_{0}^{t_1} dt_2  \int\limits_{0}^{t_{n-1}} dt_n g(t_1,\dots,t_n)=\frac{1}{n!}\int\limits_{0}^t dt_1\dots \int\limits_{0}^t dt_n \cT\.g(t_1\dots,t_n)
+		\ee 
+		
+		One can use this result in \eqref{temp1} and after some manipulation, we obtain
+		\be
+		V(\e,t)=\cT\left(e^{\e\int\limits_0^t A(t') dt'}\right)\. V(0)
+		\ee 
+		where $\cT$ is understood to apply products of $A$ when exponential is expanded. Since the Taylor expansion of exponential function has infinite radius of convergence, we can take $\e\to 1$ and obtain the final result:
+		\be
+		V(t)=\cT\left(e^{\int\limits_0^t A(t') dt'}\right)\. V(0)
+		\ee 
+		In Physics, this is mostly known as Dyson series.
+		\item In class, I emphasized that this is a hard topic and the students are not expected to understand it fully. No question was asked about this in any homework or examination.
+\end{enumerate}}
+
+\chapter{Eigensystems and Sturm-Lioville theory}
+\draftnote{
+	\begin{enumerate}
+		\item Getting back to the simple case of constant $A(t)$, we solved some explicit examples in class. We considered an RLC circuit of resistor, capacitor, and inductor in parallel (and nothing else). We have shown in class that this system is coupled, hence one needs to work with matrices to find the, say, current over inductor as a function of time if there was initial energy in the system. Indeed, the system is described by
+		\be 
+		\rdr{}{t}\begin{pmatrix}
+			I_L(t)\\ V(t)
+		\end{pmatrix}= \begin{pmatrix}
+			0&1/L\\-1/C&-1/(RC)
+		\end{pmatrix}\begin{pmatrix}
+			I_L(t)\\ V(t)
+		\end{pmatrix}
+		\ee 
+		We solved in class for $C=1 mF$, $L=200 H$, and $R=1/6 kOhm$ via exponentiation of the matrix. As teasor, I also showed that the differential equations for the variables $S_1=I_L+10^{-3}V$ and $S_2=I_L+5 10^{-3}V$ are actually decoupled: these are called normal mods, and we will learn about how to get these (finding the eigenvalues and eigenfunctions of a system) below!
+		
+		\item How to compute exponential of a matrix? As an example, consider
+		\be 
+		e^{\begin{pmatrix}
+				a&b\\c&d
+		\end{pmatrix}}=&\begin{pmatrix}
+			1&0\\0&1
+		\end{pmatrix}+\begin{pmatrix}
+			a&b\\c&d
+		\end{pmatrix}+\half \begin{pmatrix}
+			a&b\\c&d
+		\end{pmatrix}\.\begin{pmatrix}
+			a&b\\c&d
+		\end{pmatrix}+\frac{1}{3!}\begin{pmatrix}
+			a&b\\c&d
+		\end{pmatrix}\.\begin{pmatrix}
+			a&b\\c&d
+		\end{pmatrix}\.\begin{pmatrix}
+			a&b\\c&d
+		\end{pmatrix}+\dots
+		\\
+		=&\begin{pmatrix}
+			f_{11}(a,b,c,d)&f_{12}(a,b,c,d)\\f_{21}(a,b,c,d)&f_{22}(a,b,c,d)
+		\end{pmatrix}
+		\ee 
+		This is tedious!
+		
+		Observe that 
+		\be 
+		A=U\.D\.U^{-1} \quad e^A=U\.e^D\.U^{-1}
+		\ee 
+		which one can check by expanding matrices. If $D$ is diagonal, then
+		\be 
+		e^A=U\.\begin{pmatrix}
+			e^{\lambda_1}& 0& \dots & 0\\
+			0& e^{\lambda_2}& \dots & 0\\
+			\dots \\
+			0&\dots & 0 & e^{\lambda_n}
+		\end{pmatrix}\. U^{-1}
+		\ee 
+		where $\lambda_i$ are diagonal entries of the matrix $D$.
+		\item We now try to solve the question: how do we find the matrix $U$ for a given $A$? If we write $U$ in terms of its column vectors as $U=\begin{pmatrix}
+			\vec{u}_1&\vec{u}_2&\dots&\vec{u}_n
+		\end{pmatrix}$, then $A\.U=U\.D$ implies
+		\be 
+		A\.\begin{pmatrix}
+			\vec{u}_1&\vec{u}_2&\dots&\vec{u}_n
+		\end{pmatrix}=\begin{pmatrix}
+			\lambda_1\vec{u}_1&\l_2\vec{u}_2&\dots&\l_n\vec{u}_n
+		\end{pmatrix}
+		\ee 
+		which implies 
+		\be
+		\label{temp2} 
+		A\.\vec{u}_i=\lambda_i \vec{u}_i\quad \forall i
+		\ee 
+		$u_i$ (we'll drop the vector sign for simplicity) are called \emph{right eigenvectors} of $A$, and $\l_i$ are called \emph{eigenvalues} of $A$. We can find an analogous equation in terms of \emph{left eigenvectors} of $A$ ($\vec{v}_i\.A=\vec{v}_i\l_i$), where $\vec{v}$ are actually row vectors of $U$ (unlike $\vec{u}$, which are column vectors of $U$). We'll only work with right eigenvectors so we'll drop the adjective right from now on.
+		
+		\item Observe that finding the matrix $U$, which is also called \emph{modal matrix}, is equivalent to solving the equation \eqref{temp2}, which can be rewritten as
+		\be 
+		\left(A-\lambda_i\mathbb{I}\right)\. u_i=0
+		\ee
+		If $\left(A-\lambda_i\mathbb{I}\right)$ is invertible, then we contract the equation above with $\left(A-\lambda_i\mathbb{I}\right)^{-1}$ from the left, which gives $u_i=\left(A-\lambda_i\mathbb{I}\right)^{-1}\.0$ hence the only solution is the trivial solution $u_i=0$. Therefore, for nontrivial $u_i$, we need $\left(A-\lambda_i\mathbb{I}\right)$ to be non-invertible, which means its determinant is zero:
+		\be 
+		\det \left(A-\lambda_i\mathbb{I}\right) =0
+		\ee 
+		This gives us a polynomial in $\l_i$, which is called \emph{characteristic polynomial} of $A$. For the matrix $A$ that describes a single linear ordinary differential equation with constant coefficients, the characteristic polynomial reduces to the characteristic equation that we have learned earlier.
+		
+		\item In class, we have solved two examples: the RLC circuit earlier, and $f''(x)+3f'(x)+2f(x)=0$. We found their eigensystem (and hence normal modes).
+		\item Discussed physical importance of this \emph{similarity transformation}, i.e. 
+		\be 
+		A=U\.D\.U^{-1}
+		\ee 
+		where $U$ is called a similarity transformation and the diagonal matrix $D$ is called the spectrum. This mathematical terminology is in line with our physical intuitions and usage of the term spectrum. Indeed, in optics, electromagnetic theory, atomic \& nuclear physics, and chemical physics, we use the term spectrum to refer to the different frequencies of light in the emission (or absorption) spectrum of  some system/material. These different frequencies are actually the eigenvalues of the system as monochromatic light with different frequencies are \emph{eigenfunctions} that form a basis on which any electromagnetic disturbance can be decomposed. This is most easily seen in a prism where light right gets decomposed into monochromotic light (remember Pink Floyd :D): this is simply expansion of white light in the basis of eigenfunctions of the light ($e^{ikx}$). In fact, the Harmonic analysis that we have learned before (Fourier transform being one example) are generally expansions over eigenfunctions of a differential operator! (that differential operator being Casimir operator and eigenfunctions being unitary irreducible representations of the relevant group, but this is a story for another time!)
+		\item Extending this whole discussion of spectrum and matrix transformation to infinite dimensions is equivalent to extending our eigenvalue equation to functions from finite dimensional column vectors: we now have
+		\be 
+		\cD\. f(x)=\l f(x)
+		\ee 
+		for a differential operator $\cD$, where $f(x)$ is its eigenfunction and $\l$ is its eigenvalue.
+		\item The analysis of eigensystem of operators is immensely important, but to make further progress, we need to define \emph{inner products}!
+		\item Remind dot products over real vector spaces $(.)::(\R^n,\R^n)\to \R$, extend them to functions $\R\to\R$ by defining the inner product $\<,\>::(\R\to\R,\R\to\R)\to\R$ as $\<f,g\>=\int\limits_\R f(x)g(x)dx$, and then generalize this further to complex functions as 
+		\bea
+		\<,\>_\w::{}&{}(A\to\C,A\to\C)\to\C \\
+		\<f,g\>_\w={}&{}\int\limits_A \Big(f(x)\Big)^*g(x)\w(x)dx
+		\eea
+		for $A\subseteq\R$.
+		\item In class, we defined adjoint of an operator wrt an inner product, discussed its properties, showed that self-adjoint operators have a real spectrum and orthogonal eigenfunctions. Add further discussion regarding symmetric vs self-adjoint operators.
+		\item Sturm-Liouville problem is basically analysis of the eigensystem of \emph{second order self adjoint differential operators}.
+	\end{enumerate}
+}
+
+\chapter{Beyond linear ordinary differential equations}
+\begin{enumerate}
+	\item Talked about abstract concept of a system S, with input I, and with output O, where their types are $\cS$, $\cI$, and $\cO$. Talked about how systems can be represented in different frameworks, as differential equations, as algebraic equations, or etc. Discussed how certain transformations actually act like a map between different representations of a system, e.g. Fourier transform can take a differential representation in one domain to an algebraic representation in another domain.
+	\item Discussed how systems can have properties (such as bounded input bounded output, casual, linear, etc.), and how we have been focused on linear systems with single input (hence can be represented by an linear ordinary differential equations), and how natural generalizations to nonlinear systems or multiple inputs lead to non-linear and/or partial differential equations.
+\end{enumerate}
+\section{Non-linear ordinary differential equations}
+\begin{enumerate}
+	\item Discussed exact equations, separable equations, Bernoulli equations, and solved examples.
+\end{enumerate}
+\section{Partial differential equations}
+\begin{enumerate}
+	\item Introduced \emph{tuples}, which are ordered lists:
+	\be 
+	(x_1,x_2,\dots,x_n)::T_1\x T_2\x \cdots \x T_n
+	\ee 
+	where $\x$ denotes a product, and $T_1\x T_2\x \cdots \x T_n$ is called a \emph{product type}. $\x$ creates a new product type from individual types; its inverse is \emph{projection} denoted by $\pi_i$ which works such that
+	
+	
+	
+	\bea 
+	\pi_i ::{}&{} \left(T_1\x T_2\x \cdots \x T_n\right)\to T_i\\
+	\pi_i={}&{}(x_1,x_2,\dots,x_n)\to x_i
+	\eea
+	
+	What does it mean to take products of types? What do we really mean by, say, $\cM_{n\x n}(\C)\x \R$?
+	\begin{itemize}
+		\item In computer science, vast applications via so-called algebraic data types
+		\item In logic, product of types are actually related to $\land$ (and) operation via Curry-Howard correspondence
+		\item In abstract math, product of any family of objects is defined as \emph{``the most general thing''} from which individual objects can be extracted (category theory).
+	\end{itemize}
+	
+	We are really used to taking products of types in Physics; for instance, Cartesian plane is $\R^2=\R\x\R$ is simply product of two real types. However, there is actually subtlety with such products in more general cases; for instance, the mathematical framework for quantum information theory is the so-called \texttt{Hilb} category which does not admit a Cartesian product (the only available products are non-cartesian), hence we do not actually have projection operations in this category. The well known physical result of this mathematical fact is that you cannot copy information in a quantum computer!
+	
+	\item If the elements of a tuple are of the same type, we use the easier notation $(x_1,\dots,x_n)::T^n$.
+	
+	\item Multi-variable functions are functions from tuples:
+	\bea 
+	f::{}&{} \R^3\to\R \\
+	f={}&{} (x_1,x_2,x_3)\to f(x_1,x_2,x_3)
+	\eea 
+	
+	\item Introduced D-notation:
+	\bea 
+	D::{}&{}\Z_+\to(\R^n\to\C)\to(\R^n\to\C)\\ 
+	D={}&{}i\to\left((x_1,\dots,x_n)\to f(x_1,\dots,x_n)\right)\to \left((x_1,\dots,x_n)\to \frac{\partial f(x_1,\dots,x_n)}{\partial x_i}\right)
+	\eea 
+	e.g. $\displaystyle D_2f(x,y)=\frac{\partial f(x,y)}{\partial y}$
+	
+	\item Chain rule:
+	\be 
+	\rdr{}{x} f(g_1(x),\dots,g_k(x))=\sum\limits_{i=1}^k\left(\rdr{}{x}g_i(x)\right)D_if(g_1(x),\dots,g_k(x))
+	\ee 
+	
+	\item Consider two functions $f$ and $g$:
+	\be 
+	f::{}&{}(X\x Y)\to Z\\
+	g::{}&{} X\to (Y\to Z)
+	\ee 
+	We can \emph{choose} $g$ such that $g(x)(y)=f(x,y)$. This is called \emph{currying}, i.e. we curried $f$ into this new form as $g$. The reverse (rewriting a function like $g$ as a function like $f$) is called \emph{uncurrying}.
+	
+	\item Discussed several important examples of partial differential equations:
+	\bea
+	D_1 f(t,x)-\a^2 D_2^2 f(t,x)={}&{}0\qquad(\text{heat conductance equation})\\
+	D_1^2 f(t,x)-c^2 D_2^2 f(t,x)={}&{}0\qquad(\text{wave equation})\\
+	D_1^2 f(t,x)+ D_2^2 f(t,x)={}&{}0\qquad(\text{Laplace equation})
+	\eea 
+	
+	\item We solved these equations both via method of seperation of variables, and also proposing solutions of the form $f(x,t)=g(x+a t)$.
+	\item We discussed how partial differential equations can have undetermined functions in the answer just like how ordinary differential equations have undetermined coefficients in the answer!
+\end{enumerate}
