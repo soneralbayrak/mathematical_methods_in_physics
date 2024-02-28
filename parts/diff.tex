@@ -2,7 +2,7 @@
 \section{Preliminaries: some basic terminology}
 
 \subsection{Type notation and functions}
-
+\label{sec: type notation and functions}
 Consider the number $2$. It is an integer, which mathematicians denote as $2\in \Z$, where $\Z$ denotes the set of integers.\footnote{$\Z$ is actually an integral domain.} Computer scientists on the other hand would denote this as
 \be 
 2::\texttt{Integer}
@@ -750,7 +750,7 @@ for arbitrary coefficients $c_{ij}$.
 \draftnote{RLC circuits, damper-spring systems, traffic models, etc.}
 
 \section{Laplace transform}
-Consider the following higher order function:\footnote{
+Consider the following higher order function:\footnote{\label{footnote:dummy variables}
 	Note that the letters on the left hand side of an arrow are \emph{placeholders}, i.e. they do not inherently carry information. Such parameters are called dummy variables in math (or scooping variables in computer science) and they are ubiquitous in math and physics; for instance, the integrals $\int dx f(x)$ and $\int dy f(y)$ are the same expression as $x$ and $y$ are dummy variables. Similarly, the expressions $x\to f(x)$ and $y\to f(y)$ are equivalent.
 	
 	It gets complicated with the higher order functions as they include multiple arrows; in such cases, the left hand side of \emph{each arrow} contains only placeholders for \emph{the right hand side of that particular arrow}. For example, let us rewrite \equref{eq: general integral transform} in a colorful way:
@@ -1514,6 +1514,7 @@ If $r_1$ and $r_2$ are two distinct roots of $a_0+a_1s+a_2s^2=0$, we can simply 
 	\item Discussed exact equations, separable equations, Bernoulli equations, and solved examples.
 \end{enumerate}
 \section{Partial differential equations}
+\label{sec: partial differential equations}
 \begin{enumerate}
 	\item Introduced \emph{tuples}, which are ordered lists:
 	\be 
