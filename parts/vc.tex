@@ -165,7 +165,7 @@ if the following statements are true:
 	\item $\boxed{(S\backslash\{0\},\.)\text{ is a commutative group}}$
 \end{enumerate}
 
-Fields are ubiquitous and super important for physicists as we use them everwhere! The rational, real, and complex numbers all form fields under ordinary arithmetic addition and multiplication:\footnote{
+Fields are ubiquitous and super important for physicists as we use them everwhere! The rational, real, and complex numbers all form fields under ordinary arithmetic addition and multiplication:\footnote{\label{footnote: exotic example for a field}
 For a more exotic example, consider the following set:
 \be 
 A=\Big\{(x\to x+a)\;\Big|\; a\in \R\Big\}
@@ -208,11 +208,139 @@ then we can prove that $(A,\oplus,\otimes)$ is actually a field!
 \be 
 (\Q,+,\.)::\texttt{Field}\;,\qquad (\R,+,\.)::\texttt{Field}\;,\qquad (\C,+,\.)::\texttt{Field}
 \ee  
-\draftnote{To be added: linear spaces, linear algebras, lie algebras, exponential map, lie groups}
+
+\paragraph{Vector space (Linear space):} We \emph{define} \emph{``a vector space over a field $F$''} as the triple $(V,\oplus,\odot)$, i.e.
+\bea
+V::{}&{}\texttt{Set}\\
+\Big(F=(S,+,\.)\Big)::{}&{}\texttt{Field}\\
+\oplus::{}&{}(V,V)\to V\\
+\odot::{}&{}(S,V)\to V\\
+(V,\oplus,\odot)::{}&{}\texttt{Vector Space}
+\eea
+if the following statements are true
+\begin{enumerate}
+	\item $\boxed{(V,\oplus)::\text{Commutative Group}}$
+	\item $\boxed{(\forall v\in V)\; 1\odot v=v\text{ where $1$ is the identity element of $\.$}}$
+	\item $\boxed{(\forall v\in V)(\forall s\in S)\; s\odot v \in V}$
+	\item $\boxed{(\forall v\in V)(\forall a,b\in S)\; (a\.b)\odot v=a\odot (b\odot v)}$
+	\item $\boxed{(\forall v\in V)(\forall a,b\in S)\; (a+b)\odot v=(a\odot v)\oplus (b \odot v)}$
+	\item $\boxed{(\forall v,w\in V)(\forall s\in S)\; s\odot(v\oplus w)=(s\odot v)\oplus (s\odot w)}$
+\end{enumerate}
+Here, the elements of the underlying field $F$ are called \emph{scalars} ($s\in S$) and the elements of the linear spaces are called \emph{vectors} ($v\in V$). indeed, $V$ above is the set of these vectors, $\oplus$ is the \emph{vector addition} operation, and $\odot$ is the \emph{scalar multiplication} operation. We will see more properties of vectors (such as basis, linear independence, etc.) in the next section.
+
+The standard example of a linear space is this:
+\be
+\big(
+\left(\cM_{n\x m}(S),\oplus\right),\left(S,+,\.\right)
+\big)::\text{Linear Space}
+\ee 
+In words, we say that all $m\x n$ matrices from a field $\ka=\left(S,+,\.\right)$ form a linear space over $\ka$. In this example, matrices \emph{are} vectors of this linear space and the vector addition $\oplus$ is simply defined as the matrix addition. A more familiar example can be given as follows:
+\be 
+V={}&{}\{a\bx+b\by+c\bz \;|\; a,b,c\in\R\}\\
+\left(a_1\bx+b_1\by+c_1\bz\right)\oplus\left(a_1\bx+b_1\by+c_1\bz\right)={}&{}(a_1+a_2)\bx+(b_1+b_2)\by+(c_1+c_2)\bz\\
+s\odot\left(a\bx+b\by+c\bz\right)={}&{}(s\.a)\bx+(s\.b)\by+(s\.c)\bz
+\ee 
+where we defined the set $V$ and the explicit action of the functions $\oplus$ and $\odot$.\footnote{
+Let us consider a more nontrivial example. Consider the field $(A,\oplus,\otimes)$ disucssed in footnote~\ref{footnote: exotic example for a field}. We will define a vector space $(W,\square,\odot)$ over this field. Note that, in this example, $\square$ will denote the vector addition whereas $\oplus$ is reserved for the scalar addition in the field $A$.
+\\\\
+We define the set $W$ as
+\be 
+W=\{(a,b)\;|\;a,b\in\R\}
+\ee  
+whereas we choose the vector addition and scalar multiplications as
+\be 
+(a,b)\square (c,d)=(a+c,\;b+d)
+\ee 
+and
+\be 
+\textsf{plus}(a)\odot (b,c)=(a\.b,\;a\.c)
+\ee 
+With these definitions, we can verify that all conditions for $(W,\square,\odot)$ to be a vector space over the field $A$ are satisfied.
+}
+\draftnote{
+\begin{enumerate}
+	\item (Linear algebra$=$linear space with vector multiplication) is introduced and discussed.
+	\item (Lie algebras$=$linear algebra with multiplication being antisymmetric) is introduced and discussed.
+	\item Made reference to the commutators and discussed how a linear algebra can be turned into a lie algebra via commutators.
+	\item Cross products in three dimensional vector space is discussed from this perspective: $3d$ vectors form a lie algebra thanks to the cross product.
+	\item Emphasized how vector spaces can be built on an arbitrary set $V$ as long as the necessary conditions are satisfied. For instance, we can choose
+	\be 
+	V=\Big\{a\pdr{}{x}+b\pdr{}{y}+c\pdr{}{z}\;\Big|\;a,b,c\in\R\Big\}
+	\ee 
+	With arithmatic addition and multiplication, these indeed form a vector space. In fact, this way of definition is far more useful than $a\bi+b\bj+c\bk$ as we will see later.
+\end{enumerate}
+}
+
 \subsection{Properties of Linear spaces}
-Bases, standard basis, coordinate systems, relations to tuples and matrices
+\draftnote{
+\begin{enumerate}
+	\item Basis for vector spaces is introduced: let $(B\supset V)::\texttt{Set}$. $B$ is called \emph{a basis} of $V$ if following statements are true:
+\begin{itemize}
+	\item $(\forall k\in\{1,2,\dim B\})(\forall e_1,\dots,e_k\in B)(\forall c_1,\dots,c_k\in S) [c_1=\dots=c_k=0]\lor[c_1e_1+\dots+c_ke_k=0]$
+	\item $(\forall v\in V)(\exists ! a_1,\dots,a_{\dim B}\in S) v=a_1e_1+\dots a_{\dim B}e_{\dim B}$
+\end{itemize}
+The first statement is the \emph{linear independence} of the basis vectors, whereas second statement is the requirement that the basis \emph{spans} the vector space, i.e. any vector can be decomposed in terms of the basis elements. The coefficients $a_i$ are called the \emph{components} of the vector in this basis.
+\item If $\dim B<\infty$, it is called the dimension of the vector space!
+\item If $\dim B=\infty$, the vector space is called \emph{infinite dimensional}!
+\item Using a basis, a vector can be related to a list/array/tuple of scalars:
+\be 
+\left.\begin{aligned}
+	v::&\texttt{Vector}\\
+	a_1,\dots,a_n::&\texttt{Scalar}
+\end{aligned}\right\}\Rightarrow v=\begin{pmatrix}
+	a_1&\dots&a_n
+\end{pmatrix}\begin{pmatrix}
+	e_1\\\dots\\e_n
+\end{pmatrix}
+\ee 
+For instance, $(3\bi+4\bk)::\texttt{Vector}$ whereas $(3,0,4)::(\texttt{Scalar},\texttt{Scalar},\texttt{Scalar})$; nevertheless, they represent the same information once the proper basis is given: $3\bi+4\bk=\begin{pmatrix}
+	3&0&4
+\end{pmatrix}\begin{pmatrix}
+	\bi\\\bj\\bk
+\end{pmatrix}$.
+\item If multiple basis exist for a vector space, all have the same dimension and all can be converted to one another (proof omitted).
+\item Index notation and Einstein's summation convention is discussed, i.e. $v=v^ie_i$. Note that index placement is important, i.e. $e^i\ne e_i$.
+\item One can choose $a_i$ to represent a row or column matrix (and $a^i$ the other one). Note that $M_i^{\;j}$ or $M^i_{\; j}$ represent a square matrix (as they convert a row/column matrix to another row/column matrix), but $M_{ij}$ or $M^{ij}$ are not square matrices.
+\end{enumerate}
+}
+
 \section{Inner product spaces}
-Concept of \emph{vector spaces with additional structure}, dual vector spaces, inner product, normed vector spaces, topological vector spaces, Hilbert spaces
+\draftnote{
+\begin{enumerate}
+\item Normed vector spaces: in general, we do not need to have functions that takes vectors as inputs and spits out scalars as outputs, i.e. no $(\cdot)::(V,V)\to S$ or $\norm{.}::V\to S$ is necessary for the definition of the vector space.
+\\\\
+If we impose that a function \emph{\textsf{norm}} such that
+\be 
+\textsf{norm}::&V\to\R \\
+\textsf{norm}=& x\to\norm{x}
+\ee 
+exists where
+\begin{itemize}
+	\item $(\forall v\in V) [\norm{v}\ne 0]\lor[v=0]$
+	\item $(\forall v\in V)(\forall s\in S)\norm{s\odot v}=\abs{s}.\norm{v}$
+	\item $(\forall v,w\in V)\norm{v\oplus w}\le\norm{v}+\norm{w}$
+\end{itemize}
+and where $V$ is a vector space over the field $\R$ or $\C$, then we call $(V,\norm{.})$ a \emph{normed vector space}.
+\item With norm, we can define distance between two vectors: $d::(V,V)\to\R$ and $d=(x,y)\to\norm{x-y}$.
+\item With norm, we can define angle between two vectors: $\theta::(V,V)\to\R$ and $\displaystyle \theta=(x,y)\to\acos(\frac{\norm{x}^2+\norm{y}^2-\norm{x-y}^2}{2\norm{x}\norm{y}})$.
+\item Inner product spaces: If we have a vector space over the field $\R$ or $\C$, and if we impose the existence of the function $\<.,\.\>$ for 
+\be 
+F\in&\{\R,\C\}\\
+V::&\texttt{Vector Space over }F\\
+\<.,.\>::&(V,V)\to F
+\ee 
+where the following are true:
+\begin{itemize}
+	\item $(\forall v,w\in V)\;\<v,w\>=\<w,v\>^*$ (conjugate symmetry)
+	\item $(\forall u,v,w\in V)(\forall a,b\in F)\; \<au+bv,w\>=a\<u,w\>+b\<v,w\>$
+	\item $(\forall v\in V\backslash\{0\})\;\<v,v\>>0$
+	\item $\<0,0\>=0$
+\end{itemize}
+\item Inner product vector spaces can immediately be turned to a normed vector space as well as we can  define $\norm{v}=\sqrt{\<v,v\>}$ which is consistent with all norm requirements. In this definition, the angle between two vectors become $\displaystyle\cos\theta=\frac{\Re(\<x,y\>)}{\norm{x}\norm{y}}$.
+\end{enumerate}
+}
+\draftnote{To be added: dual vector spaces, topological vector spaces, Hilbert spaces}
+
 \section{Algebras over fields}
 \subsection{Tensor algebras}
 Tensor algebras and tensors
