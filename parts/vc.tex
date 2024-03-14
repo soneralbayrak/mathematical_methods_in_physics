@@ -339,20 +339,170 @@ where the following are true:
 \item Inner product vector spaces can immediately be turned to a normed vector space as well as we can  define $\norm{v}=\sqrt{\<v,v\>}$ which is consistent with all norm requirements. In this definition, the angle between two vectors become $\displaystyle\cos\theta=\frac{\Re(\<x,y\>)}{\norm{x}\norm{y}}$.
 \end{enumerate}
 }
-\draftnote{To be added: dual vector spaces, topological vector spaces, Hilbert spaces}
+\section{Dual vector spaces}
+\draftnote{
+\begin{enumerate}
+\item Dual vector spaces: Let $V$ be a vector space over a field $F$. If we consider linear functions that take a vector to a scalar, those functions themselves form a vector space: that is called the \emph{dual vector space} $V^*$. So we have 
+\bea 
+(F=(S,+,.))::&\texttt{Field}\\
+V::&\texttt{Set}\\
+\oplus::&(V,V)\to V\\
+\odot::&(S,V)\to V\\
+(V^*=\{V\to S\})::&\texttt{Set}\\
+\oplus^*::&(V^*,V^*)\to V^*\\
+\odot^*::&(S^*,V^*)\to V^*\\
+\eea 
+where 
+\bea 
+(V,\oplus,\odot)=\text{ vector space over }F\\
+(V^*,\oplus^*,\odot^*)=\text{ vector space over }F
+\eea 
+Gave several examples in class, for instance $V=\{a\bi+b\bj\;|\;a,b\in\R\}$ and $V^*=\{(x\bi+y\bj)\to(ax+by)\;|\;a,b\in\R\}$.
+\item Conventionally, elements of $V$ are called \emph{vectors} and elements of $V^*$ are called \emph{covectors}.
+\item For the vector space given in the notation
+\be 
+V=\Big\{a\pdr{}{x}+b\pdr{}{y}+c\pdr{}{z}\;\Big|\;a,b,c,\in\R\Big\}
+\ee 
+the dual vector space is denoted as
+\be 
+V^*=\big\{adx+bdy+cdz\;\big|\;a,b,c\in\R\}
+\ee 
+where $dx\left(\pdr{}{x}\right)=1$, $dx\left(\pdr{}{y}\right)=0$, and similarly.
+
+Note that this convention is more than just a notation: the vector spaces indeed transform functions to functions, and integrations are indeed summations of covectors in a loose sense. We will make these much more concrete later.
+\item Discussed in detail and derived that if a basis of the vector space $e_i$ and the basis of the dual vector space $e^i$ transform as 
+\be 
+e_i\to& M_i^{\;k}e_k\\
+e^i\to& e^kN_k^{\;\;i}
+\ee 
+then the components of the basis vector $v^i$ and the components of the covector $w_i$ transform as 
+\be 
+v^i\to& v^k(M^{-1})_k^{\;\;i}\\
+w_i\to& (N^{-1})_i^{\;k}w_k
+\ee 
+If we want the action of the covector basis on vector basis to remain unchanged, i.e.
+\be 
+e^i(e_k)\to e^i(e_k)
+\ee 
+then we need $N=M^{-1}$. With this, we see that
+\be 
+e_i\to& M_i^{\;k}e_k\\
+w_i\to& M_i^{\;k}w_k\\
+e^i\to& e^k(M^{-1})_k^{\;\;i}\\
+v^i\to& v^k(M^{-1})_k^{\;\;i}
+\ee
+We see that the array $w_i$ transforms in the same way as the basis vectors of $V$, i.e. it transforms \emph{covariantly}. We then loosely state that $w_i$ is a \emph{covariant vector}!\footnote{Note that $v^i$ ($w_i$) is actually only the components of the (co)vector, hence it is only an array of the underlying field , i.e. $w_i::(S,S,\dots,S)$ and $v^i::(S,S,\dots,S)$. In contrast, the combination $(w_ie^i)::V^*$ is a covector and the combination $(v^ie_i)::V$ is a vector.} In contrast, $v^i$ transforms in an inverse way compared to $e_i$, and hence it is loosely called a \emph{covariant vector}!
+\end{enumerate}
+}
+\draftnote{To be added: topological vector spaces, Hilbert spaces}
 
 \section{Algebras over fields}
 \subsection{Tensor algebras}
-Tensor algebras and tensors
+\draftnote{
+\begin{enumerate}
+	\item Consider a linear space over a field $F$. We call \emph{``type $(r,s)$ tensor on a vector space $V$''} an element of 
+	\be 
+	\underbrace{V\otimes V\otimes\cdot\otimes V}_{r}\otimes\underbrace{V^*\otimes V^*\otimes\cdot\otimes V^*}_{s}
+	\ee 
+	where $\otimes$ is an associative bilinear map, i.e.
+	\be 
+	&A=\{V,V^*\}\\
+	&\otimes::(A,A)\to A\otimes A\\
+	&(\forall a,b,c\in A)\;(a\otimes b)\otimes c=a\otimes(b\otimes c)
+	\ee
+\item We conventionally denote
+\be 
+T^kV=\underbrace{V\otimes\cdots\otimes V}_{k}
+\ee 
+Since the bilinear map $\otimes$ takes the product of $v:: T^kV$ and $\w:: T^l V$ to $(v\otimes\w)::T^{k+l}V$, we need the consider the space of all possible $T^kV$ to have an algebra: this is denoted as $T(V)$ (tensor algebra over $V$) and is defined as
+\be 
+T(V)=\bigoplus\limits_{k=0}^\infty T^kV=F\oplus V\oplus(V\otimes V)\oplus\cdots
+\ee 
+A similar definition can be made for $T(V^*)$; the product $T(V)\otimes T(V^*)$ is the algebra over vector field that includes all type of tensors (i.e. $(\forall r,s\in\N)\;(r,s)-$tensor).
+\item In Physics, we usually work with components. Indeed, consider the following example:
+\be 
+a::&V\otimes V\otimes V^*\\
+a=&a^{ij}_{\;\;k}e_i\otimes e_j\otimes e^k
+\ee 
+We usually call $a^{ij}_{\;\;k}$ a tensor: in reality, it is only a collection of scalars (underlying field elements of the vector space); nevertheless, once a basis is specified, there is indeed a unique map between $a$ and $a^{ij}_{\;\;k}$ hence this abuse of notation is justified.
+\item $\otimes$ provides an \emph{outer} product, i.e. $a\otimes b$ is not part of the types of $a$ or $b$. For instance, if both $a$ and $b$ are of the type $(1,0)$, $a\otimes b$ is of the type $(2,0)$. In general the value $r+s$ for a type $(r,s)$ tensor is called \emph{the rank of the tensor}, and the rank of the tensor $a\otimes b$ is the sum of the ranks of the tensors $a$ and $b$. For instance:
+\be 
+\label{eqn: tensor example}
+a::&V\otimes V\otimes V^*\\
+b::&V^*\otimes V^*\\
+(c=a\otimes b)::&V\otimes V\otimes V^*\otimes V^*\otimes V^*\\
+a=&a^{ij}_{\;\;k}e_i\otimes e_j\otimes e^k\\
+b=&b_{lm}e^l\otimes e^m\\
+c=&c^{ij}_{\;\;klm}e_i\otimes e_j\otimes e^k\otimes e^l\otimes e^m\\
+c^{ij}_{\;\;klm}=&a^{ij}_{\;\;k}b_{lm}
+\ee 
+\item As stated earlier, we usually work with components in practice (at least in the Physics), so the product of two tensors $a^{i_1\dots i_r}_{\quad\;\; k_1\dots k_s}$ and $b^{l_1\dots l_t}_{\quad\;\; m_1\dots m_u}$ just becomes $c^{i_1\dots i_r l_1\dots l_t}_{\qquad\quad k_1\dots k_s m_1\dots m_u}=a^{i_1\dots i_r}_{\quad\;\; k_1\dots k_s}b^{l_1\dots l_t}_{\quad\;\; m_1\dots m_u}$.
+\item There is a way to change the type and rank of a tensor by an operation called \emph{contraction}. What it does is basically act the basis covector on the basis vector; to see this, consider the tensor $c$ in the equation~\ref{eqn: tensor example}. We can \emph{choose} to contract some of its basis elements to reduce its rank, for instance if we choose to act $e^k$ on $e_i$, we get $e^k(e_i)=\de^k_{\;i}$ for the kronecker-delta $\de$. But since $c^{ij}_{\;\;klm}\de^k_{\;i}=c^{ij}_{\;\;ilm}$, we arrive at
+\be 
+c'::&V\otimes V^*\otimes V^*\\
+c'=&c^{ij}_{\;\;ilm} e_j\otimes e^l\otimes e^m
+\ee 
+If we instead acted $e^k$ on $e_j$, we would get a different tensor $c''$:
+\be 
+c''::&V\otimes V^*\otimes V^*\\
+c''=&c^{ij}_{\;\;jlm} e_i\otimes e^l\otimes e^m
+\ee
+Or we could act $e^k$ on $e_i$ and $e^l$ on $e_j$: this would give us an entirely different tensor $c'''$:
+\be 
+c'''::& V^*\\
+c'''=&c^{ij}_{\;\;ijm}e^m
+\ee
+\item Consider the rotational version of Newton's second law, i.e. \emph{``torque is equal to moment of inertial times angular acceleration''}. We conventionally write it as a matrix equation, i.e. $\tau^i=I^i_{\;j}\a^j$. We see that we could write them as follows:
+\be 
+\tau,\alpha::&V\\
+I::&V\otimes V^*\\
+(I\otimes \alpha)=& I^i_{\;j}\alpha^k e_i\otimes e_k\otimes e^j\\
+\tau=&I^i_{\;j}\a^j e_i
+\ee 
+Clearly, we got $\tau$ by first taking the outer product of $I$ and $\a$, and then doing a contraction between two of the indices (equivalently, applying the covector $e^j$ on the vector $e_k$).\footnote{
+This line of reasoning is valid to a degree for $3d-$vectors, but in higher dimensions, it is not true. Firstly, $\tau$ and $\a$ are not vectors but \emph{bivectors} in general dimension (we'll cover bivectors below), hence $I$ is actually not a matrix (a rank-2 tensor) but a linear map of bivectors to bivectors (hence a rank-4 tensor): $I::V\otimes V\otimes V^*\otimes V^*$.
+}
+\end{enumerate}
+}
 \subsection{Exterior and alternating algebras}
+\draftnote{\begin{enumerate}
+\item Tensor product $\otimes$ is only defined as an associative bilinear mapping. If we define a similar product with the additional property that it is antisymmetric, we get \emph{exterior algebra}.
+\item The relevant antisymmetric operator is called \emph{Wedge product} and is denoted as $\wedge$:
+\begin{itemize}
+	\item $(\forall u,v\in V)\; u\wedge v=-v\wedge u$
+	\item $(\forall u,v,w\in V)\; u\wedge(v\wedge w)=(u\wedge v)\wedge w$
+\end{itemize}
+\item As the product is fully antisymmetric, any wedge product of $k-$many vectors is zero if $k>\dim(V)$, thus:
+\be 
+\Lambda(V)=\bigoplus\limits_{k=0}^{\dim(V)} \Lambda^kV=F\oplus V\oplus(V\wedge V)\oplus\cdots
+\ee 
+for
+\be 
+\Lambda^kV=\underbrace{V\wedge\cdots\wedge V}_{k}
+\ee 
+forms the exterior product.
+\end{enumerate}}
 Wedge product and multivectors, oriented area and volume, hodge duality
 
 \subsection{Division algebras}
-Normed division algebras and Hurwitz's theorem; finite-dimensional associative division algebras over the real numbers and Frobenius theorem; more about quaternions, their usage in spatial rotation (hence applications in engineering), and Feza Gursey's work with quaternions
+\draftnote{
+Following is not covered in class or in homeworks; may be covered next years:\\\\	
+Normed division algebras and Hurwitz's theorem; finite-dimensional associative division algebras over the real numbers and Frobenius theorem; more about quaternions, their usage in spatial rotation (hence applications in engineering), and Feza Gursey's work with quaternions}
 
 
 \chapter{Differentiation in Vector Calculus}
 \section{Vector fields on Euclidean Spaces}
+\draftnote{
+\begin{enumerate}
+	\item In class, we discussed 2d and 3d pendulums: at different positions, the velocity at that position belongs to the vector space \emph{at that position}. Even though these vectors spaces are isomorphic to each other,\footnote{Any two finite dimensional vector spaces with the same dimension are actually isomorphic to each other.} i.e. they can be transformed to each other, they are actually different vector spaces! This is not only true for pendulums, but for any motion! 
+	\item Let us assume that we are going to describe the kinematics of a particle. We need to specify the position and the velocity of the particle at that position: this is the complete information to understand the trajectory of the particle. In other words, if we know all possible $(r,\vec{v}(r))$ pairs where $r$ parametrizes the particle's position in the system and $\vec{v}(r)$ is the velocity vector in that position, then we can describe the motion completely!
+	\\\\
+	Consider a two dimensional pendulum. We can parametrize the object's position by an angle $\theta$ as the trajectory forms a circle. At any position, its velocity lies in the \emph{tangent line} at the pendulum's position to this circle: note that these lines are \emph{different} at different values of $\theta$, so we indeed have infinitely many vector spaces, one for each value of $\theta$. We could choose $\pdr{}{\theta}$ as the basis vector; then the relevant pairs would look like $\left(\frac{\pi}{6},2\pdr{}{\theta}\right)$ or $\left(-\frac{\pi}{3},-\pdr{}{\theta}\right)$. The first one says that at $\pi=\pi/6$, the velocity is $2\pdr{}{\theta}$ at the tangent space to the circle at $\theta=\pi/6$. We will see late that this basically means the particle is moving such that at $\theta=\pi/6$, it will move to increase its $\theta$. On the contrary, at $\theta=-\pi/3$, it will move to decrease its $\theta$ (as the velocity at that point is $-\pdr{}{\theta}$). If we are to combine all such $(\theta,v(\theta)\pdr{}{\theta})$ pairs, we have the complete behavior of the pendulum!
+	\\\\
+	To understand these better, we need to introduce some terminology.
+	\item 
+\end{enumerate}
+}
 Concept of vector fields, use of partial derivatives to describe vector fields, bivector fields ($F_{\mu\nu}$ in electromagnetism being a bivector), tensor fields
 \section{Forms and duals of vector fields}
 Forms as covectors, tangent and cotangent bundles, musical isomorphism, index notation of tensors, covariant vs contravariant indices, metric tensor field
