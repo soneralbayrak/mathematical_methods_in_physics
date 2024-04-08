@@ -21,14 +21,14 @@
 \def\bibliographyfile{collectiveReferenceLibrary}
 %
 %%% BOOK SPECIFIC PACKAGES
-\RequirePackage{slashed} 
-\RequirePackage{multicol}
+\def\Packages{\usepackage{musicography,slashed,multicol,pifont}}
 \RequirePackage[nointegrals]{wasysym} % for astronomical symbols
-\RequirePackage{pifont}% http://ctan.org/pkg/pifont
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
 %
 %%% BOOK SPECIFIC DEFINITIONS
+\def\Flat{{\musFlat{}}}
+\def\Sharp{{\musSharp{}}}
 \newcommand\draftnote[1]{{\color{blue} #1}}
 \newcommand\dplus{\mathbin{+\mkern-2mu+}}
 \def\naive{naïve }

@@ -276,7 +276,7 @@ With these definitions, we can verify that all conditions for $(W,\square,\odot)
 \begin{enumerate}
 	\item Basis for vector spaces is introduced: let $(B\supset V)::\texttt{Set}$. $B$ is called \emph{a basis} of $V$ if following statements are true:
 \begin{itemize}
-	\item $(\forall k\in\{1,2,\dim B\})(\forall e_1,\dots,e_k\in B)(\forall c_1,\dots,c_k\in S) [c_1=\dots=c_k=0]\lor[c_1e_1+\dots+c_ke_k=0]$
+	\item $(\forall k\in\{1,2,\dim B\})(\forall e_1,\dots,e_k\in B)(\forall c_1,\dots,c_k\in S) [c_1=\dots=c_k=0]\lor[c_1e_1+\dots+c_ke_k\ne 0]$
 	\item $(\forall v\in V)(\exists ! a_1,\dots,a_{\dim B}\in S) v=a_1e_1+\dots a_{\dim B}e_{\dim B}$
 \end{itemize}
 The first statement is the \emph{linear independence} of the basis vectors, whereas second statement is the requirement that the basis \emph{spans} the vector space, i.e. any vector can be decomposed in terms of the basis elements. The coefficients $a_i$ are called the \emph{components} of the vector in this basis.
@@ -361,6 +361,7 @@ Gave several examples in class, for instance $V=\{a\bi+b\bj\;|\;a,b\in\R\}$ and 
 \item Conventionally, elements of $V$ are called \emph{vectors} and elements of $V^*$ are called \emph{covectors}.
 \item For the vector space given in the notation
 \be 
+\label{eq: vector derivative notation}
 V=\Big\{a\pdr{}{x}+b\pdr{}{y}+c\pdr{}{z}\;\Big|\;a,b,c,\in\R\Big\}
 \ee 
 the dual vector space is denoted as
@@ -391,10 +392,10 @@ w_i\to& M_i^{\;k}w_k\\
 e^i\to& e^k(M^{-1})_k^{\;\;i}\\
 v^i\to& v^k(M^{-1})_k^{\;\;i}
 \ee
-We see that the array $w_i$ transforms in the same way as the basis vectors of $V$, i.e. it transforms \emph{covariantly}. We then loosely state that $w_i$ is a \emph{covariant vector}!\footnote{Note that $v^i$ ($w_i$) is actually only the components of the (co)vector, hence it is only an array of the underlying field , i.e. $w_i::(S,S,\dots,S)$ and $v^i::(S,S,\dots,S)$. In contrast, the combination $(w_ie^i)::V^*$ is a covector and the combination $(v^ie_i)::V$ is a vector.} In contrast, $v^i$ transforms in an inverse way compared to $e_i$, and hence it is loosely called a \emph{covariant vector}!
+We see that the array $w_i$ transforms in the same way as the basis vectors of $V$, i.e. it transforms \emph{covariantly}. We then loosely state that $w_i$ is a \emph{covariant vector}!\footnote{Note that $v^i$ ($w_i$) is actually only the components of the (co)vector, hence it is only an array of the underlying field , i.e. $w_i::(S,S,\dots,S)$ and $v^i::(S,S,\dots,S)$. In contrast, the combination $(w_ie^i)::V^*$ is a covector and the combination $(v^ie_i)::V$ is a vector.} In contrast, $v^i$ transforms in an inverse way compared to $e_i$, and hence it is loosely called a \emph{contravariant vector}!
 \end{enumerate}
 }
-\draftnote{To be added: topological vector spaces, Hilbert spaces}
+\draftnote{We did not discuss topological vector spaces and Hilbert spaces this year: we may discuss it next year!}
 
 \section{Algebras over fields}
 \subsection{Tensor algebras}
@@ -464,7 +465,7 @@ This line of reasoning is valid to a degree for $3d-$vectors, but in higher dime
 }
 \end{enumerate}
 }
-\subsection{Exterior and alternating algebras}
+\subsection{Exterior algebras}
 \draftnote{\begin{enumerate}
 \item Tensor product $\otimes$ is only defined as an associative bilinear mapping. If we define a similar product with the additional property that it is antisymmetric, we get \emph{exterior algebra}.
 \item The relevant antisymmetric operator is called \emph{Wedge product} and is denoted as $\wedge$:
@@ -480,36 +481,219 @@ for
 \be 
 \Lambda^kV=\underbrace{V\wedge\cdots\wedge V}_{k}
 \ee 
-forms the exterior product.
+forms the exterior algebra.
+\item Elements of $\Lambda^kV$ are called \emph{k-vectors} (or multivectors in general).
+\item In $3d$, the exterior product of two vectors would almost like the cross product of the vectors:
+\be 
+\left.\begin{aligned}
+u=u_1e_1+u_2e_2+u_3e_3\\
+v=v_1e_1+v_2e_2+v_3e_3
+\end{aligned}\right\}\rightarrow u\wedge v=(u_1v_2-v_2u_1)(e_1\wedge e_2)+\dots
+\ee 
+Similarly, $u\wedge v\wedge w$ will be almost same as $\vec{u}\.(\vec{v}\x\vec{w})$. These are no coincidences; in fact, we will see that many vector operations can be understood in terms of multivectors.
+\item We have seen several area and volume integrations in first year courses: we know that the integrations (such as use of Gauss law in electrodynamics) require \emph{oriented areas}; in practice, we write integrals like $\int f(x,y)dxdy$; however, obviously, the infinitesimal area element $dxdy$ is \emph{not} oriented when written like that. The proper way to write it is actually as $dx\wedge dy$: this is simply a \emph{2-covector}; likewise, the oriented volume element is a \emph{3-covector} $dx\wedge dy\wedge dz$.
+
+\item Hodge duality: Any two vector space with same dimension are isomorphic to each other, i.e. they can be converted to one another. Since $\Lambda^p{V}$ is a vector space with dimensionality $\frac{d!}{p!(d-p)!}$,\footnote{This is the number to choose $p$ elements out of $d$, as the basis vectors of $\Lambda^p(V)$ are ordered combinations (e.g. $e_1\wedge e_2$ and $e_2\wedge e_1$ are not linearly independent).} there is an isomorphism between $p-$vectors and $(d-p)-$vectors: a natural way to achieve this is the \emph{Hodge duality}. If $v$ is a $p-$vector, then its Hodge dual (denoted as $\star v$) is a $(d-p)-$vector!
+
+\item We physicists mostly work only with components (components of the vector, multivector, tensor, etc.) instead of the actual object, so for us it is sufficient to know how to relate the components of a $p-$vector and its Hodge dual.\footnote{
+More abstractly, we can understand Hodge duality as follows.
+\\\\
+Let $V::\texttt{Inner Product Vector Space}$ have the inner product $\<\.,\.\>::(V,V)\to\C$. This inner product \emph{induces} and inner product in the vector space $(\star\a)_{i_{k+1}\dots i_d}$ as follows:
+\be
+\<\.,\.\>_k::(\Lambda^kV,\Lambda^k V)\to\C
+\ee 
+for 
+\begin{multline}
+\<\a_1\wedge\dots\wedge\a_k,\b_1\wedge\dots\wedge\b_k\>=\\\det\begin{pmatrix}
+	\<\a_1,\b_1\> &\dots & \<\a_1,\b_k\>
+	\\\vdots\\
+	\<\a_k,\b_1\> &\dots & \<\a_k,\b_k\>
+\end{pmatrix}
+\end{multline} 
+The Hodge-dual of a $k-$vector $\b$ is then defined in terms of this induced inner product as
+\be 
+(\forall \a\in \Lambda^k(V))\quad \a\wedge(\star\b)=\<\a,\b\>e_1\wedge\dots \wedge e_n
+\ee 
+where $e_i$ form the orthonormal basis of $V$.
+} In the convention
+\begin{subequations}
+\label{eq: Hodge dual}
+\be 
+\a=\a_{i_1\dots i_k}e^{i_1}\wedge\cdots\wedge e^{i_k}\\
+\star\a=(\star\a)_{i_{k+1}\dots i_d}e^{i_{k+1}}\wedge\cdots\wedge e^{i_d}
+\ee 
+the relation reads as
+\be 
+(\star\a)_{i_{k+1}\dots i_d}=\frac{1}{(d-k)!}\a_{i_1\dots i_k}\e^{i_1\dots i_kl_{k+1}\dots l_d}\de_{i_{k+1}l_{k+1}}\cdots \de_{i_dl_d}
+\ee 
+\end{subequations}
+if we are working in Euclidean spaces, which will be the focus of this course! Here $\de$ is the Kronecker delta symbol.
+\item We discussed examples of Hodge dualities in $2d$ and $3d$, e.g.
+\be 
+\star 1 =dx\wedge dy\;,\quad \star dx=dy\;,\quad \star dy=-dx\text{ in }2d
+\ee 
+\item We discussed how Hodge duality helps us define the cross product in $3d$: $\star \left(u\wedge v\right)=u\times v$.
 \end{enumerate}}
-Wedge product and multivectors, oriented area and volume, hodge duality
 
 \subsection{Division algebras}
 \draftnote{
 Following is not covered in class or in homeworks; may be covered next years:\\\\	
 Normed division algebras and Hurwitz's theorem; finite-dimensional associative division algebras over the real numbers and Frobenius theorem; more about quaternions, their usage in spatial rotation (hence applications in engineering), and Feza Gursey's work with quaternions}
 
-
 \chapter{Differentiation in Vector Calculus}
-\section{Vector fields on Euclidean Spaces}
+\section{Vector fields and forms on Euclidean Spaces}
 \draftnote{
 \begin{enumerate}
 	\item In class, we discussed 2d and 3d pendulums: at different positions, the velocity at that position belongs to the vector space \emph{at that position}. Even though these vectors spaces are isomorphic to each other,\footnote{Any two finite dimensional vector spaces with the same dimension are actually isomorphic to each other.} i.e. they can be transformed to each other, they are actually different vector spaces! This is not only true for pendulums, but for any motion! 
 	\item Let us assume that we are going to describe the kinematics of a particle. We need to specify the position and the velocity of the particle at that position: this is the complete information to understand the trajectory of the particle. In other words, if we know all possible $(r,\vec{v}(r))$ pairs where $r$ parametrizes the particle's position in the system and $\vec{v}(r)$ is the velocity vector in that position, then we can describe the motion completely!
 	\\\\
-	Consider a two dimensional pendulum. We can parametrize the object's position by an angle $\theta$ as the trajectory forms a circle. At any position, its velocity lies in the \emph{tangent line} at the pendulum's position to this circle: note that these lines are \emph{different} at different values of $\theta$, so we indeed have infinitely many vector spaces, one for each value of $\theta$. We could choose $\pdr{}{\theta}$ as the basis vector; then the relevant pairs would look like $\left(\frac{\pi}{6},2\pdr{}{\theta}\right)$ or $\left(-\frac{\pi}{3},-\pdr{}{\theta}\right)$. The first one says that at $\pi=\pi/6$, the velocity is $2\pdr{}{\theta}$ at the tangent space to the circle at $\theta=\pi/6$. We will see late that this basically means the particle is moving such that at $\theta=\pi/6$, it will move to increase its $\theta$. On the contrary, at $\theta=-\pi/3$, it will move to decrease its $\theta$ (as the velocity at that point is $-\pdr{}{\theta}$). If we are to combine all such $(\theta,v(\theta)\pdr{}{\theta})$ pairs, we have the complete behavior of the pendulum!
+	Consider a two dimensional pendulum. We can parametrize the object's position by an angle $\theta$ as the trajectory forms a circle. At any position, its velocity lies in the \emph{tangent line} at the pendulum's position to this circle: note that these lines are \emph{different} at different values of $\theta$, so we indeed have infinitely many vector spaces, one for each value of $\theta$. We could choose $\pdr{}{\theta}$ as the basis vector; then the relevant pairs would look like $\left(\frac{\pi}{6},2\pdr{}{\theta}\right)$ or $\left(-\frac{\pi}{3},-\pdr{}{\theta}\right)$. The first one says that at $\pi=\pi/6$, the velocity is $2\pdr{}{\theta}$ at the tangent space to the circle at $\theta=\pi/6$. We will see later that this basically means the particle is moving such that at $\theta=\pi/6$, it will move to increase its $\theta$. On the contrary, at $\theta=-\pi/3$, it will move to decrease its $\theta$ (as the velocity at that point is $-\pdr{}{\theta}$). If we are to combine all such $(\theta,v(\theta)\pdr{}{\theta})$ pairs, we have the complete behavior of the pendulum!
 	\\\\
 	To understand these better, we need to introduce some terminology.
-	\item 
+	\item We call a space \emph{Manifold} if it resembles the Euclidean space near each point.\footnote{We actually need to know \emph{topological spaces} to define manifolds more appropriately; nevertheless, this definition is good enough for this course.} For instance, $\R^k$ is trivially a Manifold, it is Euclidean space itself. A more nontrivial example is a circle (denoted as $S^1$) or a sphere (denoted as $S^2$): near any point on a circle or a sphere, the space \emph{looks like} a Euclidean space!\footnote{This is why flat Earth believers are so confused: the surface of our planet is a Manifold, and at around any point, we see it approximately as a flat plane $\R^2$.}
+	\item At any point on a Manifold $M$, we have the \emph{tangent space} to the manifold denoted as $T_xM$. For instance, $T_xS$ denotes the tangent like to the circle $S$ at the position $x$; likewise, $T_xS^2$ denotes the tangent plane to the sphere $S^2$ at the position $x$. Tangent spaces are necessarily flat, i.e. they are simply $\R^d$ where $d$ is the dimension of the Manifold.
+	\item Clearly, $T_xM$ and $M$ are different spaces: this is most easy when the Manifold is not $\R^d$. For instance, if we consider a pendulum, the position of the object is an element of the Manifold $S$, and its velocity at any point $x$ is an element of the tangent space $T_xS$. Clearly, the tangent space (simply the tangent line $\R$ in this case) is a linear space, hence its elements are vectors (called tangent vector), which makes sense as we expect the velocity to be a vector! 
+	\\\\
+	In other examples, it might look tricky. For instance, for a car moving on a plane, the manifold is $\R^2$, and the tangent space at any point is also $\R^2$: even though these two spaces are \emph{isomorphic}, they are actually different: position is an element of the manifold $\R^2$, whereas the velocity at any position is an element of the tangent space $\R^2$ at that position.
+	
+	\item Consider a manifold $M$ and an element $x\in M$. Clearly we have infinitely many tangent spaces $T_xM$ for all $x\in M$. We can then define so-called \emph{tangent bundle} of this manifold as the collection of all such vector spaces! Tangent bundle of the manifold $M$ is denoted as $TM$ and we will define it\footnote{\label{footnote: tangent bundle}A more approriate definition of tangent bundle would involve \emph{disjoint union} of individual tangent spaces. As there is no unique way to define disjoint unions (they are only defined up to isomorphisms), we can in fact define $TM$ in different ways as well. We will not be using the explicit definition of $TM$ in this course, so our definition is correct and good enough!} as 
+	\be 
+	\label{eq: bundle}
+	TM=\left\{(x,y)\;|\;x\in M,\; y\in T_xM\right\}
+	\ee 
+	\item At any point on the Manifold, we can also define the dual vector space $T_x^*M$, which is the vector space whose elements are linear functions from $T_xM$ to the underlying field. $T_x^*M$ is called \emph{cotangent space}, and by combining all of them for a given Manifold $M$, we obtain the \emph{cotangent bundle} denoted as $T^*M$.
+	\item In physics, we tentatively call a function \emph{field} if its domain is the Manifold.\footnote{Note that this has nothing to do with the mathematical term \emph{field}, which refers to a set with two operations satisfying certain conditions as detailed in \S~\ref{}.} For instance, the function $f::M\to \R$ is a real scalar field on the manifold $M$; for instance, \emph{the temperature field} is a function which takes an element of the manifold (the position in the space) and spits out a real number, i.e. the temperature at that position. Likewise the \emph{electric field} is a function which takes an element of the manifold as input and spits out a vector, i.e. the electric field vector at that position.
+	
+	\item In the partial derivative notation of vectors (see 	\eqref{eq: vector derivative notation} for an example), \emph{the vector fields} become a simple generalization of that; for instance,
+	\be 
+	V::{}&{}\R^3\to T\R^3\\
+	V={}&{}(x,y,z)\to\Big(x^2\pdr{}{x}+xz\pdr{}{y}+\frac{1}{x+y}\pdr{}{z}\Big)
+	\ee 
+	is a $3d$ vector field.\footnote{We are being very schematic with our definitions and types of objects when it comes to bundles. Indeed, the way we defined in \eqref{eq: bundle}, $V$ can have the codomain $T\R^3$ only if its output is actually $\left((x,y,z)\;,\;\Big(x^2\pdr{}{x}+xz\pdr{}{y}+\frac{1}{x+y}\pdr{}{z}\Big)\right)$. In fact, even this is not true: $(x,y,z)$ does not really represent the element of $M$ but rather an element of a \emph{chart} on $M$, which we do not cover in these notes. Furthermore, as we stated earlier in footnote~(\ref{footnote: tangent bundle}), the tangent bundle is defined only upto isomorphisms, hence even with charts introduced, we need to be extra careful with our definitions if we want rigor. Instead, we will only use types as \emph{schematic reminders} in this chapter and do not pursue the topic any further.
+	}
+	
+	\item Multivector fields on the cotangent space, or equivalently covector fields on the tangent space, are called \emph{differential forms} (forms for short). For instance,
+	\be 
+w::{}&{}\R^3\to \Lambda^2(T_x\R^3)\\
+w={}&{}(x,y,z)\to\Big(x^2dx\wedge dy+xzdx\wedge dz+\frac{1}{x+y}dy\wedge dz\Big)
+\ee 
+is a 2-form on the manifold $\R^3$.
+
+	\item Tensor fields are also straightforward generalizations of tensors to mappings from manifolds; for example,
+	\be 
+	T::{}&{}S^2\to (T_x\R^2)\otimes(T_x\R^2)\otimes(T_x^*\R^2)\\
+	T={}&{}(\f,\psi)\to\left(\sin(\psi)\pdr{}{\f}\otimes\pdr{}{\f}\otimes d\f+\cos(\psi+\f)\pdr{}{\psi}\otimes\pdr{}{\f}\otimes d\psi\right)
+	\ee 
+	is a type (2,1) tensor field on the manifold $S^2$.
+\item Musical isomorphism: We define two operations that convert back and forth between tangent and cotangent bundles:
+\bea 
+\Flat ::{}&{} TM\to T^*M\\
+\Sharp ::{}&{} T^*M\to TM
+\eea 
+which in practice amounts to raising and lowering the indices on the components of the tensors, i.e.
+\be 
+(x^ie_i)^\Flat=(x_i e^i)\;,\quad (x_ie^i)^\Sharp=(x^i e_i)
+\ee 
+In practice, we physicists do not use musical isomorphism terminology: the manifolds we work with are usually something called \emph{a metric space}, meaning that they are endowed with a \emph{metric} which is type $(0,2)$ tensor field (and the inverse metric which is type $(2,0)$ tensor field). The metric is then used to go back and forth between the dual spaces. In this course, we stick to Euclidean spaces, hence we do not need to introduce the metric tensor and its properties, and hence we won't: the discussion of musical isomorphism is simpler and sufficient enough!\footnote{The musical isomorphism is actually broader in the sense that it represent the abstract mapping between the bundles, which may not be actuated with a metric. For instance, \emph{fiber derivative} also induces a map from tangent to cotangent bundle, which is rather relevant in the study of \emph{Legendre transformations}.}
+\item The application of musical isomorphism can be extended to $k-$vectors and forms as well, e.g. $(x_{ij}e^i\wedge e^j)^\Sharp=(x^{ij}e_i\wedge e_j)$
 \end{enumerate}
 }
-Concept of vector fields, use of partial derivatives to describe vector fields, bivector fields ($F_{\mu\nu}$ in electromagnetism being a bivector), tensor fields
-\section{Forms and duals of vector fields}
-Forms as covectors, tangent and cotangent bundles, musical isomorphism, index notation of tensors, covariant vs contravariant indices, metric tensor field
 \section{Grad, div, curl, and Laplacian}
 \subsection{Exterior derivative and hodge star operator}
+\draftnote{
+\begin{enumerate}
+	\item We define \emph{exterior derivative} as a map from $p-$form to a $(p+1)-$form, and denote it as $d\w$ where $\w$ is the $p-$form. With the differentials as the basis vectors of the cotangent bundle, it explicitly reads as 
+	\be 
+	\w=&\w^{i_1\dots i_p}dx_{i_1}\wedge\dots\wedge dx_{i_p}\\
+	d\w=&\frac{\partial \w^{i_1\dots i_p}}{\partial x_k}dx_k\wedge dx_{i_1}\wedge\dots\wedge dx_{i_p}
+	\ee 
+	\item We have discussed several examples of exterior derivative in class. For instance, for the electric potential $V(x,y)=x^2+y^2$ given in a $2d$ plane, the exterior derivative of it reads as $dV=2xdx+2ydy$: if we were to plot them, they are actually vectors radially outward, precisely orthogonal to the equipotential lines (i.e. $V(x,y)=$constant); in fact, the electric field is actually proportional to this exterior derivative, i.e. $\bm{E}\sim dV$.
+	\item The importance of the exterior derivative is that it is \emph{basis-independent}. Physically, this means that exterior derivative of an observer-covariant quantity is itself observer-covariant, which is precisely what we need! In contrast, a vector field defined as $v=\frac{\partial f}{\partial x}dx-\frac{\partial f}{\partial y}dy$ is \emph{not} observer-covariant even if the function $f$ is so. In other words, it cannot represent something physical!\footnote{Note to myself: we discussed these points in detail in class, so I better include a nice discussion here as well, along with some external references.}
+	\item The Hodge duality introduced for multivectors naturally generalizes to the forms; in fact, we can immediately use the same formula given in \equref{eq: Hodge dual} for forms as follows:
+	\begin{subequations}
+		\be 
+		\a(x_1,\dots,x_d)=\a_{i_1\dots i_k}(x_1,\dots,x_d)e^{i_1}\wedge\cdots\wedge e^{i_k}\\
+		(\star\a)(x_1,\dots,x_d)=(\star\a)_{i_{k+1}\dots i_d}(x_1,\dots,x_d)e^{i_{k+1}}\wedge\cdots\wedge e^{i_d}
+		\ee 
+		and
+		\be 
+		(\star\a)_{i_{k+1}\dots i_d}(x_1,\dots,x_d)=\frac{1}{(d-k)!}\a_{i_1\dots i_k}(x_1,\dots,x_d)\e^{i_1\dots i_kl_{k+1}\dots l_d}\de_{i_{k+1}l_{k+1}}\cdots \de_{i_dl_d}
+		\ee 
+	\end{subequations}
+	\item Schematically speaking, \emph{musical isomorphism}, \emph{Hodge-duality}, and \emph{exterior derivative} are our necessary and sufficient tools to construct \emph{differential maps} from scalar \& vector fields to scalar \& vector fields. In the next section, we will then use these to define various vector differentiation operations.
+\end{enumerate}
+}
+
 \subsection{Invariant formulation of differentiation in vector calculus}
-The standard vector calculus operators in terms of exterior derivative, hodge star operator, and musical isomorphism.
+\draftnote{
+\begin{enumerate}
+	\item We define the gradient (denoted as \textsf{grad}) as follows:
+	\be 
+	\textsf{grad} ::{}&{} \texttt{Scalar Field}\to\texttt{Vector Field}\\
+	\textsf{grad}= {}&{}f\to (df)^\Sharp\\
+	\textsf{grad}= {}&{}\big((x_1,\dots,x_d)\to f(x_1,\dots,x_d)\big)\\
+	&\quad\to \left((x_1,\dots,x_d)\to \pdr{f(x_1,\dots,x_d)}{ x_i}\hat{x_i}\right)\quad(\text{in Cartesian coordinates})
+	\ee 
+	\item It is also commonly denoted as $\grad$; for instance, for the scalar field $f(x,y)=x^2+y$, we write the vector field as $\grad{f}(x,y)=2x\pdr{}{x}+\pdr{}{y}$. In the freshman notation, this simply is $\grad{f}(x,y)=2x\hat{i}+\hat{j}$. 
+	
+	\item It is easiest to understand the gradient visually: For any scalar field $f$ whose value at any point gives the scalar $S$ (temperature, electric potential, pressure, etc.), draw the equi-$S$ lines (equitemperature, equipotential, etc.) which correspond to $S=$constant lines. The vector field $\grad{f}$ then is the collection of vectors that are \emph{orthogonal} to these equi-$S$ lines. In the case of electric potential scalar field $f$, $\grad{f}$ is proportional to the electric field; likewise, in the case of temperature field $f$, $\grad{f}$ is related to the heat flow vector field.
+	\item We define the divergence (denoted as \textsf{div}) as follows:
+	\be 
+	\textsf{div} ::{}&{} \texttt{Vector Field}\to\texttt{Scalar Field}\\
+	\textsf{div}= {}&{}v\to \big(\star d\star v^\Flat\big)\\
+	\textsf{div}= {}&{}\big((x_1,\dots,x_d)\to v^i(x_1,\dots,x_d)\hat{x_i}\big)\\
+	&\quad\to \left((x_1,\dots,x_d)\to \pdr{v_i(x_1,\dots,x_d)}{ x_i}\right)\quad(\text{in Cartesian coordinates\footnotemark})
+	\ee 
+	\footnotetext{
+	It may look counter-intuitive to see that such a simple definition in Cartesian derivative involve so many operations in its abstract definition. Let us do the explicit derivation to see that it makes sense:
+	\be 
+	v=&v^i(x_1,\dots,x_d)\pdr{}{x^i}\\
+	v^\Flat=&v_i(x_1,\dots,x_d) dx^i\\
+	\star v^\Flat=&\frac{1}{(d-1)!}v_i(x_1,\dots,x_d)\e^{ik_2\dots k_d}\de_{k_2l_2}\cdots\de_{k_dl_d}\\&\quad\x dx^{l_2}\wedge \dots\wedge dx^{l_d}\\
+	d\star v^\Flat=&\frac{1}{(d-1)!}\frac{\partial v_i(x_1,\dots,x_d)}{\partial x^m}\e^{ik_2\dots k_d}\de_{k_2l_2}\cdots\de_{k_dl_d}\\&\quad\x dx^m\wedge dx^{l_2}\wedge \dots\wedge dx^{l_d}\\
+	\star d\star v^\Flat=&\frac{1}{(d-1)!}\frac{\partial v_i(x_1,\dots,x_d)}{\partial x^m}\e^{ik_2\dots k_d}\de_{k_2l_2}\cdots\de_{k_dl_d}\e^{ml_2\dots l_d}\\
+	\star d\star v^\Flat=&\frac{\partial v_i(x_1,\dots,x_d)}{\partial x^m}\de^{im}\\
+	\star d\star v^\Flat=&\frac{\partial v_i(x_1,\dots,x_d)}{\partial x^i}
+	\ee 
+	where we used $\e^{ia_1\dots a_n}	\e_{ka_1\dots a_n}=n!\de^i_k$.\\
+}
+	\item It is also commonly denoted as $\div{}$; for instance, for the vector field $v(x,y)=xy\pdr{}{x}-y^2\pdr{}{y}$, we write the scalar field as \mbox{$\div v(x,y)=-y$}.\footnote{This notation is no coincidence: the divergence can be seen as the dot product between the vector field and the gradient operator $\grad$.}
+	\item Divergence measures \emph{the scalar source} of the vector field: we will learn more about this when we cover the Helmholtz decomposition.
+	\item We define the curl (denoted as \textsf{curl}) as follows:
+	\be 
+	\textsf{curl} ::{}&{} \texttt{Vector Field}\to\texttt{Scalar Field}\quad (d=2)\\
+	\textsf{curl} ::{}&{} \texttt{Vector Field}\to\texttt{Vector Field}\quad (d=3)\\
+	\textsf{curl} ::{}&{} \texttt{Vector Field}\to(d-2)-\texttt{Vector Field}\quad (d>3)\\
+	\textsf{curl}= {}&{}v\to \big(\star d v^\Flat\big)^\Sharp
+	\ee 
+	\item The curl operator reduces to the cross product with the gradient operation in $3d$, i.e. $\textsf{curl } v=\curl{v}$; in Cartesian coordinates, it then yields
+	\be 
+	\curl{v}=\left(\pdr{v_z}{y}-\pdr{v_y}{z}\right)\hat{x}+\left(\pdr{v_x}{z}-\pdr{v_z}{x}\right)\hat{y}+\left(\pdr{v_y}{x}-\pdr{v_x}{y}\right)\hat{z}
+	\ee 
+	\item Curl measures \emph{the vector source} of the given vector field: we will understand this better with the Helmholtz decomposition.
+	\item Discussed the psudovector nature of curl and did a few examples in class.
+	\item We now turn to our last operator: the Laplacian (denoted as $\Delta$). In principle, it can take any scalar or multivector field to itself; however, we will only define it for scalar and vector fields:\footnote{Note to myself: maybe discuss Laplace beltrami operator, or at least a few citations?}
+	\be 
+	\Delta ::{}&{} \texttt{Scalar Field}\to\texttt{Scalar Field}\\
+	\Delta= {}&{}f\to \big(\star d\star d f\big)\\
+	\Delta ::{}&{} \texttt{Vector Field}\to\texttt{Vector Field}\\
+	\Delta= {}&{}v\to \big(d\star d\star v^\Flat-\star d\star d v^\Flat\big)^\Sharp
+	\ee 
+We only need this abstract definition to ensure that this operator is observer-covariant, i.e. we can do science with it!\footnote{Note to myself: Again, I discussed this whole observer-independence in class, but these notes lack a proper discussion.} In practice, we can also define this same operator as simply \emph{the gradient of divergence} and denote it as $\Delta=\div{\grad}=\grad^2$, which can take any tensor field to another tensor field: in Cartesian coordinates, it simply reads as follows:
+\be 
+R::{}&{}TM\otimes \dots\otimes TM\otimes T^*M\otimes \dots\otimes T^*M\\
+R={}&{}R^{i_1\dots i_r}_{\quad\;\; k_1\dots k_s}\pdr{}{x^{i_1}}\otimes\dots\otimes\pdr{}{x^{i_r}}\otimes dx^{k_1}\otimes\dots\otimes dx^{k_s}\\
+(\Delta R)::{}&{}TM\otimes \dots\otimes TM\otimes T^*M\otimes \dots\otimes T^*M\\
+\Delta R={}&{}\frac{\partial^2 R^{i_1\dots i_r}_{\quad\;\; k_1\dots k_s}}{\partial x^m \partial x_m}\pdr{}{x^{i_1}}\otimes\dots\otimes\pdr{}{x^{i_r}}\otimes dx^{k_1}\otimes\dots\otimes dx^{k_s}
+\ee 
+\item In class, derived several identities such as $\div{\curl v}=0$ using their abstract definitions and the identity $d^2=0$.
+\item In class, we discussed why we use these generalized definitions even though Cartesian component based ones are actually far more simple! The key point is that this way the result is guaranteed to be observer covariant/invariant! To emphasize, we defined a new operator in class (call it $\cD$) which acts on $2d-$vectors as
+\be 
+\cD\.A=\pdr{A_x}{y}+\pdr{A_y}{x}
+\ee 
+Even though this operator does generate a scalar field from a vector field, and even though there is nothing wrong with it mathematically, it is actually observer-dependent. In other words, the scalar that it generates changes when we change the coordinate system. Physically, we do not want scalars to be observer dependent (the temperature at a point should not change when I rotate clockwise 90 degrees). In this example, it is easy to see this as we can straightforwardly check it; but in general, it can become quite tedious for longer operators; and it does not instructs us how we should rather construct our operator. When we work with forms, we are guaranteed that any operator out of exterior derivative, hodge duality, and musical isomorphism is observer independent as it does not refer to a particular basis but is instead defined abstractly.
+\end{enumerate}
+}
 
 \section{Helmholtz decomposition of vector fields}
 Helmholtz decomposition and a brief mention of its generalization Hodge decomposition
