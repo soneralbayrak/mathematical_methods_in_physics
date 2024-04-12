@@ -696,15 +696,213 @@ Even though this operator does generate a scalar field from a vector field, and 
 }
 
 \section{Helmholtz decomposition of vector fields}
-Helmholtz decomposition and a brief mention of its generalization Hodge decomposition
+\draftnote{
+\begin{enumerate}
+	\item Any $3d$ vector field can be written as 
+	\be 
+	E=\text{constant }-\grad \Phi +\curl V
+	\ee 
+	In most situations, the constant piece is simply zero (so that the behavior of the vector field around infinity is zero) for which we can write
+	\be 
+	\Phi(r)=\frac{1}{4\pi}\int\limits_{\text{manifold}}\frac{\grad'\.E(r')}{\abs{r-r'}}dV'-\frac{1}{4\pi}\oint\limits_{\text{boundary}}\frac{\hat{n}'\.E(r')}{\abs{r-r'}}dS'
+	\ee 
+	and 
+	\be 
+	V(r)=\frac{1}{4\pi}\int\limits_{\text{manifold}}\frac{\grad'\x E(r')}{\abs{r-r'}}dV'-\frac{1}{4\pi}\oint\limits_{\text{boundary}}\frac{\hat{n}'\x E(r')}{\abs{r-r'}}dS'
+	\ee 
+	
+	Here, $\Phi$ is called the \emph{scalar potential} of $E$ whereas $V$ is called the \emph{vector potential} of $E$.
+	\item Even if the vector field $E$ is fixed, the vector potentials are not: the vector field is invariant under the change
+	\be 
+	\Phi\to\Phi+c\;,\quad V\to V+\grad a
+	\ee 
+	for a constant $c$ and scalar field $a$. This transformation is called \emph{gauge transformation}, and invariance of $E$ under this transformation is called \emph{gauge invariance}.
+	\item In class, we discussed the conservative forces (for which vector potential is zero), importance of these \emph{sources} in understanding electromagnetism, and how gauge transformation is actually rather important in quantum mechanics.
+	\item In class, we analyzed the vector fields through their flow diagrams: I draw a diagram and we have seem around which parts we have divergence contributions (basically Gauss law), and which parts have rotational contributions (e.g. Ampere's law).
+	\item I did not discuss or even mention the \emph{Hodge decomposition}, the generalization of this. Note to myself: decide whether to include a brief mention of this or not next year!
+\end{enumerate}
+}
 
 \chapter{Integration in Vector Calculus}
+\section{Higher Dimensional Integration}
+\draftnote{
+\begin{enumerate}
+	\item Discussed in class that the students have actually learned three kinds of integration so far: indefinite, signed definite, and unsigned definite. The fundamental theorem of calculus relates these three to each other:
+	\bea 
+	\int f(x)dx=F(x)\quad(\text{indefinite integral})\\
+	\int\limits_a^bf(x)=F(b)-F(a)\quad(\text{signed definite integral})\\
+	\int\limits_{[a,b]}f(x)dx=\left\{\begin{aligned}
+	\int\limits_a^bf(x)dx\quad&b>a\\
+	\int\limits_b^af(x)dx\quad&a>b
+	\end{aligned}\right.(\text{unsigned definite integral})
+	\eea 
+	\item When we generalize to higher dimensional integrals, these three actually diverge to different kinds of integrations:\footnote{In other words, fundamental theorem of calculus fails for higher dimensional integrations. The branch of math that analyzes how much it fails is called \emph{de Rham cohomology}.}
+	\bea 
+	\text{indefinite}\quad&\to\quad\text{anti-derivative}\\
+	\text{signed definite}\quad&\to\quad\text{integration of forms}\\
+	\text{unsigned indefinite}\quad&\to\quad\text{Lebesgue integration}
+	\eea 
+	Anti-derivation is useful for solving the partial differential equations, and Lebesgue integrations are used for integrations on measures. The integration of forms on the other hand are the most common types in the elementary Physics, so we will focus on that in these notes.\footnote{Note to myself: add examples for all.}
+	\item In class, we discussed how one-dimensional ordinary integration can be seen as summation of covectors. I'll write these in more detail with figures in future (hopefully next year). Interested reader can consult to Terence Tao's ``Differential Forms and Integration'' notes in \emph{The Princeton Companion to Mathematics}.
+	\item In class, we discussed how ambient space and integration surfaces can be of different dimensions, and how signed definite integration (which generalizes to integration of forms) is actually pairing of a $p-$form with a $p-$dimensional integration surface to create a scalar. For instance, in Gauss'law, we integrate a $2-$form (electric flux) against a $2-$dimensional integration surface (a closed Gaussian surface) which yields a scalar (total enclosed charge). Likewise, the infinitesimal work done can be seen as a $1-$form and by integrating it against a path ($1-$dimensional surface), we get a real number (the work done).
+	\item The simplest generalization of one-dimensional signed definite integral is the line integral in higher dimensions (for which integration surface is a one-dimensional line in a higher dimensional ambient space), which we will focus next. But for these integrals, we need to  understand how we can mathematically describe paths, which we turn to next.
+\end{enumerate}
+}
 \section{Curves and Line Integrals}
-Curves, parametrization, arc length, Frenet–Serret formulas, line integral
-\section{Generalized approach to integration}
-Chains, boundaries of chains, Poincare lemma
+\draftnote{
+\begin{enumerate}
+	\item Concepts: Parametrization, arc length, concept of curvature and torsion, and Frenet–Serret formulas
+	\item In class, we discussed the above concepts and schematically derived the Frenet-Serret formulas. For more on these topics, see David Tong's lecture notes on vector calculus: \hyperref{http://www.damtp.cam.ac.uk/user/tong/vc.html}{}{}{http://www.damtp.cam.ac.uk/user/tong/vc.html} (see chapter 1).
+\end{enumerate}
+}
 \section{Integral theorems}
-Discussion of generalized stokes theorem in forms, and its implication as \emph{Gradient theorem}, \emph{Divergence theorem}, \emph{Curl theorem}, and \emph{Green's theorem}.
-
+\subsection{Gradient, Divergence, Curl, and Greens theorems}
+\draftnote{
+	\begin{enumerate}
+		\item In class, we discussed these theorems and their applications in Physics, see \hyperref{http://www.damtp.cam.ac.uk/user/tong/vc.html}{}{}{http://www.damtp.cam.ac.uk/user/tong/vc.html} (chapter 4) or chapter 6.9-6.11 of the textbook for details.
+	\end{enumerate}
+}
+\subsection{Generalized Stokes theorem: one equation to derive them all!}
+\draftnote{
+\begin{enumerate}
+	\item Generalized Stoke's theorem reads as
+	\be 
+	\int\limits_{\partial \Omega} \omega=\int\limits_{\Omega}d\omega
+	\ee 
+	which is an extremely simple yet immensely powerful relation: all integral theorems can be derived using this relation.
+	\item In the above equation, $\Omega$ denotes any $(p+1)-$dimensional integration surface, $\partial\Omega$ its $p-$dimensional boundary, $\omega$ a $p-$dimensional differential form, and $d$ the exterior derivative.
+	\item The antisymmetric nature of forms ensures that $d^2=0$; this then leads to 
+	\be 
+	\int\limits_{\partial^2\Omega}\w=\int\limits_{\partial\Omega}d\w=\int\limits_{\Omega}d^2\omega=0
+	\ee 
+	for any form $\w$ of region $\Omega$. This is then only possible if $\partial^2\Omega=\{\}$, which basically means \emph{the boundary of a region does not have a boundary itself}. We illustrated this in class as it also intuitively makes sense.
+	\item We derived a few of integral theorems from the Generalized Stokes theorem. For instance, consider the integral of the exterior derivative of a $0-form$ over a path $\g$. By generalized Stoke's theorem, we have
+	\be 
+	\int\limits_{\gamma}d f(x_1,\dots,x_n)=\int\limits_{\partial\gamma} f(x_1,\dots,x_n)=f(x_1,\dots,x_n)\evaluated_{\g_i}^{\g_f}
+	\ee 
+	where the boundary of $\gamma$ is just its end points, hence the integration just becomes the difference of the function evaluated at the final $\g_f$ and the initial $\g_i$ points. As we also have 
+\be 
+d f(x_1,\dots,x_n)=\frac{\partial f}{\partial x_i} dx_i=\grad f \. {dx}
+\ee 
+we get the Gradient theorem. Similarly, the exterior derivative of a $1-form$
+\be 
+E(x_1,\dots, x_n)=E_1(x_1,\dots, x_n)dx_1+\dots E_n(x_1,\dots, x_n)dx_n=\vec{E}\.\vec{dx}
+\ee 
+is
+\be 
+dE(x_1,\dots, x_n)=\left(\frac{\partial E_2}{\partial x_1}-\frac{\partial E_1}{\partial x_2}\right)dx^1\wedge dx^2+\cdots =\left(\curl{E}\right)\.\hat{n}dA
+\ee 
+leading to the curl theorem
+\end{enumerate}
+}
 \chapter{Curvilinear Coordinate Transformations}
-Concept of coordinate charts, transformation of tensor fields under coordinate transformations, common orthogonal curvilinear coordinates (polar, cylindrical, spherical)
+Consider the vector field 
+\be 
+M(x,y)=x\pdr{}{y}-y\pdr{}{x}
+\ee 
+which is a map from the manifold to the tangent bundle, i.e. its output is a vector at the tangent space to the manifold at the input position. We can draw this vector field at the Cartesian plane; for instance, at $(x,y)=(1,0)$, the vector is $M(1,0)=\pdr{}{y}$, which is a unit vector pointing ``north''. Likewise, at $(x,y)=(0,2)$, $M(0,2)=-2\pdr{}{x}$ which is a vector of length 2 pointing ``west''. If we draw all such vectors in the Cartesian plane, we get the picture that it describes a \emph{counterclockwise rotation} around the origin.
+
+Intuitively, rotation on a plane should be describable with a single parameter, the rotation angle $\theta$. Indeed, if we were to start at any point in the coordinate plane and follow the vector field alongside the vectors, we will observe a simple rotation, describable by the rotation angle. It thus makes sense to switch to a new coordinate system where the vector field was manifestly one-dimensional, i.e. something like $\a\pdr{}{\b}$.
+
+Consider two new parameters $r$ and $\theta$ as functions of the old Cartesian coordinates:
+\be
+\begin{aligned}
+r=&f(x,y)\\
+\theta=&g(x,y)
+\end{aligned}\quad,\quad
+\begin{aligned}
+	x=&h(r,\theta)\\
+	y=&j(r,\theta)
+\end{aligned}
+\ee
+The vector field then becomes via the chain rule
+\be 
+M(x,y)=x\left(\pdr{f(x,y)}{y}\pdr{}{r}+\pdr{g(x,y)}{y}\pdr{}{\theta}\right)-y\left(\pdr{f(x,y)}{x}\pdr{}{r}+\pdr{g(x,y)}{x}\pdr{}{\theta}\right)
+\ee 
+hence
+\be 
+M(t,\theta)=\a(r,\theta)\pdr{}{r}+\b(r,\theta)\pdr{}{\theta}
+\ee 
+for 
+\bea
+\a(r,\theta)=\left[
+x\pdr{f(x,y)}{y}-y\pdr{f(x,y)}{x}
+\right]_{\substack{	x=h(r,\theta)\\y=j(r,\theta)}}
+\\
+\b(r,\theta)=\left[
+x\pdr{g(x,y)}{y}-y\pdr{g(x,y)}{x}
+\right]_{\substack{	x=h(r,\theta)\\y=j(r,\theta)}}
+\eea
+Let us now choose $f,g$ such that $\a(r,\theta)=0$, i.e.
+\be 
+\label{eq: polar coordinates}
+\frac{1}{y}\pdr{f(x,y)}{y}=\frac{1}{x}\pdr{f(x,y)}{x}
+\ee  
+Note that $f(x,y)$ is function with two variables (2 degrees of freedom), and above equation puts 1 constraint: we expect the most general solution to be a \emph{function} of 1 variable. In fact, we can easily check (for instance using Mathematica, or just by inspection) that the most general solution to this differential equation is 
+\be 
+f(x,y)=c(x^2+y^2)
+\ee 
+for the arbitrary function $c$. This then leads to the condition
+\be 
+r=c(h(r,\theta)^2+j(r,\theta)^2)
+\ee 
+which can be satisfied if we choose
+\be 
+h(r,\theta)&=\sqrt{c^{-1}(r)}\cos(\theta)\\
+j(r,\theta)&=\sqrt{c^{-1}(r)}\sin(\theta)\\
+c^{-1}(r)&>0
+\ee 
+Thus, we arrive at the unique parametrization
+\be
+\begin{aligned}
+	r=&c(x^2+y^2)\\
+	\theta=&\tan^{-1}\left(\frac{y}{x}\right)
+\end{aligned}\quad,\quad
+\begin{aligned}
+	x=&\sqrt{c^{-1}(r)}\cos(\theta)\\
+	y=&\sqrt{c^{-1}(r)}\sin(\theta)
+\end{aligned}
+\ee
+for an arbitrary function $c^{-1}(r)>0$, through which 
+\be 
+M(x,y)=x\pdr{}{y}-y\pdr{}{x}
+\ee 
+becomes
+\be 
+M(r,\theta)=\frac{\partial}{\partial\theta}
+\ee 
+We usually choose $c^{-1}(r)=r^2$ (hence $c(r)=\sqrt{r}$), which then leads to the standard polar coordinates.
+
+Let us instead consider another vector field, i.e.
+\be 
+N(x,y)=x\pdr{}{y}+y\pdr{}{x}
+\ee 
+We still want to find a parametrization that simplifies this, and all of the arguments above apply all the way upto the differential equation \eqref{eq: polar coordinates} which now becomes
+\be 
+\frac{1}{y}\pdr{f(x,y)}{y}=-\frac{1}{x}\pdr{f(x,y)}{x}
+\ee 
+leading to 
+\be 
+f(x,y)=c(x^2-y^2)
+\ee
+for which the parametrization turns into
+\be
+\begin{aligned}
+	r=&c(x^2-y^2)\\
+	\theta=&\tanh^{-1}\left(\frac{y}{x}\right)
+\end{aligned}\quad,\quad
+\begin{aligned}
+	x=&\sqrt{c^{-1}(r)}\cosh(\theta)\\
+	y=&\sqrt{c^{-1}(r)}\sinh(\theta)
+\end{aligned}
+\ee
+for an arbitrary function $c^{-1}(r)>0$, through which 
+\be 
+N(x,y)=x\pdr{}{y}+y\pdr{}{x}
+\ee 
+becomes
+\be 
+N(r,\theta)=\frac{\partial}{\partial\theta}
+\ee 
+
+Note that we could have found the correct parametrization for $N(x,y)$ by realizing that $N(x,y)=iM(x,-i y)$ hence we should go to polar coordinates in the $(x,-iy)$ cartesian plane, \emph{not} in $(x,y)$ plane. Nevertheless, we may not always be able to relate one vector field to a known one, hence our generic algebraic way of derivation is the most applicable procedure in general settings.
