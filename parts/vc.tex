@@ -603,10 +603,10 @@ In practice, we physicists do not use musical isomorphism terminology: the manif
 \draftnote{
 \begin{enumerate}
 	\item We define \emph{exterior derivative} as a map from $p-$form to a $(p+1)-$form, and denote it as $d\w$ where $\w$ is the $p-$form. With the differentials as the basis vectors of the cotangent bundle, it explicitly reads as 
-	\be 
-	\w=&\w^{i_1\dots i_p}dx_{i_1}\wedge\dots\wedge dx_{i_p}\\
-	d\w=&\frac{\partial \w^{i_1\dots i_p}}{\partial x_k}dx_k\wedge dx_{i_1}\wedge\dots\wedge dx_{i_p}
-	\ee 
+\bea
+\w=&\w_{i_1\dots i_p}dx^{i_1}\wedge\dots\wedge dx^{i_p}\\
+d\w=&\frac{\partial \w_{i_1\dots i_p}}{\partial x^k}dx^k\wedge dx^{i_1}\wedge\dots\wedge dx^{i_p}
+\eea
 	\item We have discussed several examples of exterior derivative in class. For instance, for the electric potential $V(x,y)=x^2+y^2$ given in a $2d$ plane, the exterior derivative of it reads as $dV=2xdx+2ydy$: if we were to plot them, they are actually vectors radially outward, precisely orthogonal to the equipotential lines (i.e. $V(x,y)=$constant); in fact, the electric field is actually proportional to this exterior derivative, i.e. $\bm{E}\sim dV$.
 	\item The importance of the exterior derivative is that it is \emph{basis-independent}. Physically, this means that exterior derivative of an observer-covariant quantity is itself observer-covariant, which is precisely what we need! In contrast, a vector field defined as $v=\frac{\partial f}{\partial x}dx-\frac{\partial f}{\partial y}dy$ is \emph{not} observer-covariant even if the function $f$ is so. In other words, it cannot represent something physical!\footnote{Note to myself: we discussed these points in detail in class, so I better include a nice discussion here as well, along with some external references.}
 	\item The Hodge duality introduced for multivectors naturally generalizes to the forms; in fact, we can immediately use the same formula given in \equref{eq: Hodge dual} for forms as follows:
@@ -642,7 +642,7 @@ In practice, we physicists do not use musical isomorphism terminology: the manif
 	\textsf{div} ::{}&{} \texttt{Vector Field}\to\texttt{Scalar Field}\\
 	\textsf{div}= {}&{}v\to \big(\star d\star v^\Flat\big)\\
 	\textsf{div}= {}&{}\big((x_1,\dots,x_d)\to v^i(x_1,\dots,x_d)\hat{x_i}\big)\\
-	&\quad\to \left((x_1,\dots,x_d)\to \pdr{v_i(x_1,\dots,x_d)}{ x_i}\right)\quad(\text{in Cartesian coordinates\footnotemark})
+	&\quad\to \left((x_1,\dots,x_d)\to \pdr{v^i(x_1,\dots,x_d)}{ x^i}\right)\quad(\text{in Cartesian coordinates\footnotemark})
 	\ee 
 	\footnotetext{
 	It may look counter-intuitive to see that such a simple definition in Cartesian derivative involve so many operations in its abstract definition. Let us do the explicit derivation to see that it makes sense:
@@ -906,3 +906,10 @@ N(r,\theta)=\frac{\partial}{\partial\theta}
 \ee 
 
 Note that we could have found the correct parametrization for $N(x,y)$ by realizing that $N(x,y)=iM(x,-i y)$ hence we should go to polar coordinates in the $(x,-iy)$ cartesian plane, \emph{not} in $(x,y)$ plane. Nevertheless, we may not always be able to relate one vector field to a known one, hence our generic algebraic way of derivation is the most applicable procedure in general settings.
+
+\draftnote{
+\begin{enumerate}
+	\item We discussed the above points in class.
+	\item We briefly discussed the spherical, cyclindrical, and polar coordinates. We derived the area and volume elements in these coordinates.
+\end{enumerate}
+}

@@ -1,6 +1,28 @@
 \chapter{Basics of complex calculus}
 \section{Structures of complex numbers}
 \subsection{Complex numbers as a Euclidean vector space}
+\draftnote{
+\begin{enumerate}
+	\item We reviewed the importance of complex numbers in Physics by re-discussing the historical appearance of complex numbers in Physics. Indeed, even though mathematicians had been using complex numbers as tools for centuries, physicists only began using it after the Schrödinger equation:
+	\be 
+	i\hbar \frac{\dd}{\dd t}\ket{\Psi(t)}=H(t)\ket{\Psi(t)}
+	\ee 
+	We do not need to understand the details of this equation: this is part of the quantum mechanics course. However, we recognize that it is a first order linear ordinary differential equation for the variable $\ket{\Psi(t)}$, which is actually a vector in an infinite dimensional space.\footnote{Note to self: maybe a few words about Hilbert space?}. As we have discussed in the first part of the semester, we can expand a vector in a basis; in the coordinate basis, this becomes the more familiar version:
+	\be 
+	i\hbar \pdr{}{t}\Psi(\vec{x},t)=H(\vec{x},t)\Psi(\vec{x},t)
+	\ee 
+	In these equations, $H(t)$ is a time-dependent function (called \emph{Hamilton}) which describes the characteristics of the system of which $\Psi$ is called the wavefunction. This much of information is more than enough for our purposes.
+	\\\\
+The appearance of $i$ in a physical equation was quite shocking to the physics community;\footnote{Note to self: put some references of Dyson, Dirac, etc. regarding the complex nature of Schrödinger equation.} however, we can actually rewrite it in a way free of $i$: this equivalent formulation is called \emph{Madelung equations}. This is possible because a complex number is actually equivalent to a 2d vector space over real numbers.
+\item We discussed the uniqueness of complex numbers satisfying following conditions:
+\begin{itemize}
+	\item a divisible algebra over real numbers
+	\item closed under algebra ($n^{\text{th}}$ order polynomial has $n$ roots)
+	\item commutative  
+\end{itemize}
+\item In class, we basically follow chapter 10 of Hildebrand.
+\end{enumerate}
+}
 With $\{1,i\}$ as the standard basis, complex numbers are simply a real vector space of dimension two: complex plane as cartesian plane, geometric interpretation of complex numbers, complex absolute value as Euclidean norm, complex cojugation, polar form
 \subsection{Further properties of complex numbers}
 Complex numbers as an algebraically closed field, complex numbers as a commutative algebra over the reals, complex numbers (endowed with the metric $d(z_1,z_2)=\abs{z_1-z_2}$) as a complete metric space
